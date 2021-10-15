@@ -1,0 +1,24 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Knowing' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+#Firebase framework
+pod 'Firebase/Analytics', '~> 8.4.0'
+pod 'Firebase/Auth', '~> 8.4.0'
+pod 'Firebase/Core', '~> 8.4.0'
+#UI framework
+pod 'SnapKit', '~> 5.0.0'
+pod 'Then'
+#Design Framework
+pod 'RxSwift', '~> 5.0.0'
+pod 'RxCocoa'
+#LoginAPI
+pod 'GoogleSignIn', '~> 6.0.2'
+pod 'naveridlogin-sdk-ios'
+#Server API
+pod 'Alamofire', '~> 5.4'
+  # Pods for Knowing
+
+end
