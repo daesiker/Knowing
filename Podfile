@@ -12,11 +12,14 @@ pod 'Firebase/Core', '~> 8.4.0'
 pod 'SnapKit', '~> 5.0.0'
 pod 'Then'
 #Design Framework
-pod 'RxSwift', '~> 5.0.0'
+pod 'RxSwift'
 pod 'RxCocoa'
 #LoginAPI
 pod 'GoogleSignIn', '~> 6.0.2'
 pod 'naveridlogin-sdk-ios'
+pod 'RxKakaoSDKCommon'
+pod 'RxKakaoSDKAuth'  
+pod 'RxKakaoSDKUser' 
 #Server API
 pod 'Alamofire', '~> 5.4'
   # Pods for Knowing
