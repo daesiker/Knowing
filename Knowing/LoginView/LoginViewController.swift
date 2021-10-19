@@ -13,6 +13,9 @@ import Alamofire
 import AuthenticationServices
 import CommonCrypto
 import FirebaseAuth
+import KakaoSDKAuth
+import KakaoSDKCommon
+import KakaoSDKUser
 
 class LoginViewController: UIViewController {
     
@@ -30,7 +33,23 @@ class LoginViewController: UIViewController {
     
     let kakaoLoginBt = UIButton(type: .system).then {
         $0.setTitle("카카오", for: .normal)
+        $0.addTarget(self, action:#selector(kakaoLogin) , for: .touchUpInside)
     }
+    
+    @objc private func kakaoLogin(_ sender: UIButton) {
+        if (UserApi.isKakaoTalkLoginAvailable()) {
+            UserApi.shared.loginWithKakaoTalk { oauthToken, error in
+                if let error = error {
+                    print(error)
+                    return
+                }
+                
+                print(oauthToken)
+            }
+        }
+    }
+    
+    
     
     let naverLoginBt = UIButton(type: .system).then {
         $0.setTitle("네이버", for: .normal)
