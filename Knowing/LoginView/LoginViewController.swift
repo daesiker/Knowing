@@ -28,7 +28,23 @@ class LoginViewController: UIViewController {
         $0.backgroundColor = .orange
     }
     let loginLayoutView = UIView().then {
-        $0.backgroundColor = .red
+        $0.backgroundColor = .white
+    }
+    
+    let defaultLoginBt = UIButton(type: .system).then {
+        $0.setTitle("노잉 시작하기", for: .normal)
+        $0.setTitleColor(UIColor.orange, for: .normal)
+        $0.titleLabel?.font = UIFont(name: "", size: 20)
+        $0.addTarget(self, action: #selector(defaultLogin), for: .touchUpInside)
+    }
+    
+    @objc private func defaultLogin(_ sender: UIButton) {
+        let viewController = MainTabViewController()
+        let navController = UINavigationController(rootViewController: viewController)
+        navController.isNavigationBarHidden = true
+        navController.modalTransitionStyle = .crossDissolve
+        navController.modalPresentationStyle = .fullScreen
+        self.present(navController, animated: true)
     }
     
     let kakaoLoginBt = UIButton(type: .system).then {
@@ -48,8 +64,6 @@ class LoginViewController: UIViewController {
             }
         }
     }
-    
-    
     
     let naverLoginBt = UIButton(type: .system).then {
         $0.setTitle("네이버", for: .normal)
@@ -82,6 +96,24 @@ class LoginViewController: UIViewController {
         controller.performRequests()
     }
     
+    let signUpBt = UIButton(type: .system).then {
+        
+        let attributedString = NSAttributedString(string: NSLocalizedString("이메일로 회원가입", comment: ""), attributes: [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15.0),
+            NSAttributedString.Key.foregroundColor: UIColor.gray,
+            NSAttributedString.Key.underlineStyle: 1.0
+        ])
+        $0.setAttributedTitle(attributedString, for: .normal)
+        $0.addTarget(self, action: #selector(goToSignUp), for: .touchUpInside)
+    }
+    
+    @objc private func goToSignUp(_ sender: UIButton) {
+        let viewController = SignUpViewController()
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
@@ -93,11 +125,11 @@ class LoginViewController: UIViewController {
 extension LoginViewController {
     
     func setUI() {
-        //layoutView
+        view.backgroundColor = .white
         safeArea.addSubview(howToUseLayoutView)
         howToUseLayoutView.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
-            $0.height.equalToSuperview().multipliedBy(0.7)
+            $0.height.equalToSuperview().multipliedBy(0.8)
         }
         
         safeArea.addSubview(loginLayoutView)
@@ -112,9 +144,22 @@ extension LoginViewController {
             $0.distribution = .fillEqually
         }
         
+        loginLayoutView.addSubview(defaultLoginBt)
+        defaultLoginBt.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(5)
+        }
+        
         loginLayoutView.addSubview(apiFieldStack)
         apiFieldStack.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
+            $0.top.equalTo(defaultLoginBt.snp.bottom).offset(5)
+            $0.centerX.equalToSuperview()
+        }
+        
+        loginLayoutView.addSubview(signUpBt)
+        signUpBt.snp.makeConstraints {
+            $0.top.equalTo(apiFieldStack.snp.bottom).offset(5)
+            $0.centerX.equalToSuperview()
         }
         
     }
