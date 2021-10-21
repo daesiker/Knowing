@@ -29,3 +29,7 @@ extension UIViewController {
     
     
 }
+
+extension UIColor {
+    static let mainColor = UIColor(named: "mainColor")
+}

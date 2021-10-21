@@ -13,14 +13,21 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
+        navigationController?.navigationBar.isHidden = true
         setupViewControllers()
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    
+    
     func setupViewControllers() {
-        let homeViewController = templateNavController(unselectedImage: UIImage(named: ""), selectedImage: UIImage(named: ""), title: "", rootViewController: HomeViewController())
-        let notificationViewController = templateNavController(unselectedImage: UIImage(systemName: ""), selectedImage: UIImage(named: ""), title: "", rootViewController: NotificationViewController())
-        let bookMarkViewController = templateNavController(unselectedImage: UIImage(systemName: ""), selectedImage: UIImage(named: ""), title: "", rootViewController: BookMarkViewController())
-        let myPageViewController = templateNavController(unselectedImage: UIImage(systemName: ""), selectedImage: UIImage(named: ""), title: "", rootViewController: MyPageViewController())
+        let homeViewController = templateNavController(unselectedImage: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"), title: "Home", rootViewController: HomeViewController())
+        let notificationViewController = templateNavController(unselectedImage: UIImage(systemName: "bell"), selectedImage: UIImage(systemName: "bell.fill"), title: "Notice", rootViewController: NotificationViewController())
+        let bookMarkViewController = templateNavController(unselectedImage: UIImage(systemName: "bookmark"), selectedImage: UIImage(systemName: "bookmark.fill"), title: "BookMark", rootViewController: BookMarkViewController())
+        let myPageViewController = templateNavController(unselectedImage: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"), title: "MyPage", rootViewController: MyPageViewController())
         
         viewControllers = [homeViewController, notificationViewController, bookMarkViewController, myPageViewController]
         
@@ -35,6 +42,7 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     fileprivate func templateNavController(unselectedImage: UIImage?, selectedImage: UIImage?, title: String, rootViewController: UIViewController) -> UINavigationController {
         
         let navController = UINavigationController(rootViewController: rootViewController)
+        navController.tabBarItem.title = title
         if let selectedImage = selectedImage, let unselectedImage = unselectedImage {
             navController.tabBarItem.image = unselectedImage
             navController.tabBarItem.selectedImage = selectedImage

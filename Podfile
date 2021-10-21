@@ -11,6 +11,7 @@ pod 'Firebase/Core', '~> 8.4.0'
 #UI framework
 pod 'SnapKit', '~> 5.0.0'
 pod 'Then'
+pod 'FSPagerView'
 #Design Framework
 pod 'RxSwift'
 pod 'RxCocoa'

@@ -52,6 +52,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/UserDefaults (~> 7.4)
     - PromisesObjC (< 3.0, >= 1.2)
+  - FSPagerView (0.8.3)
   - GoogleAppMeasurement (8.4.0):
     - GoogleAppMeasurement/AdIdSupport (= 8.4.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
@@ -128,6 +129,7 @@ DEPENDENCIES:
   - Firebase/Analytics (~> 8.4.0)
   - Firebase/Auth (~> 8.4.0)
   - Firebase/Core (~> 8.4.0)
+  - FSPagerView
   - GoogleSignIn (~> 6.0.2)
   - KakaoSDKAuth
   - KakaoSDKCommon
@@ -148,6 +150,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseInstallations
+    - FSPagerView
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleSignIn
@@ -175,6 +178,7 @@ SPEC CHECKSUMS:
   FirebaseCore: 31f389c37ac1ea52454a53d3081f2d7019485a4a
   FirebaseCoreDiagnostics: cad03be1904b975f845e632f2720c3337da27faf
   FirebaseInstallations: 1585729afc787877763208c2088ed84221161f77
+  FSPagerView: 670405b2f18e2a87fa37f20b00de783e562c25a8
   GoogleAppMeasurement: 6b6a08fd9c71f4dbc89e0e812acca81d797aa342
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleSignIn: fd381840dbe7c1137aa6dc30849a5c3e070c034a
@@ -193,6 +197,6 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: a784fffa8e04f9b5163e2f7801e7754ac7916f07
+PODFILE CHECKSUM: bff515600ce08271fbe594e6aebd24735c623abe
 
 COCOAPODS: 1.10.1
