@@ -23,22 +23,10 @@ class LoginViewController: UIViewController {
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
     let loginViewModel = LoginViewModel()
     let disposeBag = DisposeBag()
-    let guideImages:[UIImage] = [UIImage(named: "guide1")!, UIImage(named: "guide2")!, UIImage(named: "guide3")!]
     fileprivate var currentNonce: String?
     
     let howToUseLayoutView = UIView()
     let loginLayoutView = UIView()
-    
-    let guidePagerView = FSPagerView().then {
-        $0.isInfinite = false
-    }
-    
-    let guidePagerControl = FSPageControl().then {
-        $0.setStrokeColor(.gray, for: .normal)
-        $0.setStrokeColor(.orange, for: .selected)
-        $0.setFillColor(.gray, for: .normal)
-        $0.setFillColor(.orange, for: .selected)
-    }
     
     let defaultLoginBt = UIButton(type: .system).then {
         $0.setTitle("노잉 시작하기", for: .normal)
@@ -48,12 +36,17 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func defaultLogin(_ sender: UIButton) {
-        let viewController = MainTabViewController()
-        let navController = UINavigationController(rootViewController: viewController)
-        navController.isNavigationBarHidden = true
-        navController.modalTransitionStyle = .crossDissolve
-        navController.modalPresentationStyle = .fullScreen
-        self.present(navController, animated: true)
+//        let viewController = MainTabViewController()
+//        let navController = UINavigationController(rootViewController: viewController)
+//        navController.isNavigationBarHidden = true
+//        navController.modalTransitionStyle = .crossDissolve
+//        navController.modalPresentationStyle = .fullScreen
+//        self.present(navController, animated: true)
+        
+        let viewController = LoadingViewController()
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.modalPresentationStyle = .fullScreen
+        self.present(viewController, animated: true)
     }
     
     let kakaoLoginBt = UIButton(type: .system).then {
@@ -68,7 +61,6 @@ class LoginViewController: UIViewController {
                     print(error)
                     return
                 }
-                
                 print(oauthToken)
             }
         }
@@ -97,7 +89,7 @@ class LoginViewController: UIViewController {
         let nonce = randomNonceString()
         currentNonce = nonce
         let request = ASAuthorizationAppleIDProvider().createRequest()
-        request.requestedScopes = [.fullName]
+        request.requestedScopes = [.fullName, .email]
         request.nonce = sha256(nonce)
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = self
@@ -125,7 +117,6 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setPagerView()
         setUI()
         bind()
     }
@@ -135,22 +126,11 @@ class LoginViewController: UIViewController {
 extension LoginViewController {
     
     func setUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.mainColor
         safeArea.addSubview(howToUseLayoutView)
         howToUseLayoutView.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
             $0.height.equalToSuperview().multipliedBy(0.8)
-        }
-        
-        howToUseLayoutView.addSubview(guidePagerView)
-        guidePagerView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-        
-        guidePagerView.addSubview(guidePagerControl)
-        guidePagerControl.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(10)
-            $0.centerY.equalToSuperview()
         }
         
         safeArea.addSubview(loginLayoutView)
@@ -205,43 +185,8 @@ extension LoginViewController {
             .disposed(by: disposeBag)
     }
     
-    func setPagerView() {
-        guidePagerView.delegate = self
-        guidePagerView.dataSource = self
-        guidePagerView.register(FSPagerViewCell.self, forCellWithReuseIdentifier: "cell")
-        guidePagerControl.contentHorizontalAlignment = .leading
-        guidePagerControl.numberOfPages = self.guideImages.count
-    }
-    
 }
 
-extension LoginViewController: FSPagerViewDelegate, FSPagerViewDataSource {
-    
-    
-    func numberOfItems(in pagerView: FSPagerView) -> Int {
-        return guideImages.count
-    }
-    
-    func pagerView(_ pagerView: FSPagerView, cellForItemAt index: Int) -> FSPagerViewCell {
-        let cell = guidePagerView.dequeueReusableCell(withReuseIdentifier: "cell", at: index)
-        cell.imageView?.image = guideImages[index]
-        cell.imageView?.clipsToBounds = true
-        return cell
-    }
-    
-    func pagerView(_ pagerView: FSPagerView, didSelectItemAt index: Int) {
-        guidePagerView.deselectItem(at: index, animated: true)
-    }
-    
-    func pagerView(_ pagerView: FSPagerView, willDisplay cell: FSPagerViewCell, forItemAt index: Int) {
-        self.guidePagerControl.currentPage = index
-    }
-    
-    func pagerViewWillEndDragging(_ pagerView: FSPagerView, targetIndex: Int) {
-        self.guidePagerControl.currentPage = targetIndex
-    }
-    
-}
 
 extension LoginViewController: NaverThirdPartyLoginConnectionDelegate {
     

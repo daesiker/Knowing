@@ -18,12 +18,10 @@ class ViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let viewController = LoginViewController()
-            let navController = UINavigationController(rootViewController: viewController)
-            navController.isNavigationBarHidden = true
-            navController.modalTransitionStyle = .crossDissolve
-            navController.modalPresentationStyle = .fullScreen
-            self.present(navController, animated: true)
+            let viewController = GuideViewController()
+            viewController.modalTransitionStyle = .crossDissolve
+            viewController.modalPresentationStyle = .fullScreen
+            self.present(viewController, animated: true)
         }
     }
     

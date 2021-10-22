@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		8E7FA5334C6155D207510C50 /* Pods_Knowing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234F8FC0A6937616FF54D776 /* Pods_Knowing.framework */; };
+		BF2E058327225D7E008CA167 /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058227225D7E008CA167 /* GuideViewController.swift */; };
+		BF2E058527226070008CA167 /* CustomComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058427226070008CA167 /* CustomComponent.swift */; };
+		BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */; };
+		BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058827229C30008CA167 /* LoadingViewController.swift */; };
 		BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D62692718FF51006D7227 /* AppDelegate.swift */; };
 		BF8D626C2718FF51006D7227 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D626B2718FF51006D7227 /* SceneDelegate.swift */; };
 		BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D626D2718FF51006D7227 /* ViewController.swift */; };
@@ -30,6 +34,10 @@
 		234F8FC0A6937616FF54D776 /* Pods_Knowing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Knowing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC58E7E1901AFC3F7ED30FD /* Pods-Knowing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Knowing.debug.xcconfig"; path = "Target Support Files/Pods-Knowing/Pods-Knowing.debug.xcconfig"; sourceTree = "<group>"; };
 		79344B48A9993DC1F63632C6 /* Pods-Knowing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Knowing.release.xcconfig"; path = "Target Support Files/Pods-Knowing/Pods-Knowing.release.xcconfig"; sourceTree = "<group>"; };
+		BF2E058227225D7E008CA167 /* GuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
+		BF2E058427226070008CA167 /* CustomComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponent.swift; sourceTree = "<group>"; };
+		BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_ng9j9lpx_1.json; sourceTree = "<group>"; };
+		BF2E058827229C30008CA167 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		BF8D62662718FF51006D7227 /* Knowing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Knowing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF8D62692718FF51006D7227 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF8D626B2718FF51006D7227 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +88,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		BF2E058127225D40008CA167 /* GuideView */ = {
+			isa = PBXGroup;
+			children = (
+				BF2E058227225D7E008CA167 /* GuideViewController.swift */,
+			);
+			path = GuideView;
+			sourceTree = "<group>";
+		};
 		BF8D625D2718FF51006D7227 = {
 			isa = PBXGroup;
 			children = (
@@ -105,10 +121,11 @@
 				BFA0796E271FD1B700912C18 /* MainView */,
 				BFE0AF7F271950E000CA476A /* SignUpView */,
 				BFF506F62719033F003127CF /* LoginView */,
-				BF8D62692718FF51006D7227 /* AppDelegate.swift */,
+				BF2E058127225D40008CA167 /* GuideView */,
 				BF8D626B2718FF51006D7227 /* SceneDelegate.swift */,
 				BF8D626D2718FF51006D7227 /* ViewController.swift */,
 				BF8D626F2718FF51006D7227 /* Main.storyboard */,
+				BF8D62692718FF51006D7227 /* AppDelegate.swift */,
 				BF8D62722718FF53006D7227 /* Assets.xcassets */,
 				BF8D62742718FF53006D7227 /* LaunchScreen.storyboard */,
 				BF8D627D2719012A006D7227 /* GoogleService-Info.plist */,
@@ -126,6 +143,7 @@
 				BFA07972271FD3E600912C18 /* BookMarkView */,
 				BFA07971271FD3C200912C18 /* MyPageView */,
 				BFA0796F271FD2F800912C18 /* MainTabViewController.swift */,
+				BF2E058827229C30008CA167 /* LoadingViewController.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -183,6 +201,8 @@
 			isa = PBXGroup;
 			children = (
 				BFF506FA27190D80003127CF /* UIKitExtension.swift */,
+				BF2E058427226070008CA167 /* CustomComponent.swift */,
+				BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -250,6 +270,7 @@
 				BF8D627E2719012A006D7227 /* GoogleService-Info.plist in Resources */,
 				BF8D62732718FF53006D7227 /* Assets.xcassets in Resources */,
 				BF8D62712718FF51006D7227 /* Main.storyboard in Resources */,
+				BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,7 +323,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF2E058527226070008CA167 /* CustomComponent.swift in Sources */,
 				BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */,
+				BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
 				BFA07970271FD2F800912C18 /* MainTabViewController.swift in Sources */,
 				BFE0AF832719511500CA476A /* SignUpViewController.swift in Sources */,
@@ -313,6 +336,7 @@
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,
 				BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */,
 				BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */,
+				BF2E058327225D7E008CA167 /* GuideViewController.swift in Sources */,
 				BF8D626C2718FF51006D7227 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

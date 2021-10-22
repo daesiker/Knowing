@@ -108,6 +108,7 @@ PODS:
     - KakaoSDKCommon/Common (= 2.8.1)
   - KakaoSDKUser (2.8.1):
     - KakaoSDKAuth (= 2.8.1)
+  - lottie-ios (3.2.3)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -134,6 +135,7 @@ DEPENDENCIES:
   - KakaoSDKAuth
   - KakaoSDKCommon
   - KakaoSDKUser
+  - lottie-ios
   - naveridlogin-sdk-ios
   - RxCocoa
   - RxSwift
@@ -160,6 +162,7 @@ SPEC REPOS:
     - KakaoSDKAuth
     - KakaoSDKCommon
     - KakaoSDKUser
+    - lottie-ios
     - nanopb
     - naveridlogin-sdk-ios
     - PromisesObjC
@@ -188,6 +191,7 @@ SPEC CHECKSUMS:
   KakaoSDKAuth: 3cf74660531ac85cd2c7931df8d90d562b0a8fe2
   KakaoSDKCommon: 701ef2a9b92215a4bf131b2a6139c3586b5e8d99
   KakaoSDKUser: c4bdbca17b05ce7a25c67176ac68b6b0c8b1db56
+  lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   naveridlogin-sdk-ios: b9d7c20677981177ed994ecb1c8c2b49f223277d
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
@@ -197,6 +201,6 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: bff515600ce08271fbe594e6aebd24735c623abe
+PODFILE CHECKSUM: 2f220fcaf45a018b604b6d8f459f810fb3e0d3bf
 
 COCOAPODS: 1.10.1
