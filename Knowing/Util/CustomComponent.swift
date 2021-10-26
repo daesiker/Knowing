@@ -10,19 +10,16 @@ import UIKit
 
 class CustomButton: UIButton {
     
-    init() {
-        super.init(frame: CGRect.zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
-    convenience init(title: String, type: Bool = false) {
+    convenience init(title: String) {
         self.init()
         self.setTitle(title, for: .normal)
         self.backgroundColor = UIColor.mainColor
-        self.layer.cornerRadius = 10.0
+        self.layer.cornerRadius = 27.0
         
-        if type {
-            self.titleEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        }
         
     }
     
