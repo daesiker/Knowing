@@ -13,7 +13,8 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
-        navigationController?.navigationBar.isHidden = true
+        tabBar.barTintColor = UIColor.orange //탭바 배경색
+        tabBar.isTranslucent = false //탭바 투명도
         setupViewControllers()
     }
     

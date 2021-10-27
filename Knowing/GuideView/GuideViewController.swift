@@ -6,10 +6,13 @@
 //
 
 import UIKit
-import FSPagerView
 import Then
+import RxCocoa
+import RxSwift
 
 class GuideViewController: UIViewController {
+    
+    var disposedBag = DisposeBag()
     
     let guideScrollView = UIScrollView().then {
         
@@ -23,24 +26,8 @@ class GuideViewController: UIViewController {
     
     let nextButton = CustomButton(title: "다음").then {
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
-        $0.addTarget(self, action: #selector(goToNext), for: .touchUpInside)
         $0.contentEdgeInsets.top = 14
         $0.contentEdgeInsets.bottom = 15
-    }
-    
-    @objc func goToNext(_ sender: UIButton) {
-        if nextButton.titleLabel?.text == "다음" {
-            let contentOffset = CGPoint(x: view.frame.width, y: 0)
-            guideScrollView.setContentOffset(contentOffset, animated: true)
-            nextButton.setTitle("시작하기", for: .normal)
-        } else {
-            let viewController = LoginViewController()
-            let navController = UINavigationController(rootViewController: viewController)
-            navController.isNavigationBarHidden = true
-            navController.modalTransitionStyle = .crossDissolve
-            navController.modalPresentationStyle = .fullScreen
-            self.present(navController, animated: true)
-        }
     }
     
     let pageControl = UIPageControl()
@@ -52,6 +39,7 @@ class GuideViewController: UIViewController {
         setScrollView()
         addContentScrollView()
         setUI()
+        setBind()
     }
     
     private func setUI() {
@@ -75,6 +63,33 @@ class GuideViewController: UIViewController {
         
     }
     
+    private func setBind() {
+        nextButton.rx.tap.subscribe(onNext: {
+            if self.pageControl.currentPage == 0 {
+                let contentOffset = CGPoint(x: self.view.frame.width, y: 0)
+                self.guideScrollView.setContentOffset(contentOffset, animated: true)
+                self.nextButton.setTitle("시작하기", for: .normal)
+            } else {
+                let viewController = LoginViewController()
+                let navController = UINavigationController(rootViewController: viewController)
+                navController.isNavigationBarHidden = true
+                navController.modalTransitionStyle = .crossDissolve
+                navController.modalPresentationStyle = .fullScreen
+                self.present(navController, animated: true)
+            }
+        }).disposed(by: disposedBag)
+        
+        guideScrollView.rx.didScroll.subscribe(onNext: { _ in
+            let value = self.guideScrollView.contentOffset.x/self.guideScrollView.frame.size.width
+            if Int(round(value)) == 1 {
+                self.nextButton.setTitle("시작하기", for: .normal)
+            } else {
+                self.nextButton.setTitle("다음", for: .normal)
+            }
+            self.setPageControlSelectedPage(currentPage: Int(round(value)))
+        }).disposed(by: disposedBag)
+    }
+    
     private func setScrollView() {
         guideScrollView.delegate = self
         guideScrollView.frame = UIScreen.main.bounds
@@ -95,28 +110,14 @@ class GuideViewController: UIViewController {
             guideScrollView.contentSize.width = imageView.frame.width * CGFloat(i + 1)
         }
     }
-    
 }
-
 
 extension GuideViewController: UIScrollViewDelegate {
     
-    private func setPageControl() {
-        pageControl.numberOfPages = guideImages.count
-    }
+    
     
     private func setPageControlSelectedPage(currentPage:Int) {
         pageControl.currentPage = currentPage
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let value = scrollView.contentOffset.x/scrollView.frame.size.width
-        if Int(round(value)) == 1 {
-            nextButton.setTitle("시작하기", for: .normal)
-        } else {
-            nextButton.setTitle("다음", for: .normal)
-        }
-        setPageControlSelectedPage(currentPage: Int(round(value)))
     }
     
 }

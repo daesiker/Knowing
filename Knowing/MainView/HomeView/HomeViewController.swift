@@ -8,217 +8,111 @@
 import UIKit
 import Foundation
 import Then
-import FSPagerView
+import RxSwift
+import RxCocoa
 
-protocol HomeMenuBarDelegate: AnyObject {
-    func homeMenuBar(scrollTo index: Int)
-}
-
-class HomeViewController: UIViewController /*HomeMenuBarDelegate*/ {
+class HomeViewController: UIViewController  {
     
-    let homePageControll = FSPageControl()
-    let homePageView = FSPagerView()
+    var disposedBag = DisposeBag()
+    
+    let homeScrollView = UIScrollView().then {
+        
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.isPagingEnabled = true
+        $0.alwaysBounceVertical = false
+        $0.isScrollEnabled = false
+        $0.bounces = false
+    }
+    
+    let homeSegmentedControl: UISegmentedControl = {
+        let segmentedArray:[String] = ["맞춤 복지", "나의 캘린더", "모든 복지"]
+        let sc = UISegmentedControl(items: segmentedArray)
+        //sc.addTarget(self, action: #selector(segonChnaged), for: UIControl.Event.valueChanged)
+        sc.tintColor = UIColor.mainColor
+        sc.selectedSegmentIndex = 0
+        sc.sendActions(for: .valueChanged)
+        return sc
+    }()
+    
+//    @objc func segonChnaged(segcon: UISegmentedControl) {
+//        switch segcon.selectedSegmentIndex {
+//        case 0:
+//            let contentOffset = CGPoint(x: 0, y: 0)
+//            homeScrollView.setContentOffset(contentOffset, animated: true)
+//        case 1:
+//            let contentOffset = CGPoint(x: view.frame.width, y: 0)
+//            homeScrollView.setContentOffset(contentOffset, animated: true)
+//        case 2:
+//            let contentOffset = CGPoint(x: view.frame.width * 2, y: 0)
+//            homeScrollView.setContentOffset(contentOffset, animated: true)
+//        default:
+//            return
+//        }
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        setScrollView()
+        setUI()
+        setBind()
     }
     
+    private func setUI() {
+        view.backgroundColor = .white
+        safeArea.addSubview(homeScrollView)
+        homeScrollView.snp.makeConstraints {
+            $0.edges.equalTo(self.view.snp.edges)
+        }
+        
+        view.addSubview(homeSegmentedControl)
+        homeSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(safeArea.snp.top)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
+        }
+    }
     
+    private func setBind() {
+        homeSegmentedControl.rx.selectedSegmentIndex
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {value in
+                switch value {
+                case 0:
+                    let contentOffset = CGPoint(x: 0, y: 0)
+                    self.homeScrollView.setContentOffset(contentOffset, animated: true)
+                case 1:
+                    let contentOffset = CGPoint(x: self.view.frame.width, y: 0)
+                    self.homeScrollView.setContentOffset(contentOffset, animated: true)
+                case 2:
+                    let contentOffset = CGPoint(x: self.view.frame.width * 2, y: 0)
+                    self.homeScrollView.setContentOffset(contentOffset, animated: true)
+                default:
+                    return
+                }
+            }).disposed(by: disposedBag)
+    }
     
-//    var pageCollectionView: UICollectionView = {
-//        let collectionViewLayout = UICollectionViewFlowLayout()
-//        collectionViewLayout.scrollDirection = .horizontal
-//        let collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: collectionViewLayout)
-//        collectionView.backgroundColor = .gray
-//        collectionView.showsHorizontalScrollIndicator = false
-//        collectionView.isPagingEnabled = true
-//        return collectionView
-//    }()
-//
-//    var homeMenuBar = HomeMenuBar()
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        view.backgroundColor = .white
-//        navigationController?.hidesBarsOnSwipe = true
-//        setHomeTabBar()
-//        setPageCollectionView()
-//    }
-//
-//    func setHomeTabBar() {
-//        view.addSubview(homeMenuBar)
-//        homeMenuBar.delegate = self
-//        homeMenuBar.snp.makeConstraints {
-//            $0.top.leading.trailing.equalToSuperview()
-//            $0.height.equalToSuperview().multipliedBy(0.1)
-//        }
-//    }
-//
-//    func setPageCollectionView() {
-//        pageCollectionView.delegate = self
-//        pageCollectionView.dataSource = self
-//        pageCollectionView.register(PageCell.self, forCellWithReuseIdentifier: PageCell.reuseIdentifier)
-//        view.addSubview(pageCollectionView)
-//        pageCollectionView.snp.makeConstraints {
-//            $0.top.equalTo(homeMenuBar.snp.bottom)
-//            $0.leading.trailing.bottom.equalToSuperview()
-//        }
-//    }
-//
-//    func homeMenuBar(scrollTo index: Int) {
-//        let indexPath = IndexPath(row: index, section: 0)
-//        self.pageCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    private func setScrollView() {
+        let homeView:[UIView] = [HomeChartView(), HomeCalendarView(), HomeAllPostView()]
+        homeScrollView.frame = UIScreen.main.bounds
+        homeScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width * 3, height: UIScreen.main.bounds.height)
+        for i in 0..<homeView.count {
+            let xPos = self.view.frame.width * CGFloat(i)
+            homeView[i].frame = CGRect(x: xPos, y: 0, width: homeScrollView.bounds.width, height: homeScrollView.bounds.height)
+            homeScrollView.addSubview(homeView[i])
+            homeScrollView.contentSize.width = homeView[i].frame.width * CGFloat(i + 1)
+        }
+    }
     
 }
-
-//extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PageCell.reuseIdentifier, for: indexPath) as! PageCell
-//            cell.label.text = "\(indexPath.row + 1)번째 뷰"
-//            return cell
-//        }
-//
-//        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//            return 3
-//        }
-//
-////        func scrollViewDidScroll(_ scrollView: UIScrollView) {
-////            homeMenuBar.indicatorViewLeadingConstraint.constant = scrollView.contentOffset.x / 3
-////        }
-//
-//        func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//            let itemAt = Int(targetContentOffset.pointee.x / self.view.frame.width)
-//            let indexPath = IndexPath(item: itemAt, section: 0)
-//            homeMenuBar.homeTabBarCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
-//        }
-//}
-//
-//extension HomeViewController: UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: pageCollectionView.frame.width, height: pageCollectionView.frame.height)
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return 0
-//    }
-//}
-//
-//class HomeViewHeaderCell: UICollectionViewCell {
-//    static let reuseIdentifier = "homeHeaderCell"
-//
-//    let titleLabel = UILabel().then {
-//        $0.text = ""
-//        $0.textAlignment = .center
-//        $0.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-//        $0.textColor = .lightGray
-//    }
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        addSubview(titleLabel)
-//        titleLabel.snp.makeConstraints {
-//            $0.centerX.centerY.equalToSuperview()
-//        }
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//
-//    override var isSelected: Bool {
-//        willSet {
-//            if newValue {
-//                titleLabel.textColor =  .black
-//            } else {
-//                titleLabel.textColor = .lightGray
-//            }
-//        }
-//    }
-//
-//    override func prepareForReuse() {
-//        isSelected = false
-//    }
-//
-//
-//}
-//
-//class HomeMenuBar: UIView {
-//
-//    weak var delegate: HomeMenuBarDelegate?
-//
-//    var homeTabBarCollectionView: UICollectionView = {
-//        let collectionViewLayout = UICollectionViewFlowLayout()
-//        collectionViewLayout.scrollDirection = .horizontal
-//        let collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), collectionViewLayout: collectionViewLayout)
-//        collectionView.backgroundColor = .black
-//        return collectionView
-//    }()
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//
-//}
-//
-//extension HomeMenuBar: UICollectionViewDelegate, UICollectionViewDataSource {
-//
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 3
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeViewHeaderCell.reuseIdentifier, for: indexPath) as! HomeViewHeaderCell
-//        return cell
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: self.frame.width / 3, height: 55)
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        delegate?.homeMenuBar(scrollTo: indexPath.row)
-//        guard let cell = collectionView.cellForItem(at: indexPath) as? HomeViewHeaderCell else { return }
-//        cell.titleLabel.textColor = .lightGray
-//    }
-//
-//}
-//
-//extension HomeMenuBar: UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return 0
-//    }
-//}
-//
-//
-//class PageCell: UICollectionViewCell {
-//    static let reuseIdentifier = "homePageCell"
-//    var label = UILabel().then {
-//        $0.textColor = .black
-//        $0.textAlignment = .center
-//        $0.font = UIFont.systemFont(ofSize: 40, weight: .bold)
-//    }
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        backgroundColor = .gray
-//        addSubview(label)
-//        label.snp.makeConstraints {
-//            $0.centerX.centerY.equalToSuperview()
-//        }
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//}

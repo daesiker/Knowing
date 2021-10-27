@@ -12,6 +12,9 @@
 		BF2E058527226070008CA167 /* CustomComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058427226070008CA167 /* CustomComponent.swift */; };
 		BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */; };
 		BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058827229C30008CA167 /* LoadingViewController.swift */; };
+		BF8379372729208900584E33 /* HomeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8379362729208900584E33 /* HomeChartView.swift */; };
+		BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8379392729238300584E33 /* HomeCalendarVIew.swift */; };
+		BF83793D272924B100584E33 /* HomeAllPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83793C272924B100584E33 /* HomeAllPostView.swift */; };
 		BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D62692718FF51006D7227 /* AppDelegate.swift */; };
 		BF8D626C2718FF51006D7227 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D626B2718FF51006D7227 /* SceneDelegate.swift */; };
 		BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D626D2718FF51006D7227 /* ViewController.swift */; };
@@ -38,6 +41,9 @@
 		BF2E058427226070008CA167 /* CustomComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponent.swift; sourceTree = "<group>"; };
 		BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_ng9j9lpx_1.json; sourceTree = "<group>"; };
 		BF2E058827229C30008CA167 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		BF8379362729208900584E33 /* HomeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChartView.swift; sourceTree = "<group>"; };
+		BF8379392729238300584E33 /* HomeCalendarVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarVIew.swift; sourceTree = "<group>"; };
+		BF83793C272924B100584E33 /* HomeAllPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAllPostView.swift; sourceTree = "<group>"; };
 		BF8D62662718FF51006D7227 /* Knowing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Knowing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF8D62692718FF51006D7227 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF8D626B2718FF51006D7227 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +100,30 @@
 				BF2E058227225D7E008CA167 /* GuideViewController.swift */,
 			);
 			path = GuideView;
+			sourceTree = "<group>";
+		};
+		BF8379352729206C00584E33 /* HomeChartView */ = {
+			isa = PBXGroup;
+			children = (
+				BF8379362729208900584E33 /* HomeChartView.swift */,
+			);
+			path = HomeChartView;
+			sourceTree = "<group>";
+		};
+		BF837938272921D400584E33 /* HomeCalendarVIew */ = {
+			isa = PBXGroup;
+			children = (
+				BF8379392729238300584E33 /* HomeCalendarVIew.swift */,
+			);
+			path = HomeCalendarVIew;
+			sourceTree = "<group>";
+		};
+		BF83793B272924A300584E33 /* HomeAllPostView */ = {
+			isa = PBXGroup;
+			children = (
+				BF83793C272924B100584E33 /* HomeAllPostView.swift */,
+			);
+			path = HomeAllPostView;
 			sourceTree = "<group>";
 		};
 		BF8D625D2718FF51006D7227 = {
@@ -175,6 +205,9 @@
 		BFA07974271FD42000912C18 /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
+				BF83793B272924A300584E33 /* HomeAllPostView */,
+				BF837938272921D400584E33 /* HomeCalendarVIew */,
+				BF8379352729206C00584E33 /* HomeChartView */,
 				BFA07975271FD47F00912C18 /* HomeViewController.swift */,
 			);
 			path = HomeView;
@@ -324,9 +357,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF2E058527226070008CA167 /* CustomComponent.swift in Sources */,
+				BF83793D272924B100584E33 /* HomeAllPostView.swift in Sources */,
+				BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */,
 				BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */,
 				BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
+				BF8379372729208900584E33 /* HomeChartView.swift in Sources */,
 				BFA07970271FD2F800912C18 /* MainTabViewController.swift in Sources */,
 				BFE0AF832719511500CA476A /* SignUpViewController.swift in Sources */,
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
