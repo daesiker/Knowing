@@ -25,33 +25,18 @@ class LoginViewController: UIViewController {
     let disposeBag = DisposeBag()
     fileprivate var currentNonce: String?
     
-    let howToUseLayoutView = UIView()
-    let loginLayoutView = UIView()
-    
-    let defaultLoginBt = UIButton(type: .system).then {
-        $0.setTitle("노잉 시작하기", for: .normal)
-        $0.setTitleColor(UIColor.orange, for: .normal)
-        $0.titleLabel?.font = UIFont(name: "", size: 20)
-        $0.addTarget(self, action: #selector(defaultLogin), for: .touchUpInside)
+    let howToUseLayoutView = UIImageView(image: UIImage(named: "LoginBg"))
+    let loginLayoutView = UIView().then {
+        $0.backgroundColor = .clear
     }
     
-    @objc private func defaultLogin(_ sender: UIButton) {
-//        let viewController = MainTabViewController()
-//        let navController = UINavigationController(rootViewController: viewController)
-//        navController.isNavigationBarHidden = true
-//        navController.modalTransitionStyle = .crossDissolve
-//        navController.modalPresentationStyle = .fullScreen
-//        self.present(navController, animated: true)
-        
-        let viewController = LoadingViewController()
-        viewController.modalTransitionStyle = .crossDissolve
-        viewController.modalPresentationStyle = .fullScreen
-        self.present(viewController, animated: true)
+    let loginTitle = UILabel().then {
+        $0.text = "노잉 시작하기"
+        $0.font = UIFont.init(name: "GodoM", size: 17)
     }
     
-    let kakaoLoginBt = UIButton(type: .system).then {
-        $0.setTitle("카카오", for: .normal)
-        $0.addTarget(self, action:#selector(kakaoLogin) , for: .touchUpInside)
+    let kakaoLoginBt = UIButton(type: .custom).then {
+        $0.setImage(UIImage(named: "kakaoLogo"), for: .normal)
     }
     
     @objc private func kakaoLogin(_ sender: UIButton) {
@@ -66,9 +51,8 @@ class LoginViewController: UIViewController {
         }
     }
     
-    let naverLoginBt = UIButton(type: .system).then {
-        $0.setTitle("네이버", for: .normal)
-        $0.addTarget(self, action: #selector(naverLogin), for: .touchUpInside)
+    let naverLoginBt = UIButton(type: .custom).then {
+        $0.setImage(UIImage(named: "naverLogo"), for: .normal)
     }
     
     @objc private func naverLogin(_ sender: UIButton) {
@@ -76,13 +60,12 @@ class LoginViewController: UIViewController {
         naverLoginInstance?.requestThirdPartyLogin()
     }
     
-    let googleLoginBt = UIButton(type: .system).then {
-        $0.setTitle("구글", for: .normal)
+    let googleLoginBt = UIButton(type: .custom).then {
+        $0.setImage(UIImage(named: "googleLogo"), for: .normal)
     }
     
-    let appleLoginBt = UIButton(type: .system).then {
-        $0.setTitle("애플", for: .normal)
-        $0.addTarget(self, action: #selector(appleLogin), for: .touchUpInside)
+    let appleLoginBt = UIButton(type: .custom).then {
+        $0.setImage(UIImage(named: "appleLogo"), for: .normal)
     }
     
     @objc private func appleLogin(_ sender: UIButton) {
@@ -97,15 +80,28 @@ class LoginViewController: UIViewController {
         controller.performRequests()
     }
     
-    let signUpBt = UIButton(type: .system).then {
-        
-        let attributedString = NSAttributedString(string: NSLocalizedString("이메일로 회원가입", comment: ""), attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15.0),
-            NSAttributedString.Key.foregroundColor: UIColor.gray,
-            NSAttributedString.Key.underlineStyle: 1.0
-        ])
-        $0.setAttributedTitle(attributedString, for: .normal)
-        $0.addTarget(self, action: #selector(goToSignUp), for: .touchUpInside)
+    let defaultLoginBt = UIButton(type: .custom).then {
+        $0.setTitle("이메일로 로그인", for: .normal)
+        $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.setTitleColor(UIColor.rgb(red: 147, green: 147, blue: 147), for: .normal)
+        $0.titleEdgeInsets.top = 9
+        $0.titleEdgeInsets.bottom = 10
+        $0.titleEdgeInsets.left = 16
+        $0.titleEdgeInsets.right = 20
+    }
+    
+    let signUpBt = UIButton(type: .custom).then {
+        $0.setTitle("이메일로 회원가입", for: .normal)
+        $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.setTitleColor(UIColor.rgb(red: 147, green: 147, blue: 147), for: .normal)
+        $0.titleEdgeInsets.top = 9
+        $0.titleEdgeInsets.bottom = 8
+        $0.titleEdgeInsets.left = 20
+        $0.titleEdgeInsets.right = 5
+    }
+    
+    let separator = UIView().then {
+        $0.backgroundColor = UIColor.rgb(red: 224, green: 224, blue: 224)
     }
     
     @objc private func goToSignUp(_ sender: UIButton) {
@@ -121,47 +117,64 @@ class LoginViewController: UIViewController {
         bind()
     }
     
+    
 }
 
 extension LoginViewController {
     
     func setUI() {
-        view.backgroundColor = UIColor.mainColor
         safeArea.addSubview(howToUseLayoutView)
         howToUseLayoutView.snp.makeConstraints {
-            $0.top.left.right.equalToSuperview()
-            $0.height.equalToSuperview().multipliedBy(0.8)
+            $0.edges.equalTo(self.view.snp.edges)
         }
         
-        safeArea.addSubview(loginLayoutView)
+        view.addSubview(loginLayoutView)
         loginLayoutView.snp.makeConstraints {
-            $0.top.equalTo(howToUseLayoutView.snp.bottom)
+            $0.height.equalTo(howToUseLayoutView.snp.height).multipliedBy(0.264)
             $0.bottom.left.right.equalToSuperview()
+        }
+        
+        loginLayoutView.addSubview(loginTitle)
+        loginTitle.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(137)
+            $0.trailing.equalToSuperview().offset(-136.7)
         }
         
         let apiFieldStack = UIStackView(arrangedSubviews: [kakaoLoginBt, naverLoginBt, googleLoginBt, appleLoginBt]).then {
             $0.axis = .horizontal
-            $0.spacing = 20
+            $0.spacing = 10
             $0.distribution = .fillEqually
         }
-        
-        loginLayoutView.addSubview(defaultLoginBt)
-        defaultLoginBt.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().offset(5)
-        }
-        
+
         loginLayoutView.addSubview(apiFieldStack)
         apiFieldStack.snp.makeConstraints {
-            $0.top.equalTo(defaultLoginBt.snp.bottom).offset(5)
-            $0.centerX.equalToSuperview()
+            $0.top.equalTo(loginTitle.snp.bottom).offset(12)
+            $0.leading.equalToSuperview().offset(57.7)
+            $0.trailing.equalToSuperview().offset(-56.7)
         }
         
-        loginLayoutView.addSubview(signUpBt)
-        signUpBt.snp.makeConstraints {
-            $0.top.equalTo(apiFieldStack.snp.bottom).offset(5)
-            $0.centerX.equalToSuperview()
+        let loginStack = UIStackView(arrangedSubviews: [defaultLoginBt, signUpBt]).then {
+            $0.axis = .horizontal
+            $0.distribution = .fillEqually
+            $0.spacing = 0
         }
+        
+        loginLayoutView.addSubview(loginStack)
+        loginStack.snp.makeConstraints {
+            $0.top.equalTo(apiFieldStack.snp.bottom).offset(15)
+            $0.leading.equalToSuperview().offset(58)
+            $0.trailing.equalToSuperview().offset(-56.7)
+        }
+        
+        loginLayoutView.addSubview(separator)
+        separator.snp.makeConstraints {
+            $0.top.equalTo(apiFieldStack.snp.bottom).offset(20)
+            $0.height.equalTo(loginStack.snp.height).multipliedBy(0.6)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(2)
+        }
+        
         
     }
     
@@ -171,10 +184,26 @@ extension LoginViewController {
     }
     
     func bindInput() {
+        defaultLoginBt.rx.tap.subscribe(onNext: {
+            let viewController = DefaultLoginViewController()
+            viewController.modalTransitionStyle = .crossDissolve
+            viewController.modalPresentationStyle = .fullScreen
+            self.present(viewController, animated: true)
+        }).disposed(by: disposeBag)
+        
+        signUpBt.rx.tap.subscribe(onNext: {
+            let viewController = SignUpViewController()
+            viewController.modalTransitionStyle = .crossDissolve
+            viewController.modalPresentationStyle = .fullScreen
+            self.present(viewController, animated: true)
+        }).disposed(by: disposeBag)
+        
         googleLoginBt.rx.tap
             .map { self }
             .bind(to: loginViewModel.input.googleLoginTap)
             .disposed(by: disposeBag)
+        
+        
     }
     
     func bindOutput() {
