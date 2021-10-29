@@ -26,6 +26,7 @@ class GuideViewController: UIViewController {
     
     let nextButton = CustomButton(title: "다음").then {
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
+        $0.backgroundColor = .mainColor
         $0.contentEdgeInsets.top = 14
         $0.contentEdgeInsets.bottom = 15
     }
