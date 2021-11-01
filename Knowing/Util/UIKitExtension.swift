@@ -56,20 +56,30 @@ extension NSAttributedString {
 extension UITextField {
     
     func setLeft(image: UIImage, withPadding padding: CGFloat = 0) {
-        let wrapperView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: bounds.height, height: bounds.height))
-        
-        let imageView = UIImageView(frame: CGRect.init(x: 0, y: 0, width: 21, height: 20))
-        
+        let wrapperView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 31, height: 21))
+        let imageView = UIImageView(frame: CGRect.init(x: 10, y: 0, width: 21, height: 21))
+
         imageView.image = image
         imageView.contentMode = .scaleAspectFit
         wrapperView.addSubview(imageView)
-        imageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(11)
-            $0.leading.equalToSuperview().offset(10)
-            $0.bottom.equalToSuperview().offset(-10)
-        }
+        
         leftView = wrapperView
         leftViewMode = .always
+
+    }
+    
+    func setRight() {
+        let wrapperView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: bounds.height, height: bounds.height))
+        let imageView = UIImageView(frame: CGRect.init(x: 0, y: 0, width: 21, height: 20))
+        
+        imageView.image = UIImage(named: "tfAlert")
+        imageView.contentMode = .scaleAspectFit
+        wrapperView.addSubview(imageView)
+        imageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        rightView = wrapperView
+        rightViewMode = .always
         
     }
     

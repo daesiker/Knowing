@@ -19,7 +19,6 @@ class CustomButton: UIButton {
         self.setTitle(title, for: .normal)
         self.layer.cornerRadius = 27.0
         
-        
     }
     
     required init?(coder: NSCoder) {
@@ -45,23 +44,37 @@ class CustomTextField: UITextField {
         self.placeholder = text
         self.layer.cornerRadius = 20.0
         self.isSecureTextEntry = isSecure
-        
-        
-        
+        self.isUserInteractionEnabled = true
+        self.delegate = self
         self.setLeft(image: image)
-        
+        self.setRight()
         
     }
     
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        let rect = super.textRect(forBounds: bounds)
-        return rect.inset(by: UIEdgeInsets.init(top: 12, left: 40, bottom: 13, right: 40))
+        return bounds.inset(by: UIEdgeInsets(top: 12, left: 9, bottom: 13, right: 9))
     }
     
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
         let rect = super.editingRect(forBounds: bounds)
-        return rect.inset(by: UIEdgeInsets.init(top: 12, left: 40, bottom: 13, right: 40))
+        return rect.inset(by: UIEdgeInsets.init(top: 12, left: 9, bottom: 13, right: 9))
+    }
+    
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        let rect = super.textRect(forBounds: bounds)
+        return rect.inset(by: UIEdgeInsets.init(top: 12, left: 9, bottom: 13, right: 9))
     }
     
     
+}
+
+extension CustomTextField: UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField){
+        print("textFieldDidBeginEditing:")
+    }
 }
