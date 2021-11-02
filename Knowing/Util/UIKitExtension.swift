@@ -7,7 +7,8 @@
 
 import Foundation
 import UIKit
-
+import RxSwift
+import RxCocoa
 extension UIViewController {
     
     var safeArea:UIView {
@@ -26,6 +27,10 @@ extension UIViewController {
         }
     }
     
+    func keyBoardAction() {
+        
+    }
+    
 }
 
 extension UIColor {
@@ -35,8 +40,6 @@ extension UIColor {
         return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1)
     }
 }
-
-
 
 extension NSAttributedString {
     func withLineSpacing(_ spacing: CGFloat) -> NSAttributedString {
@@ -68,7 +71,7 @@ extension UITextField {
 
     }
     
-    func setRight() {
+    func setErrorRight() {
         let wrapperView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: bounds.height, height: bounds.height))
         let imageView = UIImageView(frame: CGRect.init(x: 0, y: 0, width: 21, height: 20))
         
@@ -83,20 +86,64 @@ extension UITextField {
         
     }
     
-    func setDatePicker(target: Any, selector: Selector) {
-        let SCwidth = self.bounds.width
-        let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: SCwidth, height: 216))
-        datePicker.datePickerMode = .date
-        self.inputView = datePicker
+    func setRight() {
+        let clearButton = UIButton(type: .custom)
+        clearButton.setImage(UIImage(named: "tfCancel")!, for: .normal)
+        clearButton.frame = CGRect(x: 0, y: 0, width: 36, height: 36)
+        clearButton.addTarget(self, action: #selector(UITextField.clear), for: .touchUpInside)
+        self.addTarget(self, action: #selector(UITextField.displayClearButtonIfNeeded), for: .editingDidBegin)
+        self.addTarget(self, action: #selector(UITextField.displayClearButtonIfNeeded), for: .editingChanged)
+        self.rightView = clearButton
+        self.rightViewMode = .whileEditing
+    }
+    
+    @objc private func displayClearButtonIfNeeded() {
+        self.rightView?.isHidden = (self.text?.isEmpty) ?? true
+    }
+    
+    @objc private func clear(sender: AnyObject) {
+        self.text = ""
+        sendActions(for: .editingChanged)
+    }
+    
+    var datePicker: UIDatePicker {
+        get {
+            let SCwidth = self.bounds.width
+            let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: SCwidth, height: 216))
+            datePicker.datePickerMode = .date
+            if #available(iOS 13.4, *) {
+                datePicker.preferredDatePickerStyle = .wheels
+                datePicker.setValue(UIColor.white, forKey: "textColor")
+                datePicker.setValue(true, forKey: "highlightsToday")
+            }
+            return datePicker
+        }
+    }
+    
+    func setDatePicker(target: Any) {
         
+        self.inputView = datePicker
+        let SCwidth = self.bounds.width
         let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: SCwidth, height: 44.0))
         let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let cancel = UIBarButtonItem(title: "Cancel", style: .plain, target: nil, action: #selector(tapCancel))
-        let barButton = UIBarButtonItem(title: "Done", style: .plain, target: target, action: selector)
+        let barButton = UIBarButtonItem(title: "Done", style: .plain, target: nil, action: #selector(donePressed))
         toolBar.setItems([cancel, flexible, barButton], animated: false)
         self.inputAccessoryView = toolBar
         
+        
+        
     }
+    
+    @objc func donePressed() {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "yyyy / MM / dd"
+        let strDate = dateFormater.string(from: datePicker.date)
+        self.text = strDate
+        self.resignFirstResponder()
+    }
+    
+    
     
     @objc func tapCancel() {
         self.resignFirstResponder()

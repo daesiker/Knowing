@@ -51,7 +51,7 @@ class GuideViewController: UIViewController {
         
         view.addSubview(nextButton)
         nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(safeArea.snp.bottom).offset(-53)
+            $0.bottom.equalTo(safeArea.snp.bottom).offset(-52)
             $0.leading.equalToSuperview().offset(31)
             $0.trailing.equalToSuperview().offset(-30)
         }
@@ -59,7 +59,7 @@ class GuideViewController: UIViewController {
         view.addSubview(pageControl)
         pageControl.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(nextButton.snp.bottom).offset(-61)
+            $0.bottom.equalTo(nextButton.snp.bottom).offset(-62)
         }
         
     }

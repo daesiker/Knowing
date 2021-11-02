@@ -138,7 +138,7 @@ extension LoginViewController {
         loginTitle.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(137)
-            $0.trailing.equalToSuperview().offset(-136.7)
+            $0.trailing.equalToSuperview().offset(-137)
         }
         
         let apiFieldStack = UIStackView(arrangedSubviews: [kakaoLoginBt, naverLoginBt, googleLoginBt, appleLoginBt]).then {
