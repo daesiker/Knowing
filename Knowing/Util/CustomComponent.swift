@@ -68,9 +68,6 @@ class CustomTextField: UITextField {
         return rect.inset(by: UIEdgeInsets.init(top: 12, left: 9, bottom: 13, right: 9))
     }
     
-    
-    
-    
 }
 
 extension CustomTextField: UITextFieldDelegate {
@@ -101,5 +98,55 @@ extension CustomTextField: UITextFieldDelegate {
         return true
     }
     
+}
+
+
+class CustomPicker: UIButton {
+    
+    let label = UILabel().then {
+        $0.text = ""
+        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
+        $0.textColor = UIColor.rgb(red: 194, green: 194, blue: 194)
+    }
+    
+    let image = UIImageView(image: UIImage(named: "triangle")!)
+    
+    let border = UIView().then {
+        $0.backgroundColor = UIColor.rgb(red: 151, green: 151, blue: 151)
+    }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubview(border)
+        border.snp.makeConstraints {
+            $0.height.equalTo(2)
+            $0.bottom.leading.trailing.equalToSuperview()
+        }
+        
+        self.addSubview(label)
+        label.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.top.equalToSuperview().offset(5)
+            $0.bottom.equalToSuperview().offset(-9)
+        }
+        
+        self.addSubview(image)
+        image.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.leading.equalToSuperview().offset(103)
+            $0.top.equalToSuperview().offset(9)
+            $0.bottom.equalToSuperview().offset(-11)
+        }
+        
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    convenience init(_ text: String) {
+        self.init()
+        label.text = text
+    }
     
 }

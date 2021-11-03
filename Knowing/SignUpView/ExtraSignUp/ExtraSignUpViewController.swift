@@ -10,9 +10,17 @@ import Then
 
 
 class ExtraSignUpViewController: UIViewController {
-
-    let topView = UIView()
-    let footerView = UIScrollView()
+    
+    let footerView = UIScrollView().then {
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.isPagingEnabled = true
+        $0.alwaysBounceVertical = false
+        $0.isScrollEnabled = true
+        $0.bounces = false
+    }
+    
+    let childView:[UIView] = [StepOneView(), StepTwoView(), StepThreeView(), StepFourView(), StepFiveView()]
     
     let backBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
@@ -21,7 +29,7 @@ class ExtraSignUpViewController: UIViewController {
     let smallTitleLabel = UILabel().then {
         $0.text = "딱 맞는 복지정보, 노잉이 찾아드릴게요!"
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 15)
-        $0.textColor = .black
+        $0.textColor = UIColor.rgb(red: 127, green: 127, blue: 127)
     }
     
     let largeTitleLabel = UILabel().then {
@@ -48,7 +56,7 @@ class ExtraSignUpViewController: UIViewController {
         $0.text = "3"
         $0.font = UIFont(name: "Roboto-Bold", size: 14)
         $0.textColor = UIColor.rgb(red: 249, green: 133, blue: 81)
-    
+        
     }
     
     let fourLabel = UILabel().then {
@@ -87,10 +95,31 @@ class ExtraSignUpViewController: UIViewController {
         $0.textColor = UIColor.rgb(red: 147, green: 147, blue: 147)
     }
     
+    let nextBt = UIButton(type: .custom).then {
+        $0.setTitle("다음", for: .normal)
+        $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
+        $0.titleLabel?.textColor = .white
+        $0.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
+        $0.layer.cornerRadius = 27.0
+        $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 147, bottom: 13, right: 147)
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
+        addContentScrollView()
+    }
+    
+    private func addContentScrollView() {
+        footerView.frame = UIScreen.main.bounds
+        footerView.contentSize = CGSize(width: UIScreen.main.bounds.width * CGFloat(childView.count), height: UIScreen.main.bounds.height * 0.63)
+        for i in 0..<childView.count {
+            let xPos = self.view.frame.width * CGFloat(i)
+            childView[i].frame = CGRect(x: xPos, y: 0, width: footerView.bounds.width, height: UIScreen.main.bounds.height * 0.63)
+            footerView.addSubview(childView[i])
+            footerView.contentSize.width = childView[i].frame.width * CGFloat(i + 1)
+        }
     }
     
 }
@@ -98,31 +127,26 @@ class ExtraSignUpViewController: UIViewController {
 extension ExtraSignUpViewController {
     func setUI() {
         view.backgroundColor = .white
-        safeArea.addSubview(topView)
-        topView.snp.makeConstraints {
-            $0.height.equalToSuperview().multipliedBy(0.4)
-            $0.top.leading.trailing.equalToSuperview()
-        }
         
-        topView.addSubview(backBt)
+        safeArea.addSubview(backBt)
         backBt.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(1)
+            $0.top.equalTo(safeArea.snp.top).offset(1)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        topView.addSubview(smallTitleLabel)
+        safeArea.addSubview(smallTitleLabel)
         smallTitleLabel.snp.makeConstraints {
             $0.top.equalTo(backBt.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(26)
         }
         
-        topView.addSubview(largeTitleLabel)
+        safeArea.addSubview(largeTitleLabel)
         largeTitleLabel.snp.makeConstraints {
             $0.top.equalTo(smallTitleLabel.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(26)
         }
         
-        topView.addSubview(progressView)
+        safeArea.addSubview(progressView)
         progressView.snp.makeConstraints {
             $0.top.equalTo(largeTitleLabel.snp.bottom).offset(51)
             $0.leading.equalToSuperview().offset(26)
@@ -130,31 +154,31 @@ extension ExtraSignUpViewController {
             $0.height.equalTo(8)
         }
         
-        topView.addSubview(oneLabel)
+        safeArea.addSubview(oneLabel)
         oneLabel.snp.makeConstraints {
             $0.bottom.equalTo(progressView.snp.top).offset(-10)
             $0.leading.equalToSuperview().offset((view.frame.width - 50) * 0.2 + 21)
         }
         
-        topView.addSubview(twoLabel)
+        safeArea.addSubview(twoLabel)
         twoLabel.snp.makeConstraints {
             $0.bottom.equalTo(progressView.snp.top).offset(-10)
             $0.leading.equalToSuperview().offset((view.frame.width - 50) * 0.4 + 21)
         }
         
-        topView.addSubview(threeLabel)
+        safeArea.addSubview(threeLabel)
         threeLabel.snp.makeConstraints {
             $0.bottom.equalTo(progressView.snp.top).offset(-10)
             $0.leading.equalToSuperview().offset((view.frame.width - 50) * 0.6 + 21)
         }
         
-        topView.addSubview(fourLabel)
+        safeArea.addSubview(fourLabel)
         fourLabel.snp.makeConstraints {
             $0.bottom.equalTo(progressView.snp.top).offset(-10)
             $0.leading.equalToSuperview().offset((view.frame.width - 50) * 0.8 + 21)
         }
         
-        topView.addSubview(fiveLabel)
+        safeArea.addSubview(fiveLabel)
         fiveLabel.snp.makeConstraints {
             $0.bottom.equalTo(progressView.snp.top).offset(-10)
             $0.trailing.equalToSuperview().offset(-25)
@@ -163,19 +187,32 @@ extension ExtraSignUpViewController {
         let subTitle = UIStackView(arrangedSubviews: [subTitle1, subTitle2, subTitle3]).then {
             $0.axis = .horizontal
             $0.spacing = 1
-            
             $0.distribution = .fillProportionally
         }
         
-        topView.addSubview(subTitle)
+        safeArea.addSubview(subTitle)
         subTitle.snp.makeConstraints {
             $0.top.equalTo(progressView.snp.bottom).offset(28)
             $0.leading.equalToSuperview().offset(78)
             $0.trailing.equalToSuperview().offset(-77)
         }
         
+        safeArea.addSubview(footerView)
+        footerView.snp.makeConstraints {
+            $0.top.equalTo(subTitle.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(self.view.snp.bottom)
+        }
         
-        
+        safeArea.addSubview(nextBt)
+        nextBt.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-22)
+            $0.leading.equalToSuperview().offset(26)
+            $0.trailing.equalToSuperview().offset(-25)
+        }
+    }
+    
+    func bind() {
         
     }
 }

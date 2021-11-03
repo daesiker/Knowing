@@ -15,7 +15,6 @@ class GuideViewController: UIViewController {
     var disposedBag = DisposeBag()
     
     let guideScrollView = UIScrollView().then {
-        
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
         $0.isPagingEnabled = true

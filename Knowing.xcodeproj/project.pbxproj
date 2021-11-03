@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		8E7FA5334C6155D207510C50 /* Pods_Knowing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234F8FC0A6937616FF54D776 /* Pods_Knowing.framework */; };
+		BF151BA5273243BC0065E766 /* StepOneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF151BA4273243BC0065E766 /* StepOneView.swift */; };
+		BF151BA72732465C0065E766 /* StepTwoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF151BA62732465C0065E766 /* StepTwoView.swift */; };
+		BF151BA92732466B0065E766 /* StepThreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF151BA82732466B0065E766 /* StepThreeView.swift */; };
+		BF151BAB273246790065E766 /* StepFourView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF151BAA273246790065E766 /* StepFourView.swift */; };
+		BF151BAD273246850065E766 /* StepFiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF151BAC273246850065E766 /* StepFiveView.swift */; };
+		BF151BAF2732760F0065E766 /* AddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF151BAE2732760F0065E766 /* AddressViewController.swift */; };
 		BF2E058327225D7E008CA167 /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058227225D7E008CA167 /* GuideViewController.swift */; };
 		BF2E058527226070008CA167 /* CustomComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058427226070008CA167 /* CustomComponent.swift */; };
 		BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */; };
@@ -43,6 +49,12 @@
 		234F8FC0A6937616FF54D776 /* Pods_Knowing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Knowing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC58E7E1901AFC3F7ED30FD /* Pods-Knowing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Knowing.debug.xcconfig"; path = "Target Support Files/Pods-Knowing/Pods-Knowing.debug.xcconfig"; sourceTree = "<group>"; };
 		79344B48A9993DC1F63632C6 /* Pods-Knowing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Knowing.release.xcconfig"; path = "Target Support Files/Pods-Knowing/Pods-Knowing.release.xcconfig"; sourceTree = "<group>"; };
+		BF151BA4273243BC0065E766 /* StepOneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepOneView.swift; sourceTree = "<group>"; };
+		BF151BA62732465C0065E766 /* StepTwoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepTwoView.swift; sourceTree = "<group>"; };
+		BF151BA82732466B0065E766 /* StepThreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepThreeView.swift; sourceTree = "<group>"; };
+		BF151BAA273246790065E766 /* StepFourView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepFourView.swift; sourceTree = "<group>"; };
+		BF151BAC273246850065E766 /* StepFiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepFiveView.swift; sourceTree = "<group>"; };
+		BF151BAE2732760F0065E766 /* AddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressViewController.swift; sourceTree = "<group>"; };
 		BF2E058227225D7E008CA167 /* GuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
 		BF2E058427226070008CA167 /* CustomComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponent.swift; sourceTree = "<group>"; };
 		BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_ng9j9lpx_1.json; sourceTree = "<group>"; };
@@ -177,6 +189,11 @@
 			isa = PBXGroup;
 			children = (
 				BF85C63327311203005D9EF1 /* ExtraSignUpViewController.swift */,
+				BF151BA4273243BC0065E766 /* StepOneView.swift */,
+				BF151BA62732465C0065E766 /* StepTwoView.swift */,
+				BF151BA82732466B0065E766 /* StepThreeView.swift */,
+				BF151BAA273246790065E766 /* StepFourView.swift */,
+				BF151BAC273246850065E766 /* StepFiveView.swift */,
 			);
 			path = ExtraSignUp;
 			sourceTree = "<group>";
@@ -294,6 +311,7 @@
 				BF2E058427226070008CA167 /* CustomComponent.swift */,
 				BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */,
 				BF85C62A27310883005D9EF1 /* FoundationExtension.swift */,
+				BF151BAE2732760F0065E766 /* AddressViewController.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -419,20 +437,26 @@
 				BF85C631273111B7005D9EF1 /* SignUpViewController.swift in Sources */,
 				BF2E058527226070008CA167 /* CustomComponent.swift in Sources */,
 				BF83793D272924B100584E33 /* HomeAllPostView.swift in Sources */,
+				BF151BA72732465C0065E766 /* StepTwoView.swift in Sources */,
 				BF85C63427311203005D9EF1 /* ExtraSignUpViewController.swift in Sources */,
 				BF85C62927310147005D9EF1 /* SignUpViewModel.swift in Sources */,
 				BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */,
 				BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */,
 				BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
+				BF151BAB273246790065E766 /* StepFourView.swift in Sources */,
 				BF8379372729208900584E33 /* HomeChartView.swift in Sources */,
 				BFA07970271FD2F800912C18 /* MainTabViewController.swift in Sources */,
+				BF151BA5273243BC0065E766 /* StepOneView.swift in Sources */,
+				BF151BA92732466B0065E766 /* StepThreeView.swift in Sources */,
 				BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */,
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
 				BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */,
 				BF85C62B27310883005D9EF1 /* FoundationExtension.swift in Sources */,
+				BF151BAF2732760F0065E766 /* AddressViewController.swift in Sources */,
 				BFF506FD27190EBB003127CF /* LoginViewModel.swift in Sources */,
 				BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */,
+				BF151BAD273246850065E766 /* StepFiveView.swift in Sources */,
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,
 				BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */,
 				BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */,
