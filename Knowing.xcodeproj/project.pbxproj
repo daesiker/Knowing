@@ -18,6 +18,7 @@
 		BF2E058527226070008CA167 /* CustomComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058427226070008CA167 /* CustomComponent.swift */; };
 		BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */; };
 		BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058827229C30008CA167 /* LoadingViewController.swift */; };
+		BF5351CB2733C2230040ECFE /* ExtraSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5351CA2733C2230040ECFE /* ExtraSignUpViewModel.swift */; };
 		BF5A2B8A272A67E200234429 /* GodoM.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B88272A5D4F00234429 /* GodoM.ttf */; };
 		BF5A2B8B272A67E500234429 /* GodoB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B89272A62D500234429 /* GodoB.ttf */; };
 		BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */; };
@@ -59,6 +60,7 @@
 		BF2E058427226070008CA167 /* CustomComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponent.swift; sourceTree = "<group>"; };
 		BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_ng9j9lpx_1.json; sourceTree = "<group>"; };
 		BF2E058827229C30008CA167 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		BF5351CA2733C2230040ECFE /* ExtraSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraSignUpViewModel.swift; sourceTree = "<group>"; };
 		BF5A2B88272A5D4F00234429 /* GodoM.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoM.ttf; sourceTree = "<group>"; };
 		BF5A2B89272A62D500234429 /* GodoB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoB.ttf; sourceTree = "<group>"; };
 		BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginViewController.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 				BF151BA82732466B0065E766 /* StepThreeView.swift */,
 				BF151BAA273246790065E766 /* StepFourView.swift */,
 				BF151BAC273246850065E766 /* StepFiveView.swift */,
+				BF5351CA2733C2230040ECFE /* ExtraSignUpViewModel.swift */,
 			);
 			path = ExtraSignUp;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 				BFA07970271FD2F800912C18 /* MainTabViewController.swift in Sources */,
 				BF151BA5273243BC0065E766 /* StepOneView.swift in Sources */,
 				BF151BA92732466B0065E766 /* StepThreeView.swift in Sources */,
+				BF5351CB2733C2230040ECFE /* ExtraSignUpViewModel.swift in Sources */,
 				BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */,
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
 				BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */,

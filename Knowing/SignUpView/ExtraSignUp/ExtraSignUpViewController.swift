@@ -7,9 +7,13 @@
 
 import UIKit
 import Then
-
+import RxCocoa
+import RxSwift
 
 class ExtraSignUpViewController: UIViewController {
+    
+    let vm = ExtraSignUpViewModel.instance
+    let disposeBag = DisposeBag()
     
     let footerView = UIScrollView().then {
         $0.showsHorizontalScrollIndicator = false
@@ -108,6 +112,7 @@ class ExtraSignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
+        bind()
         addContentScrollView()
     }
     
@@ -213,6 +218,25 @@ extension ExtraSignUpViewController {
     }
     
     func bind() {
+        bindInput()
+        bindOutput()
+    }
+    
+    func bindInput() {
         
     }
+    
+    func bindOutput() {
+        vm.stepOne.output.goCityView.subscribe(onNext: {
+            let vc = AddressViewController()
+            let nav = UINavigationController(rootViewController: vc)
+            nav.modalTransitionStyle = .coverVertical
+            nav.modalPresentationStyle = .popover
+            self.present(nav, animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+    }
+    
+    
+    
+    
 }

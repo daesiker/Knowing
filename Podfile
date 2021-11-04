@@ -17,6 +17,7 @@ pod 'lottie-ios'
 #Design Framework
 pod 'RxSwift'
 pod 'RxCocoa'
+pod 'RxDataSources'
 #LoginAPI
 pod 'GoogleSignIn', '~> 6.0.2'
 pod 'naveridlogin-sdk-ios'

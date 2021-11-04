@@ -18,24 +18,78 @@ let address:[String: [String]] = ["시/도 선택":["서울특별시", "부산�
                                   "대전광역시": ["대덕구", "동구", "서구", "유성구", "중구"],
                                   "울산광역시": ["중구", "남구", "북구", "동구", "울주군"],
                                   "제주특별자치도": ["제주시", "서귀포시"],
-                                  "세종특별자치시": ["세종시"]]
+                                  "세종특별자치시": ["세종시"],
+                                  "경기도": ["수원시","성남시","의정부시","안양시","부천시","광명시","평택시","동두천시","안산시","고양시","과천시","구리시","남양주시","오산시 ","시흥시 ","군포시","의왕시","하남시",
+                                                "용인시","파주시","이천시","안성시","김포시","화성시","광주시","양주시","포천시","여주시","양주군","여주군","연천군","포천군","가평군","양평군"],
+                                  "강원도": ["춘천시","원주시","강릉시","동해시","태백시","속초시","삼척시","홍천군","횡성군","영월군","평창군","정선군","철원군","화천군","양구군","인제군","고성군 ","양양군"],
+                                  "충청북도": ["청주시","충주시","제천시","청원군","보은군","옥천군","영동군","증평군","진천군","괴산군","음성군","단양군"],
+                                  "충청남도": ["천안시","공주시","보령시","아산시","서산시","논산시","계룡시","당진시","금산군","연기군","부여군","서천군","청양군","홍성군","예산군","태안군","당진군"],
+                                  "전라북도": ["전주시","군산시","익산시","정읍시","남원시","김제시","완주군","진안군","무주군","장수군","임실군","순창군","고창군","부안군"],
+                                  "전라남도": ["목포시","여수시","순천시","나주시","광양시","담양군","곡성군","구례군","고흥군","보성군","화순군","장흥군","강진군","해남군","영암군","무안군","함평군","영광군","장성군","완도군","진도군","신안군"],
+                                  "경상북도": ["포항시","경주시","김천시","안동시","구미시","영주시","영천시","상주시","문경시","경산시","군위군","의성군","청송군","영양군","영덕군","청도군","고령군","성주군","칠곡군","예천군","봉화군","울진군","울릉군"],
+                                  "경상남도": ["창원시","마산시","진주시","진해시","통영시","사천시","김해시","밀양시","거제시","양산시","의령군","함안군","창녕군","고성군","남해군","하동군","산청군","함양군","거창군","합천군"]]
 
 class AddressViewController: UIViewController {
     
     let disposeBag = DisposeBag()
-    let cancelBt = UIBarButtonItem(image: UIImage(named: "largeCancel"), style: .plain, target: nil, action: nil)
+    let cancelBt = UIBarButtonItem(image: UIImage(named: "largeCancel")!, style: .plain, target: nil, action: nil)
+    let searchBar = UISearchBar().then {
+        $0.searchBarStyle = .minimal
+        $0.layer.cornerRadius = 30
+        $0.placeholder = "검색어를 입력해주세요."
+    }
     
+    let separator = UIView().then {
+        $0.backgroundColor = UIColor.rgb(red: 221, green: 221, blue: 221)
+    }
+    
+    let collectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.backgroundColor = .white
+        return collectionView
+    }()
+    
+    let cellId = "cellId"
+    let allItem:[String] = address["시/도 선택"] ?? []
+    var selectedItem:[String] = address["시/도 선택"] ?? []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
         bind()
+        setCollectionView()
     }
     
     func setUI() {
         view.backgroundColor = .white
-        navigationController?.title = "시/도 선택"
-        navigationController?.navigationItem.rightBarButtonItem = cancelBt
+        let title = [NSAttributedString.Key.foregroundColor: UIColor.rgb(red: 101, green: 101, blue: 101),
+                     NSAttributedString.Key.font: UIFont(name: "GodoM", size: 20)]
+        navigationItem.title = "시/도 선택"
+        UINavigationBar.appearance().titleTextAttributes = title as [NSAttributedString.Key : Any]
+        navigationItem.rightBarButtonItem = cancelBt
+        
+        safeArea.addSubview(searchBar)
+        searchBar.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(26)
+            $0.trailing.equalToSuperview().offset(-26)
+            $0.height.equalTo(47)
+        }
+        
+        safeArea.addSubview(separator)
+        separator.snp.makeConstraints {
+            $0.top.equalTo(searchBar.snp.bottom).offset(15)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
+        safeArea.addSubview(collectionView)
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(separator.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+        
     }
     
     func bind() {
@@ -43,8 +97,79 @@ class AddressViewController: UIViewController {
             .subscribe(onNext: {
                 self.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
+        
+        searchBar.rx.text.orEmpty
+            .debounce(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .subscribe(onNext: { text in
+                self.selectedItem = self.allItem.filter { $0.hasPrefix(text) }
+                self.collectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     
+    func setCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(AddressCell.self, forCellWithReuseIdentifier: cellId)
+    }
     
+}
+
+extension AddressViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 15, left: 25, bottom: 15, right: 25)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 21
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 23
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (view.frame.width - 73) / 2
+        return CGSize(width: width, height: 41)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+       return selectedItem.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AddressCell
+        cell.button.setTitle(selectedItem[indexPath.item], for: .normal)
+        return cell
+    }
+    
+}
+
+
+class AddressCell: UICollectionViewCell {
+    
+    let button = UIButton(type: .custom).then {
+        $0.setTitle("", for: .normal)
+        $0.layer.cornerRadius = 23.5
+        $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.setTitleColor(UIColor.rgb(red: 108, green: 108, blue: 108), for: .normal)
+        $0.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+        $0.contentEdgeInsets.top = 13
+        $0.contentEdgeInsets.bottom = 13
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(button)
+        button.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
 }

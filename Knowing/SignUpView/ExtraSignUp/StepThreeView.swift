@@ -7,17 +7,13 @@
 import Foundation
 import UIKit
 
-class StepThreeView: UIView {
+class StepThreeView: UIView{
     let titleLabel = UILabel().then {
         $0.text = "step Three"
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(titleLabel)
-        titleLabel.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-        }
     }
     
     required init?(coder: NSCoder) {

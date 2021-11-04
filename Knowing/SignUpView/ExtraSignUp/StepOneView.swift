@@ -12,6 +12,9 @@ import RxCocoa
 
 class StepOneView: UIView {
     
+    let vm = ExtraSignUpViewModel.instance
+    var disposeBag = DisposeBag()
+    
     let starImg = UIImageView(image: UIImage(named: "star")!)
     
     let residenceLb = UILabel().then {
@@ -40,10 +43,10 @@ class StepOneView: UIView {
         $0.numberOfLines = 3
     }
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -51,46 +54,56 @@ class StepOneView: UIView {
     }
     
     func setUI() {
-        self.addSubview(starImg)
+        addSubview(starImg)
         starImg.snp.makeConstraints {
             $0.top.equalToSuperview().offset(55)
             $0.leading.equalToSuperview().offset(26)
         }
-        self.addSubview(residenceLb)
+        
+        
+        addSubview(residenceLb)
         residenceLb.snp.makeConstraints {
             $0.top.equalToSuperview().offset(52)
             $0.leading.equalTo(starImg.snp.trailing).offset(4)
         }
         
-        self.addSubview(cityBt)
+       addSubview(cityBt)
         cityBt.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(25)
             $0.top.equalTo(residenceLb.snp.bottom).offset(20)
         }
         
-        self.addSubview(guBt)
+        addSubview(guBt)
         guBt.snp.makeConstraints {
             $0.top.equalTo(residenceLb.snp.bottom).offset(20)
             $0.leading.equalTo(cityBt.snp.trailing).offset(26)
         }
         
-        self.addSubview(subLb)
+        addSubview(subLb)
         subLb.snp.makeConstraints {
             $0.top.equalTo(cityBt.snp.bottom).offset(43)
             $0.leading.equalToSuperview().offset(25)
         }
         
-        self.addSubview(checkBox)
+        addSubview(checkBox)
         checkBox.snp.makeConstraints {
             $0.top.equalTo(subLb.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(17)
         }
         
-        self.addSubview(cbLabel)
+        addSubview(cbLabel)
         cbLabel.snp.makeConstraints {
             $0.top.equalTo(subLb.snp.bottom).offset(16)
             $0.leading.equalTo(checkBox.snp.trailing).offset(3)
         }
     }
+    
+    func bind() {
+        cityBt.rx.tap
+            .bind(to: self.vm.stepOne.input.cityObserver)
+            .disposed(by: disposeBag)
+    }
+    
+    
 }
 

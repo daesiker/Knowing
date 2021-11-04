@@ -15,10 +15,6 @@ class StepFiveView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(titleLabel)
-        titleLabel.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-        }
     }
     
     required init?(coder: NSCoder) {
