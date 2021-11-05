@@ -114,6 +114,7 @@ class CustomPicker: UIButton {
     let border = UIView().then {
         $0.backgroundColor = UIColor.rgb(red: 151, green: 151, blue: 151)
     }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(border)
