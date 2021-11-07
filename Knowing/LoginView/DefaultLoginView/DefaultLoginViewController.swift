@@ -6,9 +6,14 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class DefaultLoginViewController: UIViewController {
-
+    
+    let vm = DefaultLoginViewModel()
+    let disposeBag = DisposeBag()
+    
     let backBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
     }
@@ -25,9 +30,15 @@ class DefaultLoginViewController: UIViewController {
         $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
     }
     
-    let emailTextField = CustomTextField(image: UIImage(named: "email")!, text: "이메일 주소 입력").then {
+    let emailTextField = CustomTextField(image: UIImage(named: "email")!, text: "이메일 주소 입력", isLogin: true).then {
         $0.backgroundColor = UIColor.rgb(red: 243, green: 243, blue: 243)
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
+    }
+    
+    let emailAlert = UILabel().then {
+        $0.text = ""
+        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 11)
+        $0.textColor = UIColor.rgb(red: 255, green: 108, blue: 0)
     }
     
     let pwLabel = UILabel().then {
@@ -36,9 +47,16 @@ class DefaultLoginViewController: UIViewController {
         $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
     }
     
-    let pwTextField = CustomTextField(image: UIImage(named: "password")!, text: "영문자와 숫자 포함 8자 이상 입력").then {
+    let pwTextField = CustomTextField(image: UIImage(named: "password")!, text: "영문자와 숫자 포함 8자 이상 입력", isLogin: true).then {
         $0.backgroundColor = UIColor.rgb(red: 243, green: 243, blue: 243)
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
+        $0.isSecureTextEntry = true
+    }
+    
+    let pwAlert = UILabel().then {
+        $0.text = ""
+        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 11)
+        $0.textColor = UIColor.rgb(red: 255, green: 108, blue: 0)
     }
     
     let logInBt = UIButton(type: .custom).then {
@@ -48,33 +66,27 @@ class DefaultLoginViewController: UIViewController {
         $0.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
         $0.layer.cornerRadius = 27.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 128, bottom: 14, right: 127)
+        $0.isEnabled = false
+    }
+    
+    let loginAlert = UILabel().then {
+        $0.text = ""
+        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 11)
+        $0.textColor = UIColor.rgb(red: 255, green: 108, blue: 0)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setUI()
-        keyboardNotification()
+        bind()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     
-    func keyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-    }
     
-    @objc func keyboardWillShow(_ sender: Notification) {
-        self.view.frame.origin.y = -150
-    }
-    
-    @objc func keyboardWillHide(_ sender: Notification) {
-        self.view.frame.origin.y = 0
-    }
-
 }
 
 extension DefaultLoginViewController {
@@ -104,9 +116,15 @@ extension DefaultLoginViewController {
             $0.top.equalTo(emailLabel.snp.bottom).offset(9)
         }
         
+        safeArea.addSubview(emailAlert)
+        emailAlert.snp.makeConstraints {
+            $0.top.equalTo(self.emailTextField.snp.bottom).offset(6)
+            $0.leading.equalToSuperview().offset(27)
+        }
+        
         safeArea.addSubview(pwLabel)
         pwLabel.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(31)
+            $0.top.equalTo(emailAlert.snp.bottom).offset(17)
             $0.leading.equalToSuperview().offset(24)
         }
         
@@ -117,11 +135,74 @@ extension DefaultLoginViewController {
             $0.top.equalTo(pwLabel.snp.bottom).offset(9)
         }
         
+        safeArea.addSubview(pwAlert)
+        pwAlert.snp.makeConstraints {
+            $0.top.equalTo(pwTextField.snp.bottom).offset(6)
+            $0.leading.equalToSuperview().offset(27)
+        }
+        
         safeArea.addSubview(logInBt)
         logInBt.snp.makeConstraints {
             $0.top.equalTo(pwTextField.snp.bottom).offset(35)
             $0.centerX.equalToSuperview()
         }
         
+    }
+    
+    func bind() {
+        bindInput()
+        bindOutput()
+    }
+    
+    func bindInput() {
+        backBt.rx.tap.subscribe(onNext: {
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+        
+        emailTextField.rx.controlEvent([.editingDidEnd])
+            .map { self.emailTextField.text ?? "" }
+            .bind(to: self.vm.input.emailObserver)
+            .disposed(by: disposeBag)
+        
+        pwTextField.rx.controlEvent([.editingDidEnd])
+            .map { self.pwTextField.text ?? "" }
+            .bind(to: self.vm.input.pwObserver)
+            .disposed(by: disposeBag)
+        
+        logInBt.rx.tap
+            .bind(to: self.vm.input.loginObserver)
+            .disposed(by: disposeBag)
+    }
+    
+    func bindOutput() {
+        vm.output.emailValid.drive(onNext: {valid in
+            if valid {
+                self.emailAlert.text = ""
+                self.emailTextField.setRight()
+            } else {
+                self.emailAlert.text = "이메일 형식이 올바르지 않습니다."
+                self.emailTextField.setErrorRight()
+            }
+        }).disposed(by: disposeBag)
+        
+        vm.output.pwValid.drive(onNext: {valid in
+            if valid {
+                self.pwAlert.text = ""
+                self.pwTextField.setRight()
+            } else {
+                self.pwAlert.text = "영문자와 숫자 포함 8자 이상 입력해주세요."
+                self.pwTextField.setErrorRight()
+            }
+        }).disposed(by: disposeBag)
+        
+        vm.output.loginValid.drive(onNext: {valid in
+            if valid {
+                self.logInBt.isEnabled = true
+                self.logInBt.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
+            } else {
+                self.logInBt.isEnabled = false
+                self.logInBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
+            }
+        }).disposed(by: disposeBag)
     }
 }

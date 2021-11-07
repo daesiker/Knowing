@@ -116,8 +116,6 @@ class SignUpViewController: UIViewController {
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
         $0.setDatePicker(target: self)
     }
-        
-        
     
     let signInBt = UIButton(type: .custom).then {
         $0.setTitle("회원가입", for: .normal)
@@ -126,6 +124,7 @@ class SignUpViewController: UIViewController {
         $0.backgroundColor = UIColor.rgb(red: 195, green: 195, blue: 195)
         $0.layer.cornerRadius = 27.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 134, bottom: 13, right: 131)
+        $0.isEnabled = false
     }
     
     override func viewDidLoad() {
@@ -142,7 +141,6 @@ class SignUpViewController: UIViewController {
     func keyboardNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
     }
     
     @objc func keyboardWillShow(_ sender: Notification) {
@@ -275,23 +273,94 @@ extension SignUpViewController {
     }
     
     func bindInput() {
+        backBt.rx.tap.subscribe(onNext: {
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+        
         nameTextField.rx.controlEvent([.editingDidEnd])
             .map { self.nameTextField.text ?? "" }
             .bind(to: vm.input.nameObserver)
             .disposed(by: disposeBag)
+        
+        emailTextField.rx.controlEvent([.editingDidEnd])
+            .map { self.emailTextField.text ?? "" }
+            .bind(to: vm.input.emailObserver)
+            .disposed(by: disposeBag)
+        
+        pwTextField.rx.controlEvent([.editingDidEnd])
+            .map { self.pwTextField.text ?? "" }
+            .bind(to: vm.input.pwObserver)
+            .disposed(by: disposeBag)
+        
+        maleBt.rx.tap
+            .map { true }
+            .bind(to: vm.input.genderObserver)
+            .disposed(by: disposeBag)
+        
+        femaleBt.rx.tap
+            .map { false }
+            .bind(to: vm.input.genderObserver)
+            .disposed(by: disposeBag)
+        
+        birthTextField.rx.controlEvent([.editingDidEnd])
+            .map { self.birthTextField.text ?? "" }
+            .bind(to: vm.input.birthObserver)
+            .disposed(by: disposeBag)
+        
+        signInBt.rx.tap.subscribe(onNext: {
+            let vc = ExtraSignUpViewController()
+            ExtraSignUpViewModel.instance.user = self.vm.user
+            vc.modalTransitionStyle = .crossDissolve
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+        
     }
     
     func bindOutput() {
-        vm.output.nameValid.drive(onNext: {valid in
+        vm.output.emailValid.drive(onNext: {valid in
             if valid {
-                self.nameAlertLabel.text = "이름은 2글자 이상입니다."
-                self.nameTextField.setErrorRight()
+                self.emailAlertLabel.text = ""
+                self.emailTextField.setRight()
             } else {
-                self.nameAlertLabel.text = ""
-                self.nameTextField.setRight()
+                self.emailAlertLabel.text = "이메일 형식이 올바르지 않습니다."
+                self.emailTextField.setErrorRight()
             }
-        })
-        .disposed(by: disposeBag)
+        }).disposed(by: disposeBag)
+        
+        vm.output.pwValid.drive(onNext: {valid in
+            if valid {
+                self.pwAlertLabel.text = ""
+                self.pwTextField.setRight()
+            } else {
+                self.pwAlertLabel.text = "영문자와 숫자 포함 8자 이상 입력해주세요."
+                self.pwTextField.setErrorRight()
+            }
+        }).disposed(by: disposeBag)
+        
+        vm.output.genderValid.drive(onNext: {valid in
+            if valid {
+                self.maleBt.setTitleColor(.white, for: .normal)
+                self.maleBt.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                self.femaleBt.setTitleColor(UIColor.rgb(red: 55, green: 57, blue: 61), for: .normal)
+                self.femaleBt.backgroundColor = .white
+            } else {
+                self.femaleBt.setTitleColor(.white, for: .normal)
+                self.femaleBt.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                self.maleBt.setTitleColor(UIColor.rgb(red: 55, green: 57, blue: 61), for: .normal)
+                self.maleBt.backgroundColor = .white
+            }
+        }).disposed(by: disposeBag)
+        
+        vm.output.buttonValid.drive(onNext: {valid in
+            if valid {
+                self.signInBt.isEnabled = true
+                self.signInBt.backgroundColor = UIColor.rgb(red: 251, green: 136, blue: 85)
+            } else {
+                self.signInBt.isEnabled = false
+                self.signInBt.backgroundColor = UIColor.rgb(red: 195, green: 195, blue: 195)
+            }
+        }).disposed(by: disposeBag)
     }
     
 }

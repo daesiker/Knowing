@@ -41,6 +41,8 @@
 		BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA07977271FD51600912C18 /* NotificationViewController.swift */; };
 		BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA07979271FD5C900912C18 /* BookMarkViewController.swift */; };
 		BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA0797B271FD5F100912C18 /* MyPageViewController.swift */; };
+		BFC38CF327365AE400F94876 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC38CF227365AE400F94876 /* User.swift */; };
+		BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1299B2737C1B500BD89EA /* DefaultLoginViewModel.swift */; };
 		BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506F7271908D4003127CF /* LoginViewController.swift */; };
 		BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506FA27190D80003127CF /* UIKitExtension.swift */; };
 		BFF506FD27190EBB003127CF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506FC27190EBB003127CF /* LoginViewModel.swift */; };
@@ -85,6 +87,8 @@
 		BFA07977271FD51600912C18 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		BFA07979271FD5C900912C18 /* BookMarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkViewController.swift; sourceTree = "<group>"; };
 		BFA0797B271FD5F100912C18 /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
+		BFC38CF227365AE400F94876 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		BFF1299B2737C1B500BD89EA /* DefaultLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginViewModel.swift; sourceTree = "<group>"; };
 		BFF506F7271908D4003127CF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		BFF506FA27190D80003127CF /* UIKitExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtension.swift; sourceTree = "<group>"; };
 		BFF506FC27190EBB003127CF /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */,
+				BFF1299B2737C1B500BD89EA /* DefaultLoginViewModel.swift */,
 			);
 			path = DefaultLoginView;
 			sourceTree = "<group>";
@@ -222,6 +227,7 @@
 		BF8D62682718FF51006D7227 /* Knowing */ = {
 			isa = PBXGroup;
 			children = (
+				BFC38CF127365AAE00F94876 /* User */,
 				BFFA1D3B271E4ED500DD7E1A /* Knowing.entitlements */,
 				BF5A2B87272A5D1100234429 /* Font */,
 				BFA0796E271FD1B700912C18 /* MainView */,
@@ -287,6 +293,14 @@
 				BFA07975271FD47F00912C18 /* HomeViewController.swift */,
 			);
 			path = HomeView;
+			sourceTree = "<group>";
+		};
+		BFC38CF127365AAE00F94876 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				BFC38CF227365AE400F94876 /* User.swift */,
+			);
+			path = User;
 			sourceTree = "<group>";
 		};
 		BFE0AF7F271950E000CA476A /* SignUpView */ = {
@@ -445,6 +459,7 @@
 				BF85C62927310147005D9EF1 /* SignUpViewModel.swift in Sources */,
 				BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */,
 				BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */,
+				BFC38CF327365AE400F94876 /* User.swift in Sources */,
 				BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
 				BF151BAB273246790065E766 /* StepFourView.swift in Sources */,
@@ -460,6 +475,7 @@
 				BF151BAF2732760F0065E766 /* AddressViewController.swift in Sources */,
 				BFF506FD27190EBB003127CF /* LoginViewModel.swift in Sources */,
 				BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */,
+				BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */,
 				BF151BAD273246850065E766 /* StepFiveView.swift in Sources */,
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,
 				BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */,

@@ -13,15 +13,14 @@ class ExtraSignUpViewModel {
     
     static let instance = ExtraSignUpViewModel()
     
+    var user = User()
     let disposeBag = DisposeBag()
     let stepOne = StepOne()
     
     init() {
-        
         stepOne.input.cityObserver
             .bind(to: self.stepOne.output.goCityView)
             .disposed(by: disposeBag)
-        
         
         
     }
