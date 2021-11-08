@@ -229,10 +229,7 @@ extension ExtraSignUpViewController {
     func bindOutput() {
         vm.stepOne.output.goCityView.subscribe(onNext: {
             let vc = AddressViewController()
-            let nav = UINavigationController(rootViewController: vc)
-            nav.modalTransitionStyle = .coverVertical
-            nav.modalPresentationStyle = .popover
-            self.present(nav, animated: true, completion: nil)
+            self.presentPanModal(vc)
         }).disposed(by: disposeBag)
     }
     

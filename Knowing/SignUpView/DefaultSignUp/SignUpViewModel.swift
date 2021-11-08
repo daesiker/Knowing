@@ -16,11 +16,13 @@ class SignUpViewModel {
     var output = Output()
     var user = User()
     
+    
+    
     struct Input {
         let nameObserver = PublishRelay<String>()
         let emailObserver = PublishRelay<String>()
         let pwObserver = PublishRelay<String>()
-        let genderObserver = PublishRelay<Bool>()
+        let genderObserver = PublishRelay<Gender>()
         let birthObserver = PublishRelay<String>()
         let signUpObserver = PublishRelay<Bool>()
         
@@ -29,7 +31,7 @@ class SignUpViewModel {
     struct Output {
         var emailValid:Driver<Bool> = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
         var pwValid:Driver<Bool> = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
-        var genderValid:Driver<Bool> = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
+        var genderValid:Driver<Gender> = PublishRelay<Gender>().asDriver(onErrorJustReturn: .notSelected)
         var buttonValid:Driver<Bool> = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
         
     }
@@ -48,10 +50,13 @@ class SignUpViewModel {
         }).disposed(by: disposeBag)
         
         input.genderObserver.subscribe(onNext: {valid in
-            if valid {
+            switch valid {
+            case .male:
                 self.user.gender = "male"
-            } else {
+            case .female:
                 self.user.gender = "female"
+            case .notSelected:
+                break
             }
         }).disposed(by: disposeBag)
         
@@ -75,10 +80,10 @@ class SignUpViewModel {
             .map { $0.validpassword() }
             .asDriver(onErrorJustReturn: false)
         
-        output.genderValid = input.genderObserver.asDriver(onErrorJustReturn: false)
+        output.genderValid = input.genderObserver.asDriver(onErrorJustReturn: .notSelected)
         
-        output.buttonValid = Driver.combineLatest(output.emailValid, output.pwValid)
-            .map { $0  && $1 && self.user.name != "" && self.user.gender != "" && self.user.birth != "" }
+        output.buttonValid = Driver.combineLatest(output.emailValid, output.pwValid, input.nameObserver.asDriver(onErrorJustReturn: ""), input.genderObserver.asDriver(onErrorJustReturn: .notSelected), input.birthObserver.asDriver(onErrorJustReturn: ""))
+            .map { $0  && $1 && $2 != "" && $3 != .notSelected && $4 != "" }
             .asDriver(onErrorJustReturn: false)
         
         

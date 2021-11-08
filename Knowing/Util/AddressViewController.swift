@@ -8,6 +8,7 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import PanModal
 
 let address:[String: [String]] = ["시/도 선택" :
                                     ["서울특별시", "부산광역시", "대구광역시", "인천광역시", "광주광역시", "대전광역시", "울산광역시", "경기도", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도", "세종특별자치시"],
@@ -37,7 +38,21 @@ let address:[String: [String]] = ["시/도 선택" :
 class AddressViewController: UIViewController {
     
     let disposeBag = DisposeBag()
-    let cancelBt = UIBarButtonItem(image: UIImage(named: "largeCancel")!, style: .plain, target: nil, action: nil)
+    
+    let backgroundView = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 40.0
+    }
+    let titleLabel = UILabel().then {
+        $0.text = "시/도 선택"
+        $0.textColor = UIColor.rgb(red: 101, green: 101, blue: 101)
+        $0.font = UIFont(name: "GodoM", size: 20)
+    }
+    
+    let cancelBt = UIButton(type: .custom).then {
+        $0.setImage(UIImage(named: "largeCancel")!, for: .normal)
+    }
+    
     let searchBar = UISearchBar().then {
         $0.searchBarStyle = .minimal
         $0.layer.cornerRadius = 30
@@ -56,8 +71,8 @@ class AddressViewController: UIViewController {
     }()
     
     let cellId = "cellId"
-    let allItem:[String] = address["시/도 선택"] ?? []
-    var selectedItem:[String] = address["시/도 선택"] ?? []
+    let allItem = address["시/도 선택"] ?? []
+    var selectedItem = address["시/도 선택"] ?? []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,30 +81,45 @@ class AddressViewController: UIViewController {
         setCollectionView()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     func setUI() {
-        view.backgroundColor = .white
-        let title = [NSAttributedString.Key.foregroundColor: UIColor.rgb(red: 101, green: 101, blue: 101),
-                     NSAttributedString.Key.font: UIFont(name: "GodoM", size: 20)]
-        navigationItem.title = "시/도 선택"
-        UINavigationBar.appearance().titleTextAttributes = title as [NSAttributedString.Key : Any]
-        navigationItem.rightBarButtonItem = cancelBt
+        view.backgroundColor = .clear
         
-        safeArea.addSubview(searchBar)
+        view.addSubview(backgroundView)
+        backgroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        backgroundView.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(26)
+            $0.centerX.equalToSuperview()
+        }
+        
+        backgroundView.addSubview(cancelBt)
+        cancelBt.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(21)
+            $0.trailing.equalToSuperview().offset(-31)
+        }
+        
+        backgroundView.addSubview(searchBar)
         searchBar.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalTo(titleLabel.snp.bottom).offset(18)
             $0.leading.equalToSuperview().offset(26)
             $0.trailing.equalToSuperview().offset(-26)
             $0.height.equalTo(47)
         }
         
-        safeArea.addSubview(separator)
+        backgroundView.addSubview(separator)
         separator.snp.makeConstraints {
             $0.top.equalTo(searchBar.snp.bottom).offset(15)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
         
-        safeArea.addSubview(collectionView)
+        backgroundView.addSubview(collectionView)
         collectionView.snp.makeConstraints {
             $0.top.equalTo(separator.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
@@ -103,6 +133,8 @@ class AddressViewController: UIViewController {
                 self.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
+        
+        
         searchBar.rx.text.orEmpty
             .debounce(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance)
             .distinctUntilChanged()
@@ -111,12 +143,37 @@ class AddressViewController: UIViewController {
                 self.collectionView.reloadData()
             })
             .disposed(by: disposeBag)
+        
+        
     }
     
     func setCollectionView() {
-        collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.dataSource = self
         collectionView.register(AddressCell.self, forCellWithReuseIdentifier: cellId)
+    }
+    
+    
+}
+
+extension AddressViewController: PanModalPresentable {
+    
+    var panScrollable: UIScrollView? {
+        return nil
+    }
+    
+    var shortFormHeight: PanModalHeight {
+        return .contentHeight(self.view.frame.height * 0.64)
+        }
+    
+    //Modal background color
+    var panModalBackgroundColor: UIColor {
+        return UIColor.black.withAlphaComponent(0.2)
+    }
+    
+    //Whether to round the top corners of the modal
+    var shouldRoundTopCorners: Bool {
+        return true
     }
     
 }
@@ -141,12 +198,13 @@ extension AddressViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       return selectedItem.count
+        return selectedItem.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AddressCell
         cell.button.setTitle(selectedItem[indexPath.item], for: .normal)
+        cell.text = selectedItem[indexPath.item]
         return cell
     }
     
@@ -154,6 +212,8 @@ extension AddressViewController: UICollectionViewDelegate, UICollectionViewDataS
 
 
 class AddressCell: UICollectionViewCell {
+    
+    var text = ""
     
     let button = UIButton(type: .custom).then {
         $0.setTitle("", for: .normal)

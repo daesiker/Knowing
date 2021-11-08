@@ -42,6 +42,7 @@
 		BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA07979271FD5C900912C18 /* BookMarkViewController.swift */; };
 		BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA0797B271FD5F100912C18 /* MyPageViewController.swift */; };
 		BFC38CF327365AE400F94876 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC38CF227365AE400F94876 /* User.swift */; };
+		BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFECE1CB2738DCAF0055FA9D /* Enum.swift */; };
 		BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1299B2737C1B500BD89EA /* DefaultLoginViewModel.swift */; };
 		BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506F7271908D4003127CF /* LoginViewController.swift */; };
 		BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506FA27190D80003127CF /* UIKitExtension.swift */; };
@@ -88,6 +89,7 @@
 		BFA07979271FD5C900912C18 /* BookMarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkViewController.swift; sourceTree = "<group>"; };
 		BFA0797B271FD5F100912C18 /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		BFC38CF227365AE400F94876 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		BFECE1CB2738DCAF0055FA9D /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		BFF1299B2737C1B500BD89EA /* DefaultLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginViewModel.swift; sourceTree = "<group>"; };
 		BFF506F7271908D4003127CF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		BFF506FA27190D80003127CF /* UIKitExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtension.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 				BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */,
 				BF85C62A27310883005D9EF1 /* FoundationExtension.swift */,
 				BF151BAE2732760F0065E766 /* AddressViewController.swift */,
+				BFECE1CB2738DCAF0055FA9D /* Enum.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -477,6 +480,7 @@
 				BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */,
 				BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */,
 				BF151BAD273246850065E766 /* StepFiveView.swift in Sources */,
+				BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */,
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,
 				BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */,
 				BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */,

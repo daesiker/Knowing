@@ -16,7 +16,6 @@ import FirebaseAuth
 import KakaoSDKAuth
 import KakaoSDKCommon
 import KakaoSDKUser
-import FSPagerView
 
 class LoginViewController: UIViewController {
     

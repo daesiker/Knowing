@@ -293,12 +293,12 @@ extension SignUpViewController {
             .disposed(by: disposeBag)
         
         maleBt.rx.tap
-            .map { true }
+            .map { Gender.male }
             .bind(to: vm.input.genderObserver)
             .disposed(by: disposeBag)
         
         femaleBt.rx.tap
-            .map { false }
+            .map { Gender.female }
             .bind(to: vm.input.genderObserver)
             .disposed(by: disposeBag)
         
@@ -339,16 +339,19 @@ extension SignUpViewController {
         }).disposed(by: disposeBag)
         
         vm.output.genderValid.drive(onNext: {valid in
-            if valid {
+            switch valid{
+            case .male:
                 self.maleBt.setTitleColor(.white, for: .normal)
                 self.maleBt.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
                 self.femaleBt.setTitleColor(UIColor.rgb(red: 55, green: 57, blue: 61), for: .normal)
                 self.femaleBt.backgroundColor = .white
-            } else {
+            case .female:
                 self.femaleBt.setTitleColor(.white, for: .normal)
                 self.femaleBt.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
                 self.maleBt.setTitleColor(UIColor.rgb(red: 55, green: 57, blue: 61), for: .normal)
                 self.maleBt.backgroundColor = .white
+            case .notSelected:
+                break
             }
         }).disposed(by: disposeBag)
         
