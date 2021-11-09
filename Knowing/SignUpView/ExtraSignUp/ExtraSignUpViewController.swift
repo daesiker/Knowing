@@ -14,13 +14,14 @@ class ExtraSignUpViewController: UIViewController {
     
     let vm = ExtraSignUpViewModel.instance
     let disposeBag = DisposeBag()
+    var currentStep = SignUpStep.step1
     
     let footerView = UIScrollView().then {
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
         $0.isPagingEnabled = true
         $0.alwaysBounceVertical = false
-        $0.isScrollEnabled = true
+        $0.isScrollEnabled = false
         $0.bounces = false
     }
     
@@ -34,6 +35,7 @@ class ExtraSignUpViewController: UIViewController {
         $0.text = "딱 맞는 복지정보, 노잉이 찾아드릴게요!"
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 15)
         $0.textColor = UIColor.rgb(red: 127, green: 127, blue: 127)
+        
     }
     
     let largeTitleLabel = UILabel().then {
@@ -51,6 +53,7 @@ class ExtraSignUpViewController: UIViewController {
     
     let twoLabel = UILabel().then {
         $0.text = "2"
+        $0.isHidden = true
         $0.font = UIFont(name: "Roboto-Bold", size: 14)
         $0.textColor = UIColor.rgb(red: 249, green: 133, blue: 81)
         
@@ -58,6 +61,7 @@ class ExtraSignUpViewController: UIViewController {
     
     let threeLabel = UILabel().then {
         $0.text = "3"
+        $0.isHidden = true
         $0.font = UIFont(name: "Roboto-Bold", size: 14)
         $0.textColor = UIColor.rgb(red: 249, green: 133, blue: 81)
         
@@ -65,6 +69,7 @@ class ExtraSignUpViewController: UIViewController {
     
     let fourLabel = UILabel().then {
         $0.text = "4"
+        $0.isHidden = true
         $0.font = UIFont(name: "Roboto-Bold", size: 14)
         $0.textColor = UIColor.rgb(red: 249, green: 133, blue: 81)
         
@@ -106,7 +111,9 @@ class ExtraSignUpViewController: UIViewController {
         $0.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
         $0.layer.cornerRadius = 27.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 147, bottom: 13, right: 147)
+        $0.isEnabled = false
     }
+    
     
     
     override func viewDidLoad() {
@@ -125,6 +132,36 @@ class ExtraSignUpViewController: UIViewController {
             footerView.addSubview(childView[i])
             footerView.contentSize.width = childView[i].frame.width * CGFloat(i + 1)
         }
+    }
+    
+    func animateView() {
+        
+        if smallTitleLabel.isHidden == true {
+            smallTitleLabel.isHidden = false
+            largeTitleLabel.isHidden = false
+            largeTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(smallTitleLabel.snp.bottom).offset(10)
+                $0.leading.equalToSuperview().offset(26)
+            }
+            smallTitleLabel.snp.makeConstraints {
+                $0.top.equalTo(backBt.snp.bottom).offset(24)
+                $0.leading.equalToSuperview().offset(26)
+            }
+            progressView.snp.makeConstraints {
+                $0.top.equalTo(largeTitleLabel.snp.bottom).offset(51)
+            }
+        } else {
+            smallTitleLabel.isHidden = true
+            largeTitleLabel.isHidden = true
+            progressView.snp.makeConstraints {
+                
+                $0.top.equalTo(backBt.snp.bottom).offset(32)
+            }
+        }
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutIfNeeded()
+        }
+        
     }
     
 }
@@ -223,7 +260,9 @@ extension ExtraSignUpViewController {
     }
     
     func bindInput() {
-        
+        nextBt.rx.tap
+            .bind(to: vm.rootView.input.nextBt)
+            .disposed(by: disposeBag)
     }
     
     func bindOutput() {
@@ -231,7 +270,97 @@ extension ExtraSignUpViewController {
             let vc = AddressViewController()
             self.presentPanModal(vc)
         }).disposed(by: disposeBag)
+        
+        vm.stepOne.output.goGuView.drive(onNext: { value in
+            if value != "시/도 선택" {
+                let vc = AddressViewController()
+                vc.allItem = address[value] ?? []
+                vc.selectedItem = Observable<[String]>.of(address[value] ?? [])
+                vc.isCity = false
+                self.presentPanModal(vc)
+            }
+        }).disposed(by: disposeBag)
+        
+        
+        vm.rootView.output.nextBtValid.drive(onNext: { value in
+            if value {
+                self.nextBt.isEnabled = true
+                self.nextBt.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
+            } else {
+                self.nextBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
+                self.nextBt.isEnabled = false
+            }
+        }).disposed(by: disposeBag)
+        
+        
+        vm.rootView.output.goSignUp
+            .emit { _ in
+                switch self.currentStep {
+                case .step1:
+                    self.goToStepTwo()
+                case .step2:
+                    self.goToStepThree()
+                case .step3:
+                    self.goToStepFour()
+                case .step4:
+                    self.goToStepFive()
+                case .step5:
+                    print("step5")
+                }
+            }.disposed(by: disposeBag)
+        
+        
     }
+    
+    func goToStepOne() {
+        self.animateView()
+        self.progressView.setProgress(0.2, animated: true)
+        self.oneLabel.isHidden = false
+        self.twoLabel.isHidden = true
+        let contentOffset = CGPoint(x: 0, y: 0)
+        self.footerView.setContentOffset(contentOffset, animated: true)
+        self.currentStep = .step1
+    }
+    
+    func goToStepTwo() {
+        self.animateView()
+        self.progressView.setProgress(0.4, animated: true)
+        self.oneLabel.isHidden = true
+        self.twoLabel.isHidden = false
+        self.threeLabel.isHidden = true
+        let contentOffset = CGPoint(x: self.view.frame.width, y: 0)
+        self.footerView.setContentOffset(contentOffset, animated: true)
+        currentStep = .step2
+    }
+    
+    func goToStepThree() {
+        self.progressView.setProgress(0.6, animated: true)
+        self.twoLabel.isHidden = true
+        self.threeLabel.isHidden = false
+        self.fourLabel.isHidden = true
+        let contentOffset = CGPoint(x: self.view.frame.width * 2, y: 0)
+        self.footerView.setContentOffset(contentOffset, animated: true)
+        currentStep = .step3
+    }
+    
+    func goToStepFour() {
+        self.progressView.setProgress(0.8, animated: true)
+        self.threeLabel.isHidden = true
+        self.fourLabel.isHidden = false
+        let contentOffset = CGPoint(x: self.view.frame.width * 3, y: 0)
+        self.footerView.setContentOffset(contentOffset, animated: true)
+        currentStep = .step4
+    }
+    
+    func goToStepFive() {
+        self.progressView.setProgress(1.0, animated: true)
+        self.fourLabel.isHidden = true
+        let contentOffset = CGPoint(x: self.view.frame.width * 4, y: 0)
+        self.footerView.setContentOffset(contentOffset, animated: true)
+        currentStep = .step5
+    }
+    
+    
     
     
     

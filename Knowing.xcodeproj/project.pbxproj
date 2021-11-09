@@ -42,6 +42,7 @@
 		BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA07979271FD5C900912C18 /* BookMarkViewController.swift */; };
 		BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA0797B271FD5F100912C18 /* MyPageViewController.swift */; };
 		BFC38CF327365AE400F94876 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC38CF227365AE400F94876 /* User.swift */; };
+		BFC74512273A0ADE00090BCB /* AddPostCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC74511273A0ADE00090BCB /* AddPostCategoryViewController.swift */; };
 		BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFECE1CB2738DCAF0055FA9D /* Enum.swift */; };
 		BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1299B2737C1B500BD89EA /* DefaultLoginViewModel.swift */; };
 		BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506F7271908D4003127CF /* LoginViewController.swift */; };
@@ -89,6 +90,7 @@
 		BFA07979271FD5C900912C18 /* BookMarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkViewController.swift; sourceTree = "<group>"; };
 		BFA0797B271FD5F100912C18 /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		BFC38CF227365AE400F94876 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		BFC74511273A0ADE00090BCB /* AddPostCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostCategoryViewController.swift; sourceTree = "<group>"; };
 		BFECE1CB2738DCAF0055FA9D /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		BFF1299B2737C1B500BD89EA /* DefaultLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginViewModel.swift; sourceTree = "<group>"; };
 		BFF506F7271908D4003127CF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -305,9 +307,18 @@
 			path = User;
 			sourceTree = "<group>";
 		};
+		BFC74510273A0A2000090BCB /* AddPostCategory */ = {
+			isa = PBXGroup;
+			children = (
+				BFC74511273A0ADE00090BCB /* AddPostCategoryViewController.swift */,
+			);
+			path = AddPostCategory;
+			sourceTree = "<group>";
+		};
 		BFE0AF7F271950E000CA476A /* SignUpView */ = {
 			isa = PBXGroup;
 			children = (
+				BFC74510273A0A2000090BCB /* AddPostCategory */,
 				BF85C632273111EA005D9EF1 /* ExtraSignUp */,
 				BF85C62C2731111C005D9EF1 /* DefaultSignUp */,
 			);
@@ -465,6 +476,7 @@
 				BFC38CF327365AE400F94876 /* User.swift in Sources */,
 				BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
+				BFC74512273A0ADE00090BCB /* AddPostCategoryViewController.swift in Sources */,
 				BF151BAB273246790065E766 /* StepFourView.swift in Sources */,
 				BF8379372729208900584E33 /* HomeChartView.swift in Sources */,
 				BFA07970271FD2F800912C18 /* MainTabViewController.swift in Sources */,

@@ -35,9 +35,11 @@ let address:[String: [String]] = ["시/도 선택" :
                                   "경상북도": ["포항시","경주시","김천시","안동시","구미시","영주시","영천시","상주시","문경시","경산시","군위군","의성군","청송군","영양군","영덕군","청도군","고령군","성주군","칠곡군","예천군","봉화군","울진군","울릉군"],
                                   "경상남도": ["창원시","마산시","진주시","진해시","통영시","사천시","김해시","밀양시","거제시","양산시","의령군","함안군","창녕군","고성군","남해군","하동군","산청군","함양군","거창군","합천군"]]
 
+
 class AddressViewController: UIViewController {
     
     let disposeBag = DisposeBag()
+    let vm = ExtraSignUpViewModel.instance
     
     let backgroundView = UIView().then {
         $0.backgroundColor = .white
@@ -71,8 +73,9 @@ class AddressViewController: UIViewController {
     }()
     
     let cellId = "cellId"
-    let allItem = address["시/도 선택"] ?? []
-    var selectedItem = address["시/도 선택"] ?? []
+    var allItem = address["시/도 선택"] ?? []
+    var selectedItem = Observable<[String]>.of(address["시/도 선택"] ?? [])
+    var isCity:Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,6 +95,7 @@ class AddressViewController: UIViewController {
         backgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        
         backgroundView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(26)
@@ -133,24 +137,44 @@ class AddressViewController: UIViewController {
                 self.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        
-        
         searchBar.rx.text.orEmpty
             .debounce(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .subscribe(onNext: { text in
-                self.selectedItem = self.allItem.filter { $0.hasPrefix(text) }
+                let items = self.allItem.filter { $0.hasPrefix(text) }
+                self.selectedItem = Observable<[String]>.of(items)
                 self.collectionView.reloadData()
-            })
-            .disposed(by: disposeBag)
+            }).disposed(by: disposeBag)
         
+        vm.stepOne.output.cityValue.drive(onNext: { _ in
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+        
+        vm.stepOne.output.guValue.drive(onNext: { _ in
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
         
     }
     
     func setCollectionView() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
         collectionView.register(AddressCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        selectedItem
+            .bind(to: collectionView.rx.items(cellIdentifier: cellId, cellType: AddressCell.self)) {row, element, cell in
+                cell.title.text = element
+            }.disposed(by: disposeBag)
+        
+        collectionView.rx
+            .itemSelected
+            .map { index in
+                let cell = self.collectionView.cellForItem(at: index) as? AddressCell
+                return cell?.title.text ?? ""
+            }
+            .bind(to: self.isCity ? vm.stepOne.input.cityValueObserver : vm.stepOne.input.guValueObserver)
+            .disposed(by: disposeBag)
     }
     
     
@@ -178,7 +202,7 @@ extension AddressViewController: PanModalPresentable {
     
 }
 
-extension AddressViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension AddressViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 15, left: 25, bottom: 15, right: 25)
@@ -197,40 +221,33 @@ extension AddressViewController: UICollectionViewDelegate, UICollectionViewDataS
         return CGSize(width: width, height: 41)
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return selectedItem.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AddressCell
-        cell.button.setTitle(selectedItem[indexPath.item], for: .normal)
-        cell.text = selectedItem[indexPath.item]
-        return cell
-    }
-    
 }
 
 
 class AddressCell: UICollectionViewCell {
     
-    var text = ""
-    
-    let button = UIButton(type: .custom).then {
-        $0.setTitle("", for: .normal)
+    let view = UIView().then {
         $0.layer.cornerRadius = 23.5
-        $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-        $0.setTitleColor(UIColor.rgb(red: 108, green: 108, blue: 108), for: .normal)
         $0.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
-        $0.contentEdgeInsets.top = 13
-        $0.contentEdgeInsets.bottom = 13
+    }
+    
+    let title = UILabel().then {
+        $0.text = ""
+        $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(button)
-        button.snp.makeConstraints {
+        addSubview(view)
+        view.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        view.addSubview(title)
+        title.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+        }
+        
     }
     
     required init?(coder: NSCoder) {
@@ -238,3 +255,5 @@ class AddressCell: UICollectionViewCell {
     }
     
 }
+
+
