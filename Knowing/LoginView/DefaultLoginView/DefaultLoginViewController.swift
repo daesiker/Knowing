@@ -75,6 +75,30 @@ class DefaultLoginViewController: UIViewController {
         $0.textColor = UIColor.rgb(red: 255, green: 108, blue: 0)
     }
     
+    let findEmailBt = UIButton(type: .custom).then {
+        $0.setTitle("이메일 찾기", for: .normal)
+        $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.setTitleColor(UIColor.rgb(red: 147, green: 147, blue: 147), for: .normal)
+        $0.titleEdgeInsets.top = 9
+        $0.titleEdgeInsets.bottom = 10
+        $0.titleEdgeInsets.left = 16
+        $0.titleEdgeInsets.right = 20
+    }
+    
+    let findPwBt = UIButton(type: .custom).then {
+        $0.setTitle("비밀번호 재설정", for: .normal)
+        $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.setTitleColor(UIColor.rgb(red: 147, green: 147, blue: 147), for: .normal)
+        $0.titleEdgeInsets.top = 9
+        $0.titleEdgeInsets.bottom = 8
+        $0.titleEdgeInsets.left = 20
+        $0.titleEdgeInsets.right = 5
+    }
+    
+    let separator = UIView().then {
+        $0.backgroundColor = UIColor.rgb(red: 224, green: 224, blue: 224)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -85,7 +109,6 @@ class DefaultLoginViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
     
 }
 
@@ -145,6 +168,27 @@ extension DefaultLoginViewController {
         logInBt.snp.makeConstraints {
             $0.top.equalTo(pwTextField.snp.bottom).offset(35)
             $0.centerX.equalToSuperview()
+        }
+        
+        let findStack = UIStackView(arrangedSubviews: [findEmailBt, findPwBt]).then {
+            $0.axis = .horizontal
+            $0.distribution = .fillEqually
+            $0.spacing = 0
+        }
+        
+        safeArea.addSubview(findStack)
+        findStack.snp.makeConstraints {
+            $0.top.equalTo(logInBt.snp.bottom).offset(11)
+            $0.leading.equalToSuperview().offset(56)
+            $0.trailing.equalToSuperview().offset(-57)
+        }
+        
+        safeArea.addSubview(separator)
+        separator.snp.makeConstraints {
+            $0.top.equalTo(logInBt.snp.bottom).offset(21)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(findStack.snp.height).multipliedBy(0.6)
+            $0.width.equalTo(2)
         }
         
     }

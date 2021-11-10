@@ -17,6 +17,8 @@ class AddPostCategoryViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = true
+        $0.layoutIfNeeded()
+        
         $0.backgroundColor = .white
     }
     
@@ -35,16 +37,13 @@ class AddPostCategoryViewController: UIViewController {
     
     let studentCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 25)
-        flowLayout.minimumLineSpacing = 17
-        flowLayout.minimumInteritemSpacing = 17
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.register(AddCategoryCell.self, forCellWithReuseIdentifier: "studentCell")
         collectionView.backgroundColor = .white
         return collectionView
     }()
     
     let studentData = Observable<[String]>.of(["전체", "교내 장학금", "교외 장학금"])
+    let studentDomy = ["전체", "교내 장학금", "교외 장학금"]
     
     let employLb = UILabel().then {
         $0.text = "취업 지원"
@@ -55,12 +54,12 @@ class AddPostCategoryViewController: UIViewController {
     let employCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.register(AddCategoryCell.self, forCellWithReuseIdentifier: "employCell")
         collectionView.backgroundColor = .white
         return collectionView
     }()
     
     let employData = Observable<[String]>.of(["전체", "구직 활동 지원 · 인턴", "중소 · 중견기업 취업 지원", "특수 분야 취업 지원", "해외 취업 및 진출 지원"])
+    let employDomy = ["전체", "구직 활동 지원 · 인턴", "중소 · 중견기업 취업 지원", "특수 분야 취업 지원", "해외 취업 및 진출 지원"]
     
     let startUpLb = UILabel().then {
         $0.text = "창업 지원"
@@ -77,6 +76,7 @@ class AddPostCategoryViewController: UIViewController {
     }()
     
     let startUpData = Observable<[String]>.of(["전체", "창업운영 지원", "경영 지원", "자본금 지원"])
+    let startUpDomy = ["전체", "창업운영 지원", "경영 지원", "자본금 지원"]
     
     let residentLb = UILabel().then {
         $0.text = "주거 · 금융 지원"
@@ -93,6 +93,7 @@ class AddPostCategoryViewController: UIViewController {
     }()
     
     let residentData = Observable<[String]>.of(["전체", "생활비 지원 · 금융 혜택", "주거 지원", "학자금 지원"])
+    let residentDomy = ["전체", "생활비 지원 · 금융 혜택", "주거 지원", "학자금 지원"]
     
     let lifeLb = UILabel().then {
         $0.text = "생활 · 복지 지원"
@@ -109,6 +110,7 @@ class AddPostCategoryViewController: UIViewController {
     }()
     
     let lifeData = Observable<[String]>.of(["전체", "건강", "문화"])
+    let lifeDomy = ["전체", "건강", "문화"]
     
     let covidLb = UILabel().then {
         $0.text = "코로나19 지원"
@@ -125,12 +127,21 @@ class AddPostCategoryViewController: UIViewController {
     }()
     
     let covidData = Observable<[String]>.of(["전체", "기본소득 지원", "저소득층 지원", "재난피해 지원", "소득 · 일자리 보전", "기타 인센티브", "심리지원"])
+    let covidDomy = ["전체", "기본소득 지원", "저소득층 지원", "재난피해 지원", "소득 · 일자리 보전", "기타 인센티브", "심리지원"]
+    
+    let signUpBt = UIButton(type: .custom).then {
+        $0.setTitle("적용하기", for: .normal)
+        $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
+        $0.titleLabel?.textColor = .white
+        $0.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
+        $0.layer.cornerRadius = 27.0
+        $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 139, bottom: 16, right: 139)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
         bind()
-        
     }
     
     
@@ -140,8 +151,10 @@ class AddPostCategoryViewController: UIViewController {
 extension AddPostCategoryViewController {
     
     func setUI() {
+        
         view.backgroundColor = .white
         safeArea.addSubview(scrollView)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 1406)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -154,14 +167,92 @@ extension AddPostCategoryViewController {
         
         scrollView.addSubview(studentLb)
         studentLb.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(42)
+            $0.top.equalTo(titleLb.snp.bottom).offset(42)
             $0.leading.equalToSuperview().offset(20)
         }
         
         scrollView.addSubview(studentCV)
         studentCV.snp.makeConstraints {
-            $0.top.equalTo(studentLb.snp.bottom)
+            $0.top.equalTo(studentLb.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(self.view.frame.width - 40)
+            $0.height.equalTo(48)
+        }
+        
+        scrollView.addSubview(employLb)
+        employLb.snp.makeConstraints {
+            $0.top.equalTo(studentCV.snp.bottom).offset(42)
             $0.leading.equalToSuperview().offset(20)
+        }
+        
+        scrollView.addSubview(employCV)
+        employCV.snp.makeConstraints {
+            $0.top.equalTo(employLb.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().offset(20)
+            $0.width.equalTo(self.view.frame.width - 46)
+            $0.height.equalTo(176)
+        }
+        
+        scrollView.addSubview(startUpLb)
+        startUpLb.snp.makeConstraints {
+            $0.top.equalTo(employCV.snp.bottom).offset(42)
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
+        scrollView.addSubview(startUpCV)
+        startUpCV.snp.makeConstraints {
+            $0.top.equalTo(startUpLb.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().offset(20)
+            $0.width.equalTo(240)
+            $0.height.equalTo(112)
+        }
+        
+        scrollView.addSubview(residentLb)
+        residentLb.snp.makeConstraints {
+            $0.top.equalTo(startUpCV.snp.bottom).offset(42)
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
+        scrollView.addSubview(residentCV)
+        residentCV.snp.makeConstraints {
+            $0.top.equalTo(residentLb.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().offset(20)
+            $0.width.equalTo(260)
+            $0.height.equalTo(112)
+        }
+        
+        scrollView.addSubview(lifeLb)
+        lifeLb.snp.makeConstraints {
+            $0.top.equalTo(residentCV.snp.bottom).offset(42)
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
+        scrollView.addSubview(lifeCV)
+        lifeCV.snp.makeConstraints {
+            $0.top.equalTo(lifeLb.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(self.view.frame.width - 40)
+            $0.height.equalTo(48)
+        }
+        
+        scrollView.addSubview(covidLb)
+        covidLb.snp.makeConstraints {
+            $0.top.equalTo(lifeCV.snp.bottom).offset(42)
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
+        scrollView.addSubview(covidCV)
+        covidCV.snp.makeConstraints {
+            $0.top.equalTo(covidLb.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().offset(20)
+            $0.width.equalTo(self.view.frame.width - 46)
+            $0.height.equalTo(176)
+        }
+        
+        scrollView.addSubview(signUpBt)
+        signUpBt.snp.makeConstraints {
+            $0.top.equalTo(covidCV.snp.bottom).offset(42)
+            $0.centerX.equalToSuperview()
         }
         
         
@@ -170,80 +261,137 @@ extension AddPostCategoryViewController {
     func bind() {
         studentCV.delegate = nil
         studentCV.dataSource = nil
+        studentCV.register(AddCategoryCell.self, forCellWithReuseIdentifier: "studentCell")
         studentCV.rx.setDelegate(self).disposed(by: disposeBag)
         studentData
             .bind(to: self.studentCV.rx.items(cellIdentifier: "studentCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.text.text = title
+                cell.configure(name: title)
             }.disposed(by: disposeBag)
         
+        
+        
+        employCV.delegate = nil
+        employCV.dataSource = nil
+        employCV.register(AddCategoryCell.self, forCellWithReuseIdentifier: "employCell")
+        employCV.rx.setDelegate(self).disposed(by: disposeBag)
         employData
-            .bind(to: self.studentCV.rx.items(cellIdentifier: "employCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.text.text = title
+            .bind(to: self.employCV.rx.items(cellIdentifier: "employCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
+                cell.configure(name: title)
             }.disposed(by: disposeBag)
         
+        startUpCV.delegate = nil
+        startUpCV.dataSource = nil
+        startUpCV.rx.setDelegate(self).disposed(by: disposeBag)
         startUpData
-            .bind(to: self.studentCV.rx.items(cellIdentifier: "startUpCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.text.text = title
+            .bind(to: self.startUpCV.rx.items(cellIdentifier: "startUpCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
+                cell.configure(name: title)
             }.disposed(by: disposeBag)
         
+        residentCV.delegate = nil
+        residentCV.dataSource = nil
+        residentCV.rx.setDelegate(self).disposed(by: disposeBag)
         residentData
-            .bind(to: self.studentCV.rx.items(cellIdentifier: "residentCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.text.text = title
+            .bind(to: self.residentCV.rx.items(cellIdentifier: "residentCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
+                cell.configure(name: title)
             }.disposed(by: disposeBag)
         
+        lifeCV.delegate = nil
+        lifeCV.dataSource = nil
+        lifeCV.rx.setDelegate(self).disposed(by: disposeBag)
         lifeData
-            .bind(to: self.studentCV.rx.items(cellIdentifier: "lifeCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.text.text = title
+            .bind(to: self.lifeCV.rx.items(cellIdentifier: "lifeCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
+                cell.configure(name: title)
             }.disposed(by: disposeBag)
         
+        covidCV.delegate = nil
+        covidCV.dataSource = nil
+        covidCV.rx.setDelegate(self).disposed(by: disposeBag)
         covidData
-            .bind(to: self.studentCV.rx.items(cellIdentifier: "covidCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.text.text = title
+            .bind(to: self.covidCV.rx.items(cellIdentifier: "covidCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
+                cell.configure(name: title)
             }.disposed(by: disposeBag)
     }
     
     
 }
 
-extension AddPostCategoryViewController: UICollectionViewDelegate {
+extension AddPostCategoryViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView == studentCV {
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: studentDomy[indexPath.item])
+        } else if collectionView == employCV {
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: employDomy[indexPath.item])
+        } else if collectionView == startUpCV {
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: startUpDomy[indexPath.item])
+        } else if collectionView == residentCV {
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: residentDomy[indexPath.item])
+        } else if collectionView == lifeCV {
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: lifeDomy[indexPath.item])
+        } else {
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: covidDomy[indexPath.item])
+        }
+    }
+    
     
 }
 
 
-
-
-class AddCategoryCell: UICollectionViewCell {
+final class AddCategoryCell: UICollectionViewCell {
     
-    let view = UIView().then {
-        $0.layer.cornerRadius = 22.0
-        $0.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+    static func fittingSize(availableHeight: CGFloat, name: String?) -> CGSize {
+        let cell = AddCategoryCell()
+        cell.configure(name: name)
+        
+        let targetSize = CGSize(width: UIView.layoutFittingCompressedSize.width, height: availableHeight)
+        return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .required)
     }
     
-    let text = UILabel().then {
-        $0.text = ""
-        $0.font = UIFont.init(name: "AppleSDGothicNeo-Medium", size: 14)
-        $0.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-    }
-    
+    private let titleLabel: UILabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(view)
-        view.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-        
-        view.addSubview(text)
-        text.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(14)
-            $0.bottom.equalToSuperview().offset(-14)
-            $0.leading.equalToSuperview().offset(25)
-            $0.trailing.equalToSuperview().offset(-26)
-        }
+        setupView()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupView()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = 22.0
+    }
+    
+    private func setupView() {
+        backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+        titleLabel.textAlignment = .center
+        titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+        titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+        contentView.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(14)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview().offset(-14)
+        }
+    }
+    
+    func configure(name: String?) {
+        titleLabel.text = name
     }
     
 }

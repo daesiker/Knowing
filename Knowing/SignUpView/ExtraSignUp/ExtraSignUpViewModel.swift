@@ -22,8 +22,6 @@ class ExtraSignUpViewModel {
     
     init() {
         
-        
-        
         // Step1
         stepOne.input.cityObserver
             .bind(to: self.stepOne.output.goCityView)

@@ -29,6 +29,15 @@
 		BF85C62B27310883005D9EF1 /* FoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF85C62A27310883005D9EF1 /* FoundationExtension.swift */; };
 		BF85C631273111B7005D9EF1 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF85C630273111B7005D9EF1 /* SignUpViewController.swift */; };
 		BF85C63427311203005D9EF1 /* ExtraSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF85C63327311203005D9EF1 /* ExtraSignUpViewController.swift */; };
+		BF8A9A03273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A02273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift */; };
+		BF8A9A06273B83A600DA4DE4 /* FindEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A05273B83A600DA4DE4 /* FindEmailViewController.swift */; };
+		BF8A9A08273B879E00DA4DE4 /* FindEmailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A07273B879E00DA4DE4 /* FindEmailViewModel.swift */; };
+		BF8A9A0A273B8BBA00DA4DE4 /* ConfirmEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A09273B8BBA00DA4DE4 /* ConfirmEmailViewController.swift */; };
+		BF8A9A0F273B927000DA4DE4 /* lf20_rjrqsjob.json in Resources */ = {isa = PBXBuildFile; fileRef = BF8A9A0E273B927000DA4DE4 /* lf20_rjrqsjob.json */; };
+		BF8A9A11273B929F00DA4DE4 /* FIndPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A10273B929F00DA4DE4 /* FIndPasswordViewController.swift */; };
+		BF8A9A13273B962000DA4DE4 /* FindPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A12273B962000DA4DE4 /* FindPasswordViewModel.swift */; };
+		BF8A9A15273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A14273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift */; };
+		BF8A9A17273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json in Resources */ = {isa = PBXBuildFile; fileRef = BF8A9A16273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json */; };
 		BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D62692718FF51006D7227 /* AppDelegate.swift */; };
 		BF8D626C2718FF51006D7227 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D626B2718FF51006D7227 /* SceneDelegate.swift */; };
 		BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D626D2718FF51006D7227 /* ViewController.swift */; };
@@ -75,6 +84,15 @@
 		BF85C62A27310883005D9EF1 /* FoundationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtension.swift; sourceTree = "<group>"; };
 		BF85C630273111B7005D9EF1 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		BF85C63327311203005D9EF1 /* ExtraSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraSignUpViewController.swift; sourceTree = "<group>"; };
+		BF8A9A02273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostCategoryViewModel.swift; sourceTree = "<group>"; };
+		BF8A9A05273B83A600DA4DE4 /* FindEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindEmailViewController.swift; sourceTree = "<group>"; };
+		BF8A9A07273B879E00DA4DE4 /* FindEmailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindEmailViewModel.swift; sourceTree = "<group>"; };
+		BF8A9A09273B8BBA00DA4DE4 /* ConfirmEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmEmailViewController.swift; sourceTree = "<group>"; };
+		BF8A9A0E273B927000DA4DE4 /* lf20_rjrqsjob.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_rjrqsjob.json; sourceTree = "<group>"; };
+		BF8A9A10273B929F00DA4DE4 /* FIndPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIndPasswordViewController.swift; sourceTree = "<group>"; };
+		BF8A9A12273B962000DA4DE4 /* FindPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordViewModel.swift; sourceTree = "<group>"; };
+		BF8A9A14273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPasswordViewController.swift; sourceTree = "<group>"; };
+		BF8A9A16273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf30_editor_ctu3nzol.json; sourceTree = "<group>"; };
 		BF8D62662718FF51006D7227 /* Knowing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Knowing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF8D62692718FF51006D7227 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF8D626B2718FF51006D7227 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -210,6 +228,28 @@
 			path = ExtraSignUp;
 			sourceTree = "<group>";
 		};
+		BF8A9A04273B838400DA4DE4 /* FindEmail */ = {
+			isa = PBXGroup;
+			children = (
+				BF8A9A05273B83A600DA4DE4 /* FindEmailViewController.swift */,
+				BF8A9A07273B879E00DA4DE4 /* FindEmailViewModel.swift */,
+				BF8A9A09273B8BBA00DA4DE4 /* ConfirmEmailViewController.swift */,
+				BF8A9A0E273B927000DA4DE4 /* lf20_rjrqsjob.json */,
+			);
+			path = FindEmail;
+			sourceTree = "<group>";
+		};
+		BF8A9A0D273B90D500DA4DE4 /* FindPassword */ = {
+			isa = PBXGroup;
+			children = (
+				BF8A9A10273B929F00DA4DE4 /* FIndPasswordViewController.swift */,
+				BF8A9A12273B962000DA4DE4 /* FindPasswordViewModel.swift */,
+				BF8A9A14273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift */,
+				BF8A9A16273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json */,
+			);
+			path = FindPassword;
+			sourceTree = "<group>";
+		};
 		BF8D625D2718FF51006D7227 = {
 			isa = PBXGroup;
 			children = (
@@ -311,6 +351,7 @@
 			isa = PBXGroup;
 			children = (
 				BFC74511273A0ADE00090BCB /* AddPostCategoryViewController.swift */,
+				BF8A9A02273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift */,
 			);
 			path = AddPostCategory;
 			sourceTree = "<group>";
@@ -328,6 +369,8 @@
 		BFF506F62719033F003127CF /* LoginView */ = {
 			isa = PBXGroup;
 			children = (
+				BF8A9A0D273B90D500DA4DE4 /* FindPassword */,
+				BF8A9A04273B838400DA4DE4 /* FindEmail */,
 				BF5A2B8F272A7B9D00234429 /* MainLogin */,
 				BF5A2B8C272A7B7900234429 /* DefaultLoginView */,
 			);
@@ -408,11 +451,13 @@
 			files = (
 				BF8D62762718FF53006D7227 /* LaunchScreen.storyboard in Resources */,
 				BF5A2B8B272A67E500234429 /* GodoB.ttf in Resources */,
+				BF8A9A17273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json in Resources */,
 				BF5A2B8A272A67E200234429 /* GodoM.ttf in Resources */,
 				BF8D627E2719012A006D7227 /* GoogleService-Info.plist in Resources */,
 				BF8D62732718FF53006D7227 /* Assets.xcassets in Resources */,
 				BF8D62712718FF51006D7227 /* Main.storyboard in Resources */,
 				BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */,
+				BF8A9A0F273B927000DA4DE4 /* lf20_rjrqsjob.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,13 +513,17 @@
 				BF85C631273111B7005D9EF1 /* SignUpViewController.swift in Sources */,
 				BF2E058527226070008CA167 /* CustomComponent.swift in Sources */,
 				BF83793D272924B100584E33 /* HomeAllPostView.swift in Sources */,
+				BF8A9A0A273B8BBA00DA4DE4 /* ConfirmEmailViewController.swift in Sources */,
 				BF151BA72732465C0065E766 /* StepTwoView.swift in Sources */,
+				BF8A9A13273B962000DA4DE4 /* FindPasswordViewModel.swift in Sources */,
 				BF85C63427311203005D9EF1 /* ExtraSignUpViewController.swift in Sources */,
 				BF85C62927310147005D9EF1 /* SignUpViewModel.swift in Sources */,
 				BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */,
 				BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */,
 				BFC38CF327365AE400F94876 /* User.swift in Sources */,
+				BF8A9A06273B83A600DA4DE4 /* FindEmailViewController.swift in Sources */,
 				BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */,
+				BF8A9A03273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
 				BFC74512273A0ADE00090BCB /* AddPostCategoryViewController.swift in Sources */,
 				BF151BAB273246790065E766 /* StepFourView.swift in Sources */,
@@ -483,16 +532,19 @@
 				BF151BA5273243BC0065E766 /* StepOneView.swift in Sources */,
 				BF151BA92732466B0065E766 /* StepThreeView.swift in Sources */,
 				BF5351CB2733C2230040ECFE /* ExtraSignUpViewModel.swift in Sources */,
+				BF8A9A15273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift in Sources */,
 				BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */,
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
 				BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */,
 				BF85C62B27310883005D9EF1 /* FoundationExtension.swift in Sources */,
+				BF8A9A08273B879E00DA4DE4 /* FindEmailViewModel.swift in Sources */,
 				BF151BAF2732760F0065E766 /* AddressViewController.swift in Sources */,
 				BFF506FD27190EBB003127CF /* LoginViewModel.swift in Sources */,
 				BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */,
 				BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */,
 				BF151BAD273246850065E766 /* StepFiveView.swift in Sources */,
 				BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */,
+				BF8A9A11273B929F00DA4DE4 /* FIndPasswordViewController.swift in Sources */,
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,
 				BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */,
 				BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */,
