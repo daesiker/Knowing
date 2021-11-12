@@ -23,12 +23,6 @@ class StepOneView: UIView {
         $0.textColor = UIColor.rgb(red: 102, green: 102, blue: 102)
     }
     
-    let subLb = UILabel().then {
-        $0.text = "아래 사항 해당 시 체크해주세요."
-        $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
-        $0.textColor = UIColor.rgb(red: 102, green: 102, blue: 102)
-    }
-    
     let cityBt = CustomPicker("시/도 선택")
     let guBt = CustomPicker("시/군/구 선택")
     
@@ -38,16 +32,15 @@ class StepOneView: UIView {
         $0.textColor = UIColor.rgb(red: 255, green: 108, blue: 0)
     }
     
-    let checkBox = UIButton(type: .custom).then {
-        $0.setImage(UIImage(named: "checkbox_unselected")!, for: .normal)
-    }
+    let starImg2 = UIImageView(image: UIImage(named: "star")!)
     
-    let cbLabel = UILabel().then {
-        $0.attributedText = NSAttributedString(string: "가장, 다문화가정, 한부모가정,\n군인의 자녀, 장애인, 다자녀,\n북한이탈주민자녀, 국자유공자자녀").withLineSpacing(2)
-        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 15)
-        $0.textColor = UIColor.rgb(red: 115, green: 115, blue: 115)
-        $0.numberOfLines = 3
+    let specialLb = UILabel().then {
+        $0.text = "특별사항"
+        $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
+        $0.textColor = UIColor.rgb(red: 102, green: 102, blue: 102)
     }
+    let specialBt = CustomPicker("특별사항 선택")
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,23 +84,25 @@ class StepOneView: UIView {
             $0.leading.equalToSuperview().offset(25)
         }
         
-        addSubview(subLb)
-        subLb.snp.makeConstraints {
-            $0.top.equalTo(cityAlertLb.snp.bottom).offset(30)
+        addSubview(starImg2)
+        starImg2.snp.makeConstraints {
+            $0.top.equalTo(cityBt.snp.bottom).offset(47)
             $0.leading.equalToSuperview().offset(25)
         }
         
-        addSubview(checkBox)
-        checkBox.snp.makeConstraints {
-            $0.top.equalTo(subLb.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(17)
+        addSubview(specialLb)
+        specialLb.snp.makeConstraints {
+            $0.top.equalTo(cityBt.snp.bottom).offset(44)
+            $0.leading.equalTo(starImg2.snp.trailing).offset(3)
         }
         
-        addSubview(cbLabel)
-        cbLabel.snp.makeConstraints {
-            $0.top.equalTo(subLb.snp.bottom).offset(16)
-            $0.leading.equalTo(checkBox.snp.trailing).offset(3)
+        addSubview(specialBt)
+        specialBt.snp.makeConstraints {
+            $0.top.equalTo(specialLb.snp.bottom).offset(21)
+            $0.leading.equalToSuperview().offset(25)
         }
+        
+        
     }
     
     func bind() {
@@ -123,6 +118,10 @@ class StepOneView: UIView {
         guBt.rx.tap
             .map { self.cityBt.label.text ?? ""}
             .bind(to: self.vm.stepOne.input.guObserver)
+            .disposed(by: disposeBag)
+        
+        specialBt.rx.tap
+            .bind(to: self.vm.stepOne.input.specialObserver)
             .disposed(by: disposeBag)
     }
     
@@ -150,6 +149,12 @@ class StepOneView: UIView {
         vm.stepOne.output.guValue
             .drive(onNext: { value in
                 self.guBt.label.text = value
+            }).disposed(by: disposeBag)
+        
+        vm.stepOne.output.dismissSpecialView
+            .drive(onNext: {value in
+                self.specialBt.label.text = value
+                self.specialBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
             }).disposed(by: disposeBag)
     }
     

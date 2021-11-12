@@ -176,6 +176,7 @@ class AddressViewController: UIViewController {
             }
             .bind(to: self.isCity ? vm.stepOne.input.cityValueObserver : vm.stepOne.input.guValueObserver)
             .disposed(by: disposeBag)
+        
     }
     
     

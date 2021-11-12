@@ -35,7 +35,6 @@ class ExtraSignUpViewController: UIViewController {
         $0.text = "딱 맞는 복지정보, 노잉이 찾아드릴게요!"
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 15)
         $0.textColor = UIColor.rgb(red: 127, green: 127, blue: 127)
-        
     }
     
     let largeTitleLabel = UILabel().then {
@@ -281,6 +280,12 @@ extension ExtraSignUpViewController {
             }
         }).disposed(by: disposeBag)
         
+        vm.stepOne.output.goSpecialView.subscribe(onNext: {
+            let vc = SpecialViewController()
+            self.presentPanModal(vc)
+        }).disposed(by: disposeBag)
+        
+        
         
         vm.rootView.output.nextBtValid.drive(onNext: { value in
             if value {
@@ -359,10 +364,5 @@ extension ExtraSignUpViewController {
         self.footerView.setContentOffset(contentOffset, animated: true)
         currentStep = .step5
     }
-    
-    
-    
-    
-    
     
 }

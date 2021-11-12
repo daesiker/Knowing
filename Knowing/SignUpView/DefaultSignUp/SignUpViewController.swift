@@ -14,6 +14,14 @@ class SignUpViewController: UIViewController {
     let vm = SignUpViewModel()
     let disposeBag = DisposeBag()
     
+    let scrollView = UIScrollView().then {
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
+        $0.isScrollEnabled = true
+        $0.layoutIfNeeded()
+    }
+    
     let backBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
     }
@@ -82,6 +90,34 @@ class SignUpViewController: UIViewController {
         $0.font = UIFont.init(name: "AppleSDGothicNeo-Regular", size: 11)
     }
     
+    let pwConfirmLabel = UILabel().then {
+        $0.text = "비밀번호 확인"
+        $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
+    }
+    
+    let pwConfirmTextField = CustomTextField(image: UIImage(named: "password")!, text: "다시 한번 입력").then {
+        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
+        $0.isSecureTextEntry = true
+    }
+    
+    let pwConfirmAlertLabel = UILabel().then {
+        $0.text = ""
+        $0.textColor = UIColor.rgb(red: 255, green: 108, blue: 0)
+        $0.font = UIFont.init(name: "AppleSDGothicNeo-Regular", size: 11)
+    }
+    
+    let phoneLb = UILabel().then {
+        $0.text = "전화번호"
+        $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
+    }
+    
+    let phoneTextField = CustomTextField(image: UIImage(named: "phone")!, text: "'-'없이 입력").then {
+        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
+        $0.keyboardType = .numberPad
+    }
+    
     let genderLabel = UILabel().then {
         $0.text = "성별"
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
@@ -131,11 +167,11 @@ class SignUpViewController: UIViewController {
         super.viewDidLoad()
         setUI()
         bind()
-        keyboardNotification()
+        //keyboardNotification()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        self.scrollView.endEditing(true)
     }
     
     func keyboardNotification() {
@@ -157,77 +193,116 @@ extension SignUpViewController {
     
     func setUI() {
         view.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
+        safeArea.addSubview(scrollView)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 909)
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         
-        safeArea.addSubview(backBt)
+        scrollView.addSubview(backBt)
         backBt.snp.makeConstraints {
-            $0.top.equalTo(safeArea.snp.top).offset(6)
+            $0.top.equalToSuperview().offset(6)
             $0.leading.equalToSuperview().offset(20)
         }
-        safeArea.addSubview(welcomeLabel)
+        scrollView.addSubview(welcomeLabel)
         welcomeLabel.snp.makeConstraints {
             $0.top.equalTo(backBt.snp.bottom).offset(13)
             $0.leading.equalToSuperview().offset(25)
         }
-        safeArea.addSubview(titleLabel)
+        scrollView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(welcomeLabel.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(26)
         }
         
-        safeArea.addSubview(nameLabel)
+        scrollView.addSubview(nameLabel)
         nameLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(33)
             $0.leading.equalToSuperview().offset(25)
         }
-        safeArea.addSubview(nameTextField)
+        
+        scrollView.addSubview(nameTextField)
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(nameLabel.snp.bottom).offset(8)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(26)
             $0.trailing.equalTo(self.safeArea.snp.trailing).offset(-25)
         }
-        safeArea.addSubview(nameAlertLabel)
+        
+        scrollView.addSubview(nameAlertLabel)
         nameAlertLabel.snp.makeConstraints {
             $0.top.equalTo(nameTextField.snp.bottom).offset(5)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(25)
         }
         
-        safeArea.addSubview(emailLabel)
+        scrollView.addSubview(emailLabel)
         emailLabel.snp.makeConstraints {
             $0.top.equalTo(nameTextField.snp.bottom).offset(28)
             $0.leading.equalToSuperview().offset(25)
         }
-        safeArea.addSubview(emailTextField)
+        scrollView.addSubview(emailTextField)
         emailTextField.snp.makeConstraints {
             $0.top.equalTo(emailLabel.snp.bottom).offset(8)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(26)
             $0.trailing.equalTo(self.safeArea.snp.trailing).offset(-25)
         }
-        safeArea.addSubview(emailAlertLabel)
+        scrollView.addSubview(emailAlertLabel)
         emailAlertLabel.snp.makeConstraints {
             $0.top.equalTo(emailTextField.snp.bottom).offset(5)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(25)
         }
         
-        safeArea.addSubview(pwLabel)
+        scrollView.addSubview(pwLabel)
         pwLabel.snp.makeConstraints {
             $0.top.equalTo(emailTextField.snp.bottom).offset(28)
             $0.leading.equalToSuperview().offset(25)
         }
-        safeArea.addSubview(pwTextField)
+        scrollView.addSubview(pwTextField)
         pwTextField.snp.makeConstraints {
             $0.top.equalTo(pwLabel.snp.bottom).offset(8)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(26)
             $0.trailing.equalTo(self.safeArea.snp.trailing).offset(-25)
         }
-        safeArea.addSubview(pwAlertLabel)
+        scrollView.addSubview(pwAlertLabel)
         pwAlertLabel.snp.makeConstraints {
             $0.top.equalTo(pwTextField.snp.bottom).offset(5)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(25)
         }
         
-        safeArea.addSubview(genderLabel)
-        genderLabel.snp.makeConstraints {
+        scrollView.addSubview(pwConfirmLabel)
+        pwConfirmLabel.snp.makeConstraints {
             $0.top.equalTo(pwTextField.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().offset(25)
+        }
+        
+        scrollView.addSubview(pwConfirmTextField)
+        pwConfirmTextField.snp.makeConstraints {
+            $0.top.equalTo(pwConfirmLabel.snp.bottom).offset(8)
+            $0.leading.equalTo(self.safeArea.snp.leading).offset(26)
+            $0.trailing.equalTo(self.safeArea.snp.trailing).offset(-25)
+        }
+        
+        scrollView.addSubview(pwConfirmAlertLabel)
+        pwConfirmAlertLabel.snp.makeConstraints {
+            $0.top.equalTo(pwConfirmTextField.snp.bottom).offset(5)
+            $0.leading.equalTo(self.safeArea.snp.leading).offset(25)
+        }
+        
+        scrollView.addSubview(phoneLb)
+        phoneLb.snp.makeConstraints {
+            $0.top.equalTo(pwConfirmTextField.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().offset(25)
+        }
+        
+        scrollView.addSubview(phoneTextField)
+        phoneTextField.snp.makeConstraints {
+            $0.top.equalTo(phoneLb.snp.bottom).offset(8)
+            $0.leading.equalTo(self.safeArea.snp.leading).offset(26)
+            $0.trailing.equalTo(self.safeArea.snp.trailing).offset(-25)
+        }
+        
+        scrollView.addSubview(genderLabel)
+        genderLabel.snp.makeConstraints {
+            $0.top.equalTo(phoneTextField.snp.bottom).offset(28)
             $0.leading.equalToSuperview().offset(25)
         }
         
@@ -237,7 +312,7 @@ extension SignUpViewController {
             $0.spacing = 28
         }
         
-        safeArea.addSubview(genderStackView)
+        scrollView.addSubview(genderStackView)
         genderStackView.snp.makeConstraints {
             $0.top.equalTo(genderLabel.snp.bottom).offset(8)
             $0.leading.equalTo(safeArea.snp.leading).offset(26)
@@ -245,20 +320,20 @@ extension SignUpViewController {
             
         }
         
-        safeArea.addSubview(birthLabel)
+        scrollView.addSubview(birthLabel)
         birthLabel.snp.makeConstraints {
             $0.top.equalTo(genderStackView.snp.bottom).offset(28)
             $0.leading.equalTo(safeArea.snp.leading).offset(25)
         }
         
-        safeArea.addSubview(birthTextField)
+        scrollView.addSubview(birthTextField)
         birthTextField.snp.makeConstraints {
             $0.top.equalTo(birthLabel.snp.bottom).offset(8)
             $0.leading.equalTo(safeArea.snp.leading).offset(26)
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-25)
         }
         
-        safeArea.addSubview(signInBt)
+        scrollView.addSubview(signInBt)
         signInBt.snp.makeConstraints {
             $0.top.equalTo(birthTextField.snp.bottom).offset(30)
             $0.leading.equalTo(safeArea.snp.leading).offset(26)
@@ -291,6 +366,13 @@ extension SignUpViewController {
             .map { self.pwTextField.text ?? "" }
             .bind(to: vm.input.pwObserver)
             .disposed(by: disposeBag)
+        
+        pwConfirmTextField.rx.controlEvent([.editingDidEnd])
+            .map { self.pwConfirmTextField.text ?? "" }
+            .bind(to: vm.input.pwConfirmObserver)
+            .disposed(by: disposeBag)
+        
+        
         
         maleBt.rx.tap
             .map { Gender.male }
@@ -335,6 +417,16 @@ extension SignUpViewController {
             } else {
                 self.pwAlertLabel.text = "영문자와 숫자 포함 8자 이상 입력해주세요."
                 self.pwTextField.setErrorRight()
+            }
+        }).disposed(by: disposeBag)
+        
+        vm.output.pwConfirmValid.drive(onNext: { valid in
+            if valid {
+                self.pwConfirmLabel.text = ""
+                self.pwConfirmTextField.setRight()
+            } else {
+                self.pwConfirmLabel.text = "비밀번호가 맞지 않습니다."
+                self.pwConfirmTextField.setErrorRight()
             }
         }).disposed(by: disposeBag)
         
