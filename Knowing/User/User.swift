@@ -20,7 +20,13 @@ struct User {
     var address:String = ""
     var specialStatus:[String] = []
     
+    //step2
+    var money1:String = ""
+    var money2:String = ""
+    var employStatus:[String] = []
     
+    //step3
+    var records:[String] = []
     
     var school: String? = nil
     var major: String? = nil

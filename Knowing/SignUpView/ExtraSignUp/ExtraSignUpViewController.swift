@@ -124,10 +124,10 @@ class ExtraSignUpViewController: UIViewController {
     
     private func addContentScrollView() {
         footerView.frame = UIScreen.main.bounds
-        footerView.contentSize = CGSize(width: UIScreen.main.bounds.width * CGFloat(childView.count), height: UIScreen.main.bounds.height * 0.63)
+        footerView.contentSize = CGSize(width: UIScreen.main.bounds.width * CGFloat(childView.count), height: UIScreen.main.bounds.height)
         for i in 0..<childView.count {
             let xPos = self.view.frame.width * CGFloat(i)
-            childView[i].frame = CGRect(x: xPos, y: 0, width: footerView.bounds.width, height: UIScreen.main.bounds.height * 0.63)
+            childView[i].frame = CGRect(x: xPos, y: 0, width: footerView.bounds.width, height: UIScreen.main.bounds.height)
             footerView.addSubview(childView[i])
             footerView.contentSize.width = childView[i].frame.width * CGFloat(i + 1)
         }

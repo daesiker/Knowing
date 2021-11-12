@@ -70,12 +70,14 @@ class StepOneView: UIView {
         cityBt.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(25)
             $0.top.equalTo(residenceLb.snp.bottom).offset(20)
+            $0.width.equalTo(113)
         }
         
         addSubview(guBt)
         guBt.snp.makeConstraints {
             $0.top.equalTo(residenceLb.snp.bottom).offset(20)
             $0.leading.equalTo(cityBt.snp.trailing).offset(26)
+            $0.width.equalTo(112)
         }
         
         addSubview(cityAlertLb)
@@ -100,6 +102,7 @@ class StepOneView: UIView {
         specialBt.snp.makeConstraints {
             $0.top.equalTo(specialLb.snp.bottom).offset(21)
             $0.leading.equalToSuperview().offset(25)
+            $0.width.equalTo(113)
         }
         
         

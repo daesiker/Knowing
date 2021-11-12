@@ -133,7 +133,6 @@ class CustomPicker: UIButton {
         self.addSubview(image)
         image.snp.makeConstraints {
             $0.trailing.equalToSuperview()
-            $0.leading.equalToSuperview().offset(103)
             $0.top.equalToSuperview().offset(9)
             $0.bottom.equalToSuperview().offset(-11)
         }
