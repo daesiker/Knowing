@@ -128,11 +128,12 @@ class StepOneView: UIView {
             .disposed(by: disposeBag)
     }
     
+    
     func bindOutput() {
         vm.stepOne.output.cityValue
             .drive(onNext:{ value in
                 self.cityBt.label.text = value
-                self.cityBt.label.textColor = UIColor.rgb(red: 194, green: 194, blue: 194)
+                self.cityBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
                 self.cityAlertLb.text = ""
             })
             .disposed(by: disposeBag)
@@ -152,6 +153,7 @@ class StepOneView: UIView {
         vm.stepOne.output.guValue
             .drive(onNext: { value in
                 self.guBt.label.text = value
+                self.guBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
             }).disposed(by: disposeBag)
         
         vm.stepOne.output.dismissSpecialView

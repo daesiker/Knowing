@@ -23,6 +23,8 @@
 		BF5A2B8A272A67E200234429 /* GodoM.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B88272A5D4F00234429 /* GodoM.ttf */; };
 		BF5A2B8B272A67E500234429 /* GodoB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B89272A62D500234429 /* GodoB.ttf */; };
 		BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */; };
+		BF6086A32740ABB900D63BF6 /* AgreeTermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */; };
+		BF6086A52740B3D100D63BF6 /* AgreeTermsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6086A42740B3D100D63BF6 /* AgreeTermsViewModel.swift */; };
 		BF8379372729208900584E33 /* HomeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8379362729208900584E33 /* HomeChartView.swift */; };
 		BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8379392729238300584E33 /* HomeCalendarVIew.swift */; };
 		BF83793D272924B100584E33 /* HomeAllPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83793C272924B100584E33 /* HomeAllPostView.swift */; };
@@ -79,6 +81,8 @@
 		BF5A2B88272A5D4F00234429 /* GodoM.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoM.ttf; sourceTree = "<group>"; };
 		BF5A2B89272A62D500234429 /* GodoB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoB.ttf; sourceTree = "<group>"; };
 		BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginViewController.swift; sourceTree = "<group>"; };
+		BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreeTermsViewController.swift; sourceTree = "<group>"; };
+		BF6086A42740B3D100D63BF6 /* AgreeTermsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreeTermsViewModel.swift; sourceTree = "<group>"; };
 		BF8379362729208900584E33 /* HomeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChartView.swift; sourceTree = "<group>"; };
 		BF8379392729238300584E33 /* HomeCalendarVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarVIew.swift; sourceTree = "<group>"; };
 		BF83793C272924B100584E33 /* HomeAllPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAllPostView.swift; sourceTree = "<group>"; };
@@ -181,6 +185,15 @@
 				BFF506FC27190EBB003127CF /* LoginViewModel.swift */,
 			);
 			path = MainLogin;
+			sourceTree = "<group>";
+		};
+		BF6086A12740ABA100D63BF6 /* AgreeTerms */ = {
+			isa = PBXGroup;
+			children = (
+				BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */,
+				BF6086A42740B3D100D63BF6 /* AgreeTermsViewModel.swift */,
+			);
+			path = AgreeTerms;
 			sourceTree = "<group>";
 		};
 		BF8379352729206C00584E33 /* HomeChartView */ = {
@@ -361,6 +374,7 @@
 		BFE0AF7F271950E000CA476A /* SignUpView */ = {
 			isa = PBXGroup;
 			children = (
+				BF6086A12740ABA100D63BF6 /* AgreeTerms */,
 				BFC74510273A0A2000090BCB /* AddPostCategory */,
 				BF85C632273111EA005D9EF1 /* ExtraSignUp */,
 				BF85C62C2731111C005D9EF1 /* DefaultSignUp */,
@@ -526,6 +540,7 @@
 				BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */,
 				BFC38CF327365AE400F94876 /* User.swift in Sources */,
 				BF8A9A06273B83A600DA4DE4 /* FindEmailViewController.swift in Sources */,
+				BF6086A32740ABB900D63BF6 /* AgreeTermsViewController.swift in Sources */,
 				BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */,
 				BF8A9A03273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
@@ -547,6 +562,7 @@
 				BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */,
 				BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */,
 				BF151BAD273246850065E766 /* StepFiveView.swift in Sources */,
+				BF6086A52740B3D100D63BF6 /* AgreeTermsViewModel.swift in Sources */,
 				BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */,
 				BF8A9A11273B929F00DA4DE4 /* FIndPasswordViewController.swift in Sources */,
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,

@@ -216,6 +216,23 @@ extension DefaultLoginViewController {
         logInBt.rx.tap
             .bind(to: self.vm.input.loginObserver)
             .disposed(by: disposeBag)
+        
+        findEmailBt.rx.tap
+            .subscribe(onNext: {
+                let vc = FindEmailViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
+            }).disposed(by: disposeBag)
+        
+        findPwBt.rx.tap
+            .subscribe(onNext: {
+                let vc = FIndPasswordViewController()
+                vc.modalPresentationStyle = .fullScreen
+                vc.modalTransitionStyle = .crossDissolve
+                self.present(vc, animated: true, completion: nil)
+            }).disposed(by: disposeBag)
+        
     }
     
     func bindOutput() {

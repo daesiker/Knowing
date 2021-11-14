@@ -119,7 +119,7 @@ class CustomPicker: UIButton {
         super.init(frame: frame)
         self.addSubview(border)
         border.snp.makeConstraints {
-            $0.height.equalTo(2)
+            $0.height.equalTo(0.5)
             $0.bottom.leading.trailing.equalToSuperview()
         }
         
