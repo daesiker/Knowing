@@ -63,6 +63,10 @@ class FindEmailViewController: UIViewController {
         bind()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
 }
 
 extension FindEmailViewController {
@@ -122,6 +126,10 @@ extension FindEmailViewController {
     
     func bindInput() {
         
+        backBt.rx.tap.subscribe(onNext: {
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+        
         nameTextField.rx.controlEvent([.editingDidEnd])
             .map { self.nameTextField.text ?? "" }
             .bind(to: self.vm.input.nameObserver)
@@ -135,7 +143,14 @@ extension FindEmailViewController {
         confirmBt.rx.tap
             .bind(to: self.vm.input.buttonObserver)
             .disposed(by: disposeBag)
-            
+        
+        confirmBt.rx.tap
+            .subscribe(onNext: {
+                let vc = ConfirmEmailViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            }).disposed(by: disposeBag)
     }
     
     func bindOutput() {
@@ -149,6 +164,8 @@ extension FindEmailViewController {
                 self.confirmBt.isEnabled = false
             }
         }).disposed(by: disposeBag)
+        
+        
         
     }
 }

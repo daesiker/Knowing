@@ -17,7 +17,7 @@ class FindPasswordViewModel {
     
     struct Input {
         let nameObserver = PublishRelay<String>()
-        let phoneObserver = PublishRelay<String>()
+        let emailObserver = PublishRelay<String>()
         let buttonObserver = PublishRelay<Void>()
     }
     
@@ -28,7 +28,8 @@ class FindPasswordViewModel {
     }
     
     init() {
-        output.btValid = Driver.combineLatest(input.nameObserver.asDriver(onErrorJustReturn: ""), input.phoneObserver.asDriver(onErrorJustReturn: ""))
+        
+        output.btValid = Driver.combineLatest(input.nameObserver.asDriver(onErrorJustReturn: ""), input.emailObserver.asDriver(onErrorJustReturn: ""))
             .map { $0 != "" && $1 != "" }
             .asDriver(onErrorJustReturn: false)
     }

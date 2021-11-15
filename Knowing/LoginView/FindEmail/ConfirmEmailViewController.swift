@@ -119,11 +119,21 @@ extension ConfirmEmailViewController {
     }
     
     func bind() {
+        goFindPwBt.rx.tap
+            .subscribe(onNext: {
+                let vc = FindPasswordViewController()
+                vc.modalPresentationStyle = .fullScreen
+                vc.modalTransitionStyle = .crossDissolve
+                self.present(vc, animated: true)
+            }).disposed(by: disposeBag)
+        
         goLoginBt.rx.tap.subscribe(onNext: {
-            let vc = DefaultLoginViewController()
-            vc.modalTransitionStyle = .crossDissolve
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true, completion: nil)
+            let viewController = LoginViewController()
+            let navController = UINavigationController(rootViewController: viewController)
+            navController.isNavigationBarHidden = true
+            navController.modalTransitionStyle = .crossDissolve
+            navController.modalPresentationStyle = .fullScreen
+            self.present(navController, animated: true)
         }).disposed(by: disposeBag)
         
         

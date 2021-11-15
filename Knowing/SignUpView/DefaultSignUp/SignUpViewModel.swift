@@ -49,7 +49,7 @@ class SignUpViewModel {
         }).disposed(by: disposeBag)
         
         input.pwObserver.subscribe(onNext: {valid in
-            self.user.password = valid
+            self.user.pwd = valid
         }).disposed(by: disposeBag)
         
         input.phoneObserver.subscribe(onNext: {valid in
@@ -59,16 +59,21 @@ class SignUpViewModel {
         input.genderObserver.subscribe(onNext: {valid in
             switch valid {
             case .male:
-                self.user.gender = "male"
+                self.user.gender = true
             case .female:
-                self.user.gender = "female"
+                self.user.gender = false
             case .notSelected:
                 break
             }
         }).disposed(by: disposeBag)
         
         input.birthObserver.subscribe(onNext: {valid in
-            self.user.birth = valid
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd"
+            
+            let date = dateFormatter.date(from: valid)
+            
+            self.user.birth = date?.age ?? 0
         }).disposed(by: disposeBag)
         
         
@@ -92,8 +97,10 @@ class SignUpViewModel {
         
         output.genderValid = input.genderObserver.asDriver(onErrorJustReturn: .notSelected)
         
+        
+        
         output.buttonValid = Driver.combineLatest(output.emailValid, output.pwValid, input.nameObserver.asDriver(onErrorJustReturn: ""), input.genderObserver.asDriver(onErrorJustReturn: .notSelected), input.birthObserver.asDriver(onErrorJustReturn: ""), output.pwConfirmValid, input.phoneObserver.asDriver(onErrorJustReturn: ""))
-            .map { $0  && $1 && $2 != "" && $3 != .notSelected && $4 != ""  && $5 && $6 != "" }
+            { $0  && $1 && $2 != "" && $3 != .notSelected && $4 != ""  && $5 && $6 != "" }
             .asDriver(onErrorJustReturn: false)
         
     }

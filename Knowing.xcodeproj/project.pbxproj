@@ -23,6 +23,8 @@
 		BF5A2B8A272A67E200234429 /* GodoM.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B88272A5D4F00234429 /* GodoM.ttf */; };
 		BF5A2B8B272A67E500234429 /* GodoB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B89272A62D500234429 /* GodoB.ttf */; };
 		BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */; };
+		BF5C9BBE2742939E00005AC7 /* ApiSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C9BBD2742939E00005AC7 /* ApiSignUpViewController.swift */; };
+		BF5C9BC02742A53C00005AC7 /* ApiSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C9BBF2742A53C00005AC7 /* ApiSignUpViewModel.swift */; };
 		BF6086A32740ABB900D63BF6 /* AgreeTermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */; };
 		BF6086A52740B3D100D63BF6 /* AgreeTermsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6086A42740B3D100D63BF6 /* AgreeTermsViewModel.swift */; };
 		BF8379372729208900584E33 /* HomeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8379362729208900584E33 /* HomeChartView.swift */; };
@@ -37,7 +39,7 @@
 		BF8A9A08273B879E00DA4DE4 /* FindEmailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A07273B879E00DA4DE4 /* FindEmailViewModel.swift */; };
 		BF8A9A0A273B8BBA00DA4DE4 /* ConfirmEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A09273B8BBA00DA4DE4 /* ConfirmEmailViewController.swift */; };
 		BF8A9A0F273B927000DA4DE4 /* lf20_rjrqsjob.json in Resources */ = {isa = PBXBuildFile; fileRef = BF8A9A0E273B927000DA4DE4 /* lf20_rjrqsjob.json */; };
-		BF8A9A11273B929F00DA4DE4 /* FIndPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A10273B929F00DA4DE4 /* FIndPasswordViewController.swift */; };
+		BF8A9A11273B929F00DA4DE4 /* FindPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A10273B929F00DA4DE4 /* FindPasswordViewController.swift */; };
 		BF8A9A13273B962000DA4DE4 /* FindPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A12273B962000DA4DE4 /* FindPasswordViewModel.swift */; };
 		BF8A9A15273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A14273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift */; };
 		BF8A9A17273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json in Resources */ = {isa = PBXBuildFile; fileRef = BF8A9A16273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json */; };
@@ -81,6 +83,8 @@
 		BF5A2B88272A5D4F00234429 /* GodoM.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoM.ttf; sourceTree = "<group>"; };
 		BF5A2B89272A62D500234429 /* GodoB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoB.ttf; sourceTree = "<group>"; };
 		BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginViewController.swift; sourceTree = "<group>"; };
+		BF5C9BBD2742939E00005AC7 /* ApiSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiSignUpViewController.swift; sourceTree = "<group>"; };
+		BF5C9BBF2742A53C00005AC7 /* ApiSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiSignUpViewModel.swift; sourceTree = "<group>"; };
 		BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreeTermsViewController.swift; sourceTree = "<group>"; };
 		BF6086A42740B3D100D63BF6 /* AgreeTermsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreeTermsViewModel.swift; sourceTree = "<group>"; };
 		BF8379362729208900584E33 /* HomeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChartView.swift; sourceTree = "<group>"; };
@@ -95,7 +99,7 @@
 		BF8A9A07273B879E00DA4DE4 /* FindEmailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindEmailViewModel.swift; sourceTree = "<group>"; };
 		BF8A9A09273B8BBA00DA4DE4 /* ConfirmEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmEmailViewController.swift; sourceTree = "<group>"; };
 		BF8A9A0E273B927000DA4DE4 /* lf20_rjrqsjob.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_rjrqsjob.json; sourceTree = "<group>"; };
-		BF8A9A10273B929F00DA4DE4 /* FIndPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIndPasswordViewController.swift; sourceTree = "<group>"; };
+		BF8A9A10273B929F00DA4DE4 /* FindPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordViewController.swift; sourceTree = "<group>"; };
 		BF8A9A12273B962000DA4DE4 /* FindPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordViewModel.swift; sourceTree = "<group>"; };
 		BF8A9A14273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPasswordViewController.swift; sourceTree = "<group>"; };
 		BF8A9A16273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf30_editor_ctu3nzol.json; sourceTree = "<group>"; };
@@ -187,6 +191,15 @@
 			path = MainLogin;
 			sourceTree = "<group>";
 		};
+		BF5C9BBC2742938700005AC7 /* ApiSignUp */ = {
+			isa = PBXGroup;
+			children = (
+				BF5C9BBD2742939E00005AC7 /* ApiSignUpViewController.swift */,
+				BF5C9BBF2742A53C00005AC7 /* ApiSignUpViewModel.swift */,
+			);
+			path = ApiSignUp;
+			sourceTree = "<group>";
+		};
 		BF6086A12740ABA100D63BF6 /* AgreeTerms */ = {
 			isa = PBXGroup;
 			children = (
@@ -257,7 +270,7 @@
 		BF8A9A0D273B90D500DA4DE4 /* FindPassword */ = {
 			isa = PBXGroup;
 			children = (
-				BF8A9A10273B929F00DA4DE4 /* FIndPasswordViewController.swift */,
+				BF8A9A10273B929F00DA4DE4 /* FindPasswordViewController.swift */,
 				BF8A9A12273B962000DA4DE4 /* FindPasswordViewModel.swift */,
 				BF8A9A14273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift */,
 				BF8A9A16273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json */,
@@ -374,6 +387,7 @@
 		BFE0AF7F271950E000CA476A /* SignUpView */ = {
 			isa = PBXGroup;
 			children = (
+				BF5C9BBC2742938700005AC7 /* ApiSignUp */,
 				BF6086A12740ABA100D63BF6 /* AgreeTerms */,
 				BFC74510273A0A2000090BCB /* AddPostCategory */,
 				BF85C632273111EA005D9EF1 /* ExtraSignUp */,
@@ -542,6 +556,7 @@
 				BF8A9A06273B83A600DA4DE4 /* FindEmailViewController.swift in Sources */,
 				BF6086A32740ABB900D63BF6 /* AgreeTermsViewController.swift in Sources */,
 				BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */,
+				BF5C9BBE2742939E00005AC7 /* ApiSignUpViewController.swift in Sources */,
 				BF8A9A03273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
 				BFC74512273A0ADE00090BCB /* AddPostCategoryViewController.swift in Sources */,
@@ -553,6 +568,7 @@
 				BF5351CB2733C2230040ECFE /* ExtraSignUpViewModel.swift in Sources */,
 				BF8A9A15273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift in Sources */,
 				BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */,
+				BF5C9BC02742A53C00005AC7 /* ApiSignUpViewModel.swift in Sources */,
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
 				BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */,
 				BF85C62B27310883005D9EF1 /* FoundationExtension.swift in Sources */,
@@ -564,7 +580,7 @@
 				BF151BAD273246850065E766 /* StepFiveView.swift in Sources */,
 				BF6086A52740B3D100D63BF6 /* AgreeTermsViewModel.swift in Sources */,
 				BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */,
-				BF8A9A11273B929F00DA4DE4 /* FIndPasswordViewController.swift in Sources */,
+				BF8A9A11273B929F00DA4DE4 /* FindPasswordViewController.swift in Sources */,
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,
 				BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */,
 				BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */,

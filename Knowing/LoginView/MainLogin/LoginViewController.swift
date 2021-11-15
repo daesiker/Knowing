@@ -191,9 +191,10 @@ extension LoginViewController {
         }).disposed(by: disposeBag)
         
         signUpBt.rx.tap.subscribe(onNext: {
-            let viewController = SignUpViewController()
+            let viewController = AgreeTermsViewController()
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
+            
             self.present(viewController, animated: true)
         }).disposed(by: disposeBag)
         
@@ -201,6 +202,8 @@ extension LoginViewController {
             .map { self }
             .bind(to: loginViewModel.input.googleLoginTap)
             .disposed(by: disposeBag)
+        
+        
         
         
     }

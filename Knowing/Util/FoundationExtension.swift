@@ -30,6 +30,8 @@ extension String {
         return passwordtesting.evaluate(with: self)
     }
 
-    
-    
+}
+
+extension Date {
+    var age:Int { Calendar.current.dateComponents([.year], from: self, to: Date()).year! }
 }

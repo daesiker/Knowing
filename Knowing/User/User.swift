@@ -11,9 +11,9 @@ struct User {
     //default
     var name:String = ""
     var email:String = ""
-    var password:String = ""
-    var gender:String = ""
-    var birth:String = ""
+    var pwd:String = ""
+    var gender:Bool = true
+    var birth:Int = 0
     var phNumber:String = ""
     
     //step1

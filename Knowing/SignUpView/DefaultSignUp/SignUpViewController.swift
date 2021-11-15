@@ -14,13 +14,15 @@ class SignUpViewController: UIViewController {
     let vm = SignUpViewModel()
     let disposeBag = DisposeBag()
     
-    let scrollView = UIScrollView().then {
-        $0.showsHorizontalScrollIndicator = false
-        $0.showsVerticalScrollIndicator = false
-        $0.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
-        $0.isScrollEnabled = true
-        $0.layoutIfNeeded()
-    }
+    let scrollView:UIScrollView = {
+        let sv = UIScrollView()
+        sv.showsHorizontalScrollIndicator = false
+        sv.showsVerticalScrollIndicator = false
+        sv.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
+        sv.isScrollEnabled = true
+        sv.layoutIfNeeded()
+        return sv
+    }()
     
     let backBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
@@ -193,8 +195,9 @@ extension SignUpViewController {
     
     func setUI() {
         view.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
+        scrollView.delegate = self
         safeArea.addSubview(scrollView)
-        scrollView.contentSize = CGSize(width: view.frame.width, height: 909)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 950)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -204,6 +207,7 @@ extension SignUpViewController {
             $0.top.equalToSuperview().offset(6)
             $0.leading.equalToSuperview().offset(20)
         }
+        
         scrollView.addSubview(welcomeLabel)
         welcomeLabel.snp.makeConstraints {
             $0.top.equalTo(backBt.snp.bottom).offset(13)
@@ -372,8 +376,6 @@ extension SignUpViewController {
             .bind(to: vm.input.pwConfirmObserver)
             .disposed(by: disposeBag)
         
-        
-        
         maleBt.rx.tap
             .map { Gender.male }
             .bind(to: vm.input.genderObserver)
@@ -422,10 +424,10 @@ extension SignUpViewController {
         
         vm.output.pwConfirmValid.drive(onNext: { valid in
             if valid {
-                self.pwConfirmLabel.text = ""
+                self.pwConfirmAlertLabel.text = ""
                 self.pwConfirmTextField.setRight()
             } else {
-                self.pwConfirmLabel.text = "비밀번호가 맞지 않습니다."
+                self.pwConfirmAlertLabel.text = "비밀번호가 맞지 않습니다."
                 self.pwConfirmTextField.setErrorRight()
             }
         }).disposed(by: disposeBag)
@@ -448,6 +450,7 @@ extension SignUpViewController {
         }).disposed(by: disposeBag)
         
         vm.output.buttonValid.drive(onNext: {valid in
+            print(valid)
             if valid {
                 self.signInBt.isEnabled = true
                 self.signInBt.backgroundColor = UIColor.rgb(red: 251, green: 136, blue: 85)
@@ -460,4 +463,10 @@ extension SignUpViewController {
     
 }
 
-
+extension SignUpViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.view.endEditing(true)
+    }
+    
+}

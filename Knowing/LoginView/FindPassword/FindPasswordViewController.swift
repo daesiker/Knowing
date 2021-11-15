@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class FIndPasswordViewController: UIViewController {
+class FindPasswordViewController: UIViewController {
 
     let disposeBag = DisposeBag()
     let vm = FindPasswordViewModel()
@@ -75,10 +75,13 @@ class FIndPasswordViewController: UIViewController {
         bind()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
 
 }
 
-extension FIndPasswordViewController {
+extension FindPasswordViewController {
     func setUI() {
         view.backgroundColor = .white
         
@@ -153,6 +156,10 @@ extension FIndPasswordViewController {
     
     func bindInput() {
         
+        backBt.rx.tap.subscribe(onNext: {
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+        
         nameTextField.rx.controlEvent([.editingDidEnd])
             .map { self.nameTextField.text ?? "" }
             .bind(to: self.vm.input.nameObserver)
@@ -160,13 +167,20 @@ extension FIndPasswordViewController {
         
         emailTextField.rx.controlEvent([.editingDidEnd])
             .map { self.emailTextField.text ?? "" }
-            .bind(to: self.vm.input.phoneObserver)
+            .bind(to: self.vm.input.emailObserver)
             .disposed(by: disposeBag)
         
         confirmBt.rx.tap
             .bind(to: self.vm.input.buttonObserver)
             .disposed(by: disposeBag)
-            
+        
+        confirmBt.rx.tap.subscribe(onNext: {
+            let vc = ConfirmPasswordViewController()
+            vc.modalPresentationStyle = .fullScreen
+            vc.modalTransitionStyle = .crossDissolve
+            self.present(vc, animated: true)
+        }).disposed(by: disposeBag)
+        
     }
     
     func bindOutput() {

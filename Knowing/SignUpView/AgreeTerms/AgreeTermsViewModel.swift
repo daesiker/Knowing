@@ -26,16 +26,21 @@ class AgreeTermsViewModel {
     }
     
     struct Output {
-        var allValid = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [])
-        var firstValid = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [])
-        var secondValid = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [])
-        var thirdValid = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [])
-        var nextBtValid = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
+        var allValid = BehaviorRelay<[Bool]>(value: [false, false, false, false]).asDriver(onErrorJustReturn: [])
+        var firstValid = BehaviorRelay<[Bool]>(value: [false, false, false, false]).asDriver(onErrorJustReturn: [])
+        var secondValid = BehaviorRelay<[Bool]>(value: [false, false, false, false]).asDriver(onErrorJustReturn: [])
+        var thirdValid = BehaviorRelay<[Bool]>(value: [false, false, false, false]).asDriver(onErrorJustReturn: [])
+        var nextBtValid = BehaviorRelay<Bool>(value: false).asDriver(onErrorJustReturn: false)
     }
     
     
     
     init() {
+        output.firstValid = input.firstObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
+        output.secondValid = input.secondObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
+        output.thirdValid = input.thirdObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
+        output.allValid = input.allObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
+        
         
         
         input.allObserver.subscribe(onNext: {
@@ -46,7 +51,7 @@ class AgreeTermsViewModel {
             }
         }).disposed(by: disposeBag)
         
-        output.allValid = input.allObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
+        
         
         input.firstObserver.subscribe(onNext: {
             if self.checkBox[1] {
@@ -62,7 +67,6 @@ class AgreeTermsViewModel {
             }
         }).disposed(by: disposeBag)
         
-        output.firstValid = input.firstObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         
         input.secondObserver.subscribe(onNext: {
             if self.checkBox[2] {
@@ -78,7 +82,7 @@ class AgreeTermsViewModel {
             }
         }).disposed(by: disposeBag)
         
-        output.secondValid = input.secondObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
+        
         
         input.thirdObserver.subscribe(onNext: {
             if self.checkBox[3] {
@@ -94,15 +98,10 @@ class AgreeTermsViewModel {
             }
         }).disposed(by: disposeBag)
         
-        output.thirdValid = input.thirdObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         
-        output.nextBtValid = Observable.combineLatest(input.allObserver, input.firstObserver, input.secondObserver, input.thirdObserver).map({ _, _, _, _ in
-            if self.checkBox[1] && self.checkBox[2] {
-                return true
-            } else {
-                return false
-            }
-        }).asDriver(onErrorJustReturn: false)
+        
+        
+        
         
     }
     

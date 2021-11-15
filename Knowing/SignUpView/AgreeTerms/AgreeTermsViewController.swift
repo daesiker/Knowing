@@ -14,11 +14,7 @@ class AgreeTermsViewController: UIViewController {
     let disposeBag = DisposeBag()
     let vm = AgreeTermsViewModel()
     
-    let titleLb = UILabel().then {
-        $0.text = "knowing"
-        $0.textColor = UIColor.rgb(red: 249, green: 133, blue: 81)
-        $0.font = UIFont(name: "GodoM", size: 20)
-    }
+    let titleLb = UIImageView(image: UIImage(named: "textLogo")!)
     
     let subLb = UILabel().then {
         $0.attributedText = NSAttributedString(string: "간편한 이용을 위해\n약관에 동의해주세요").withLineSpacing(6)
@@ -94,6 +90,17 @@ class AgreeTermsViewController: UIViewController {
         $0.layer.cornerRadius = 27.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 142, bottom: 13, right: 141)
         $0.isEnabled = false
+    }
+    
+    let birthLabel = UILabel().then {
+        $0.text = "생년월일"
+        $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
+    }
+    
+    let birthTextField = CustomTextField(image: UIImage(named: "birth")!, text: "2000 / 06 / 15").then {
+        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
+        $0.setDatePicker(target: self)
     }
     
     override func viewDidLoad() {
@@ -295,13 +302,11 @@ extension AgreeTermsViewController {
         }).disposed(by: disposeBag)
         
         vm.output.thirdValid.drive(onNext: { valid in
-            
             if valid[0] {
                 self.allCbImg.setImage(UIImage(named: "checkbox_selected")!, for: .normal)
             } else {
                 self.allCbImg.setImage(UIImage(named: "checkbox_unselected")!, for: .normal)
             }
-            
             if valid[3] {
                 self.thirdCbImg.setImage(UIImage(named: "checkbox_selected")!, for: .normal)
             } else {

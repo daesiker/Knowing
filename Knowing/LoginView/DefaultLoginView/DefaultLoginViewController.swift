@@ -227,7 +227,7 @@ extension DefaultLoginViewController {
         
         findPwBt.rx.tap
             .subscribe(onNext: {
-                let vc = FIndPasswordViewController()
+                let vc = FindPasswordViewController()
                 vc.modalPresentationStyle = .fullScreen
                 vc.modalTransitionStyle = .crossDissolve
                 self.present(vc, animated: true, completion: nil)

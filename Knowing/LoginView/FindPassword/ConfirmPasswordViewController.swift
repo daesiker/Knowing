@@ -12,6 +12,8 @@ import RxCocoa
 
 class ConfirmPasswordViewController: UIViewController {
 
+    let disposeBag = DisposeBag()
+    
     let animationView = AnimationView(name: "lf30_editor_ctu3nzol").then {
         $0.contentMode = .scaleAspectFill
     }
@@ -94,6 +96,13 @@ extension ConfirmPasswordViewController {
     }
     
     func bind() {
-        
+        confirmBt.rx.tap.subscribe(onNext: {
+            let viewController = LoginViewController()
+            let navController = UINavigationController(rootViewController: viewController)
+            navController.isNavigationBarHidden = true
+            navController.modalTransitionStyle = .crossDissolve
+            navController.modalPresentationStyle = .fullScreen
+            self.present(navController, animated: true)
+        }).disposed(by: disposeBag)
     }
 }
