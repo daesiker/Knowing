@@ -138,15 +138,6 @@ class AddressViewController: UIViewController {
                 self.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        searchBar.rx.text.orEmpty
-            .debounce(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance)
-            .distinctUntilChanged()
-            .subscribe(onNext: { text in
-                let items = self.allItem.filter { $0.hasPrefix(text) }
-                self.selectedItem = Observable<[String]>.of(items)
-                self.collectionView.reloadData()
-            }).disposed(by: disposeBag)
-        
         vm.stepOne.output.cityValue.drive(onNext: { _ in
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)

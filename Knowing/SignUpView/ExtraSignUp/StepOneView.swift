@@ -59,7 +59,6 @@ class StepOneView: UIView {
             $0.leading.equalToSuperview().offset(26)
         }
         
-        
         addSubview(residenceLb)
         residenceLb.snp.makeConstraints {
             $0.top.equalToSuperview().offset(52)
@@ -156,11 +155,14 @@ class StepOneView: UIView {
                 self.guBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
             }).disposed(by: disposeBag)
         
+        
         vm.stepOne.output.dismissSpecialView
             .drive(onNext: {value in
                 self.specialBt.label.text = value
                 self.specialBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
             }).disposed(by: disposeBag)
+        
+        
     }
     
     

@@ -31,6 +31,8 @@ class ExtraSignUpViewModel {
         rootView.output.nextBtValid = Driver.combineLatest(stepOne.output.cityValue, stepOne.output.guValue, stepOne.output.dismissSpecialView) //여기서 스케문으로 나눌꺼임
             .map { $0 != "" && $1 != "" && $2 != ""}
             .asDriver(onErrorJustReturn: false)
+        
+        
         rootView.input.nextBt.subscribe { event in
             switch event {
             case .completed:

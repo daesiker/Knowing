@@ -34,15 +34,17 @@ class AgreeTermsViewModel {
     }
     
     
-    
     init() {
+        
         output.firstValid = input.firstObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         output.secondValid = input.secondObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         output.thirdValid = input.thirdObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         output.allValid = input.allObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         
-        
-        
+        output.nextBtValid = Observable.of(input.allObserver, input.firstObserver, input.secondObserver, input.thirdObserver).merge().map {
+            return self.checkBox[1] && self.checkBox[2]
+        }.asDriver(onErrorJustReturn: false)
+            
         input.allObserver.subscribe(onNext: {
             if self.checkBox[0] {
                 self.checkBox = [false, false, false, false]
@@ -50,8 +52,6 @@ class AgreeTermsViewModel {
                 self.checkBox = [true, true, true, true]
             }
         }).disposed(by: disposeBag)
-        
-        
         
         input.firstObserver.subscribe(onNext: {
             if self.checkBox[1] {
@@ -67,7 +67,6 @@ class AgreeTermsViewModel {
             }
         }).disposed(by: disposeBag)
         
-        
         input.secondObserver.subscribe(onNext: {
             if self.checkBox[2] {
                 if self.checkBox[0] {
@@ -82,8 +81,6 @@ class AgreeTermsViewModel {
             }
         }).disposed(by: disposeBag)
         
-        
-        
         input.thirdObserver.subscribe(onNext: {
             if self.checkBox[3] {
                 if self.checkBox[0] {
@@ -97,11 +94,6 @@ class AgreeTermsViewModel {
                 self.checkBox[3] = true
             }
         }).disposed(by: disposeBag)
-        
-        
-        
-        
-        
         
     }
     

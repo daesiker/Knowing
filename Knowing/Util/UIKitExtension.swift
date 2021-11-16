@@ -111,10 +111,10 @@ extension UITextField {
             let SCwidth = self.bounds.width
             let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: SCwidth, height: 216))
             datePicker.datePickerMode = .date
+            datePicker.isSelected = true
             if #available(iOS 13.4, *) {
                 datePicker.preferredDatePickerStyle = .wheels
-                datePicker.setValue(UIColor.white, forKey: "textColor")
-                datePicker.setValue(true, forKey: "highlightsToday")
+                datePicker.setValue(UIColor.black, forKey: "textColor")
             }
             return datePicker
         }
@@ -127,23 +127,22 @@ extension UITextField {
         let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: SCwidth, height: 44.0))
         let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let cancel = UIBarButtonItem(title: "Cancel", style: .plain, target: nil, action: #selector(tapCancel))
-        let barButton = UIBarButtonItem(title: "Done", style: .plain, target: nil, action: #selector(donePressed))
+        let barButton = UIBarButtonItem(title: "Done", style: .plain, target: target, action: #selector(donePressed))
         toolBar.setItems([cancel, flexible, barButton], animated: false)
         self.inputAccessoryView = toolBar
         
-        
-        
     }
     
-    @objc func donePressed() {
-        let dateFormater = DateFormatter()
-        dateFormater.dateFormat = "yyyy / MM / dd"
-        let strDate = dateFormater.string(from: datePicker.date)
-        self.text = strDate
+    @objc func donePressed(_ sender: UIDatePicker) {
+        if let datePicker = self.inputView as? UIDatePicker {
+            let dateFormater = DateFormatter()
+            dateFormater.dateFormat = "yyyy / MM / dd"
+            let strDate = dateFormater.string(from: datePicker.date)
+            self.text = strDate
+        }
+        
         self.resignFirstResponder()
     }
-    
-    
     
     @objc func tapCancel() {
         self.resignFirstResponder()

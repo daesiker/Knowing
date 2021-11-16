@@ -68,12 +68,18 @@ class SignUpViewModel {
         }).disposed(by: disposeBag)
         
         input.birthObserver.subscribe(onNext: {valid in
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyyMMdd"
+            let dateComponent = valid.components(separatedBy: " / ")
+            let year = Int(dateComponent[0]) ?? 1995
+            let month = Int(dateComponent[1]) ?? 10
+            let day = Int(dateComponent[2]) ?? 12
+            let date = DateComponents(year: year, month: month, day: day)
+            let calendar = Calendar.current
+            let now = calendar.dateComponents([.year, .month, .day], from: Date())
+            let ageComponents = calendar.dateComponents([.year], from: date, to: now)
+            let age = ageComponents.year ?? 20
             
-            let date = dateFormatter.date(from: valid)
+            self.user.birth = age
             
-            self.user.birth = date?.age ?? 0
         }).disposed(by: disposeBag)
         
         
@@ -96,8 +102,6 @@ class SignUpViewModel {
             .asDriver(onErrorJustReturn: false)
         
         output.genderValid = input.genderObserver.asDriver(onErrorJustReturn: .notSelected)
-        
-        
         
         output.buttonValid = Driver.combineLatest(output.emailValid, output.pwValid, input.nameObserver.asDriver(onErrorJustReturn: ""), input.genderObserver.asDriver(onErrorJustReturn: .notSelected), input.birthObserver.asDriver(onErrorJustReturn: ""), output.pwConfirmValid, input.phoneObserver.asDriver(onErrorJustReturn: ""))
             { $0  && $1 && $2 != "" && $3 != .notSelected && $4 != ""  && $5 && $6 != "" }

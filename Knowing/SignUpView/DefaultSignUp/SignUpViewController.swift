@@ -167,27 +167,12 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setSV()
         setUI()
         bind()
-        //keyboardNotification()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.scrollView.endEditing(true)
-    }
     
-    func keyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func keyboardWillShow(_ sender: Notification) {
-        self.view.frame.origin.y = -150
-    }
-    
-    @objc func keyboardWillHide(_ sender: Notification) {
-        self.view.frame.origin.y = 0
-    }
     
 }
 
@@ -386,6 +371,11 @@ extension SignUpViewController {
             .bind(to: vm.input.genderObserver)
             .disposed(by: disposeBag)
         
+        phoneTextField.rx.text.orEmpty
+            .distinctUntilChanged()
+            .bind(to: vm.input.phoneObserver)
+            .disposed(by: disposeBag)
+        
         birthTextField.rx.controlEvent([.editingDidEnd])
             .map { self.birthTextField.text ?? "" }
             .bind(to: vm.input.birthObserver)
@@ -450,7 +440,6 @@ extension SignUpViewController {
         }).disposed(by: disposeBag)
         
         vm.output.buttonValid.drive(onNext: {valid in
-            print(valid)
             if valid {
                 self.signInBt.isEnabled = true
                 self.signInBt.backgroundColor = UIColor.rgb(red: 251, green: 136, blue: 85)
@@ -461,6 +450,8 @@ extension SignUpViewController {
         }).disposed(by: disposeBag)
     }
     
+    
+    
 }
 
 extension SignUpViewController: UIScrollViewDelegate {
@@ -469,4 +460,41 @@ extension SignUpViewController: UIScrollViewDelegate {
         self.view.endEditing(true)
     }
     
+    func setSV() {
+        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(myTapMethod))
+
+        singleTapGestureRecognizer.numberOfTapsRequired = 1
+
+        singleTapGestureRecognizer.isEnabled = true
+
+        singleTapGestureRecognizer.cancelsTouchesInView = false
+
+        scrollView.addGestureRecognizer(singleTapGestureRecognizer)
+        
+        NotificationCenter.default.addObserver(self,selector: #selector(self.keyboardDidShow(notification:)),
+            name: UIResponder.keyboardDidShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self,selector: #selector(self.keyboardDidHide(notification:)),
+            name: UIResponder.keyboardDidHideNotification, object: nil)
+    }
+    
+    @objc func myTapMethod(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    //MARK: Methods to manage keybaord
+    @objc func keyboardDidShow(notification: NSNotification) {
+        var info = notification.userInfo
+        let keyBoardSize = info![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+        scrollView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyBoardSize.height, right: 0.0)
+        scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyBoardSize.height, right: 0.0)
+    }
+
+    @objc func keyboardDidHide(notification: NSNotification) {
+        
+        scrollView.contentInset = UIEdgeInsets.zero
+        scrollView.scrollIndicatorInsets = UIEdgeInsets.zero
+    }
+    
 }
+
+

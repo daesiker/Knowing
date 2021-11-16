@@ -266,7 +266,7 @@ extension ExtraSignUpViewController {
     
     func bindOutput() {
         vm.stepOne.output.goCityView.subscribe(onNext: {
-            let vc = AddressViewController()
+            let vc = TmpAddressViewController()
             self.presentPanModal(vc)
         }).disposed(by: disposeBag)
         
