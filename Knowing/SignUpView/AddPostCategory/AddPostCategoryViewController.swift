@@ -269,7 +269,6 @@ extension AddPostCategoryViewController {
             }.disposed(by: disposeBag)
         
         
-        
         employCV.delegate = nil
         employCV.dataSource = nil
         employCV.register(AddCategoryCell.self, forCellWithReuseIdentifier: "employCell")

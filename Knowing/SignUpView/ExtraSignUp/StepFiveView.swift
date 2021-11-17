@@ -14,7 +14,9 @@ class StepFiveView: UIView {
     
     let cellId = "cellId"
     let disposeBag = DisposeBag()
-    let score:[String] = ["선택 안함", "~2.99", "3.0~3.44", "3.5~3.99", "4.0~"]
+    let vm = ExtraSignUpViewModel.instance
+    let score:[String] = ["~2.99", "3.0~3.44", "3.5~3.99", "해당 없음"]
+    let scoreData = Observable<[String]>.of(["~2.99", "3.0~3.44", "3.5~3.99", "해당 없음"])
     let schoolData:[[String]] = [["1", "2", "3", "4"],["학년"], ["1", "2"], ["학기"]]
     
     let semeLabel = UILabel().then {
@@ -83,6 +85,7 @@ class StepFiveView: UIView {
         super.init(frame: frame)
         setCollectionView()
         setUI()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -90,24 +93,7 @@ class StepFiveView: UIView {
     }
     
     
-    func setCollectionView() {
-        scoreCollectionView.dataSource = self
-        scoreCollectionView.delegate = self
-        scoreCollectionView.register(MajorCell.self, forCellWithReuseIdentifier: cellId)
-        detailPicker.delegate = self
-        detailPicker.dataSource = self
-        detailTextField.inputView = detailPicker
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        let button = UIBarButtonItem(title: "선택", style: .plain, target: self, action: #selector(self.tapCancel))
-        toolBar.setItems([button], animated: true)
-        toolBar.isUserInteractionEnabled = true
-        detailTextField.inputAccessoryView = toolBar
-    }
     
-    @objc func tapCancel() {
-        detailTextField.resignFirstResponder()
-    }
     
 }
 
@@ -150,12 +136,72 @@ extension StepFiveView {
             $0.top.equalTo(lastSemeLabel.snp.bottom)
         }
         
+    }
+    
+    func bind() {
+        
+        detailTextField.rx.controlEvent([.editingDidEnd])
+            .map { self.detailTextField.text ?? "" }
+            .bind(to: vm.stepFive.input.semesterObserver)
+            .disposed(by: disposeBag)
+        
+        scoreCollectionView.rx.itemSelected
+            .subscribe(onNext: { value in
+                for i in 0..<self.score.count {
+                    let cell = self.scoreCollectionView.cellForItem(at: [0, i]) as? ExtraSignUpCell
+                    if self.vm.user.lastSemesterScore == cell?.title.text {
+                        cell?.title.textColor = .white
+                        cell?.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    } else {
+                        cell?.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                        cell?.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    }
+                }
+
+            }).disposed(by: disposeBag)
         
         
     }
+    
+    func setCollectionView() {
+        scoreCollectionView.dataSource = nil
+        scoreCollectionView.delegate = nil
+        scoreCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        scoreCollectionView.register(ExtraSignUpCell.self, forCellWithReuseIdentifier: cellId)
+        
+        scoreData
+            .bind(to: scoreCollectionView.rx.items(cellIdentifier: cellId, cellType: ExtraSignUpCell.self)) { row, element, cell in
+                cell.title.text = element
+            }.disposed(by: disposeBag)
+        
+        scoreCollectionView.rx.itemSelected
+            .map { index in
+                let cell = self.scoreCollectionView.cellForItem(at: index) as? ExtraSignUpCell
+                return cell?.title.text ?? ""
+            }
+            .bind(to: self.vm.stepFive.input.lastSemesterScoreObserver)
+            .disposed(by: disposeBag)
+        
+        
+        detailPicker.delegate = self
+        detailPicker.dataSource = self
+        detailTextField.inputView = detailPicker
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let button = UIBarButtonItem(title: "선택", style: .plain, target: self, action: #selector(self.tapCancel))
+        toolBar.setItems([button], animated: true)
+        toolBar.isUserInteractionEnabled = true
+        detailTextField.inputAccessoryView = toolBar
+    }
+    
+    @objc func tapCancel() {
+        detailTextField.resignFirstResponder()
+    }
 }
 
-extension StepFiveView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension StepFiveView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 24, left: 25, bottom: 267, right: 25)
     }
@@ -173,15 +219,6 @@ extension StepFiveView: UICollectionViewDelegate, UICollectionViewDataSource, UI
         return CGSize(width: width, height: 42)
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       return score.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MajorCell
-        cell.button.setTitle(score[indexPath.item], for: .normal)
-        return cell
-    }
 }
 
 extension StepFiveView: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -203,10 +240,10 @@ extension StepFiveView: UIPickerViewDelegate, UIPickerViewDataSource {
         var tmp1 = "2 학년   "
         var tmp2 = "2 학기"
         if component == 0 {
-            tmp1 = "\(schoolData[component][row]) 학년  "
+            tmp1 = "\(schoolData[component][row])학년  "
         }
         if component == 2 {
-            tmp2 = "\(schoolData[component][row]) 학기"
+            tmp2 = "\(schoolData[component][row])학기"
         }
         
         detailTextField.text = tmp1 + tmp2

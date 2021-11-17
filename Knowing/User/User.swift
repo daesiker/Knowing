@@ -21,20 +21,27 @@ struct User {
     var specialStatus:[String] = []
     
     //step2
-    var money1:String = ""
-    var money2:String = ""
-    var employStatus:[String] = []
+    var incomeLevel:String = ""
+    var incomeAvg:String = ""
+    var employmentState:[String] = []
     
     //step3
-    var records:[String] = []
-    
+    var schollRecords:[String] = []
     var school: String? = nil
-    var major: String? = nil
-    var score: String? = nil
-    var currentTerm: String? = nil
+    
+    //step4
+    var mainMajor:String = ""
+    var subMajor:String = ""
+    
+    //step5
+    var semester:String = ""
+    var addSemester:Bool = false
+    var lastSemesterScore:String = ""
+    
+    
     
     var category:[[String]] = [[], [], [], [], []]
-    
+    var bookmark:String = ""
     var provider:String = ""
     var fcmToken:String = ""
 }

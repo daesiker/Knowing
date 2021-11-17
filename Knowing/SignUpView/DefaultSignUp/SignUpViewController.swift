@@ -483,7 +483,7 @@ extension SignUpViewController: UIScrollViewDelegate {
     
     //MARK: Methods to manage keybaord
     @objc func keyboardDidShow(notification: NSNotification) {
-        var info = notification.userInfo
+        let info = notification.userInfo
         let keyBoardSize = info![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
         scrollView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyBoardSize.height, right: 0.0)
         scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyBoardSize.height, right: 0.0)

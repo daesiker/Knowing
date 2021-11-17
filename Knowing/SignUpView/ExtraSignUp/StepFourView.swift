@@ -7,9 +7,16 @@
 
 import Foundation
 import UIKit
+import RxCocoa
+import RxSwift
+
 class StepFourView: UIView {
+    
     let cellId = "cellId"
-    let subject:[String] = ["인문", "사회", "법", "경영", "교육", "공학", "자연", "예체능", "의약", "기타"]
+    let vm = ExtraSignUpViewModel.instance
+    let disposeBag = DisposeBag()
+    
+    
     let majorLabel = UILabel().then {
         $0.text = "전공 계열"
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
@@ -22,6 +29,9 @@ class StepFourView: UIView {
         collectionView.backgroundColor = .white
         return collectionView
     }()
+    
+    let subject = Observable<[String]>.of(["인문", "사회", "법", "경영", "교육", "공학", "자연", "예체능", "의약", "기타"])
+    let dataCount = 10
     
     let detailLabel = UILabel().then {
         $0.text = "학과"
@@ -49,8 +59,10 @@ class StepFourView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUI()
         setCollectionView()
+        setUI()
+        bind()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -91,16 +103,58 @@ class StepFourView: UIView {
         }
     }
     
+    func bind() {
+        
+        detailTextField.rx.controlEvent([.editingDidEnd])
+            .map { self.detailTextField.text ?? "" }
+            .bind(to: vm.stepFour.input.subMajorObserver)
+            .disposed(by: disposeBag)
+        
+        majorCollectionView.rx.itemSelected
+            .subscribe(onNext: { value in
+                for i in 0..<10 {
+                    let cell = self.majorCollectionView.cellForItem(at: [0, i]) as? ExtraSignUpCell
+                    if self.vm.user.mainMajor == cell?.title.text {
+                        cell?.title.textColor = .white
+                        cell?.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    } else {
+                        cell?.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                        cell?.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    }
+                }
+
+            }).disposed(by: disposeBag)
+        
+    }
+    
+    
+    
     func setCollectionView() {
-        majorCollectionView.dataSource = self
-        majorCollectionView.delegate = self
-        majorCollectionView.register(MajorCell.self, forCellWithReuseIdentifier: cellId)
+        majorCollectionView.dataSource = nil
+        majorCollectionView.delegate = nil
+        majorCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        majorCollectionView.register(ExtraSignUpCell.self, forCellWithReuseIdentifier: cellId)
+        
+        subject
+            .bind(to: majorCollectionView.rx.items(cellIdentifier: cellId, cellType: ExtraSignUpCell.self)) { row, element, cell in
+                cell.title.text = element
+            }.disposed(by: disposeBag)
+        
+        majorCollectionView.rx.itemSelected
+            .map { index in
+                let cell = self.majorCollectionView.cellForItem(at: index) as? ExtraSignUpCell
+                return cell?.title.text ?? ""
+            }
+            .bind(to: self.vm.stepFour.input.mainMajorObserver)
+            .disposed(by: disposeBag)
     }
     
     
 }
 
-extension StepFourView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension StepFourView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 26, left: 25, bottom: 50, right: 25)
     }
@@ -118,40 +172,7 @@ extension StepFourView: UICollectionViewDelegate, UICollectionViewDataSource, UI
         return CGSize(width: width, height: 42)
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       return subject.count
-    }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MajorCell
-        cell.button.setTitle(subject[indexPath.item], for: .normal)
-        return cell
-    }
 }
 
 
-class MajorCell: UICollectionViewCell {
-    
-    let button = UIButton(type: .custom).then {
-        $0.setTitle("", for: .normal)
-        $0.layer.cornerRadius = 23.5
-        $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-        $0.setTitleColor(UIColor.rgb(red: 108, green: 108, blue: 108), for: .normal)
-        $0.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
-        $0.contentEdgeInsets.top = 14
-        $0.contentEdgeInsets.bottom = 14
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(button)
-        button.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-}

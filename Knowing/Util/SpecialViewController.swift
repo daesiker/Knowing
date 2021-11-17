@@ -167,6 +167,7 @@ extension SpecialViewController {
         
         
         checkBoxBt.rx.tap
+            .map { "" }
             .bind(to: vm.stepOne.input.specialNoneValueObserver)
             .disposed(by: disposeBag)
         

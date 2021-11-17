@@ -144,7 +144,7 @@ class StepOneView: UIView {
                     self.cityBt.label.textColor = UIColor.rgb(red: 255, green: 108, blue: 0)
                 } else {
                     self.cityAlertLb.text = ""
-                    self.cityBt.label.textColor = UIColor.rgb(red: 194, green: 194, blue: 194)
+                    self.cityBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
                 }
             })
             .disposed(by: disposeBag)
@@ -155,11 +155,15 @@ class StepOneView: UIView {
                 self.guBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
             }).disposed(by: disposeBag)
         
-        
         vm.stepOne.output.dismissSpecialView
             .drive(onNext: {value in
                 self.specialBt.label.text = value
-                self.specialBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
+                if value == "특별사항 선택" {
+                    self.specialBt.label.textColor = UIColor.rgb(red: 194, green: 194, blue: 194)
+                } else {
+                    self.specialBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
+                }
+                
             }).disposed(by: disposeBag)
         
         

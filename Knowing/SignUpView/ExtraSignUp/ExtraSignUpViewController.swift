@@ -117,10 +117,16 @@ class ExtraSignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setSV()
         setUI()
         bind()
         addContentScrollView()
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     
     private func addContentScrollView() {
         footerView.frame = UIScreen.main.bounds
@@ -262,6 +268,23 @@ extension ExtraSignUpViewController {
         nextBt.rx.tap
             .bind(to: vm.rootView.input.nextBt)
             .disposed(by: disposeBag)
+        
+        backBt.rx.tap
+            .subscribe(onNext: {
+                switch self.vm.currentStep {
+                case .step1:
+                    self.dismiss(animated: true, completion: nil)
+                case .step2:
+                    self.goToStepOne()
+                case .step3:
+                    self.goToStepTwo(dismiss: true)
+                case .step4:
+                    self.goToStepThree(dismiss: true)
+                case .step5:
+                    self.goToStepFour()
+                
+                }
+            }).disposed(by: disposeBag)
     }
     
     func bindOutput() {
@@ -300,7 +323,7 @@ extension ExtraSignUpViewController {
         
         vm.rootView.output.goSignUp
             .emit { _ in
-                switch self.currentStep {
+                switch self.vm.currentStep {
                 case .step1:
                     self.goToStepTwo()
                 case .step2:
@@ -324,10 +347,10 @@ extension ExtraSignUpViewController {
         self.twoLabel.isHidden = true
         let contentOffset = CGPoint(x: 0, y: 0)
         self.footerView.setContentOffset(contentOffset, animated: true)
-        self.currentStep = .step1
+        vm.currentStep = .step1
     }
     
-    func goToStepTwo() {
+    func goToStepTwo(dismiss: Bool = false) {
         self.animateView()
         self.progressView.setProgress(0.4, animated: true)
         self.oneLabel.isHidden = true
@@ -335,26 +358,34 @@ extension ExtraSignUpViewController {
         self.threeLabel.isHidden = true
         let contentOffset = CGPoint(x: self.view.frame.width, y: 0)
         self.footerView.setContentOffset(contentOffset, animated: true)
-        currentStep = .step2
+        if !dismiss {
+            nextBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
+            nextBt.isEnabled = false
+        }
+        vm.currentStep = .step2
     }
     
-    func goToStepThree() {
+    func goToStepThree(dismiss: Bool = false) {
         self.progressView.setProgress(0.6, animated: true)
         self.twoLabel.isHidden = true
         self.threeLabel.isHidden = false
         self.fourLabel.isHidden = true
         let contentOffset = CGPoint(x: self.view.frame.width * 2, y: 0)
         self.footerView.setContentOffset(contentOffset, animated: true)
-        currentStep = .step3
+        if !dismiss {
+            nextBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
+            nextBt.isEnabled = false
+        }
+        vm.currentStep = .step3
     }
     
-    func goToStepFour() {
+    func goToStepFour(dismiss: Bool = false) {
         self.progressView.setProgress(0.8, animated: true)
         self.threeLabel.isHidden = true
         self.fourLabel.isHidden = false
         let contentOffset = CGPoint(x: self.view.frame.width * 3, y: 0)
         self.footerView.setContentOffset(contentOffset, animated: true)
-        currentStep = .step4
+        vm.currentStep = .step4
     }
     
     func goToStepFive() {
@@ -362,7 +393,42 @@ extension ExtraSignUpViewController {
         self.fourLabel.isHidden = true
         let contentOffset = CGPoint(x: self.view.frame.width * 4, y: 0)
         self.footerView.setContentOffset(contentOffset, animated: true)
-        currentStep = .step5
+        vm.currentStep = .step5
+    }
+    
+    func setSV() {
+        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(myTapMethod))
+
+        singleTapGestureRecognizer.numberOfTapsRequired = 1
+
+        singleTapGestureRecognizer.isEnabled = true
+
+        singleTapGestureRecognizer.cancelsTouchesInView = false
+
+        footerView.addGestureRecognizer(singleTapGestureRecognizer)
+        
+        NotificationCenter.default.addObserver(self,selector: #selector(self.keyboardDidShow(notification:)),
+            name: UIResponder.keyboardDidShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self,selector: #selector(self.keyboardDidHide(notification:)),
+            name: UIResponder.keyboardDidHideNotification, object: nil)
+    }
+    
+    @objc func myTapMethod(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    //MARK: Methods to manage keybaord
+    @objc func keyboardDidShow(notification: NSNotification) {
+        let info = notification.userInfo
+        let keyBoardSize = info![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+        footerView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyBoardSize.height, right: 0.0)
+        footerView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyBoardSize.height, right: 0.0)
+    }
+
+    @objc func keyboardDidHide(notification: NSNotification) {
+        
+        footerView.contentInset = UIEdgeInsets.zero
+        footerView.scrollIndicatorInsets = UIEdgeInsets.zero
     }
     
 }
