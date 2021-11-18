@@ -172,6 +172,10 @@ class SignUpViewController: UIViewController {
         bind()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        vm.user.provider = "default"
+    }
+    
     
     
 }
@@ -393,11 +397,18 @@ extension SignUpViewController {
     
     func bindOutput() {
         vm.output.emailValid.drive(onNext: {valid in
-            if valid {
+            switch valid {
+            case .correct:
                 self.emailAlertLabel.text = ""
                 self.emailTextField.setRight()
-            } else {
+            case .notAvailable:
                 self.emailAlertLabel.text = "이메일 형식이 올바르지 않습니다."
+                self.emailTextField.setErrorRight()
+            case .alreadyExsist:
+                self.emailAlertLabel.text = "이미 존재하는 이메일입니다."
+                self.emailTextField.setErrorRight()
+            case .serverError:
+                self.emailAlertLabel.text = "인터넷 연결상태를 확인해주세요."
                 self.emailTextField.setErrorRight()
             }
         }).disposed(by: disposeBag)

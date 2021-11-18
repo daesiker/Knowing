@@ -139,31 +139,35 @@ class ExtraSignUpViewController: UIViewController {
         }
     }
     
-    func animateView() {
+    func animateStepTwo() {
+    
+        self.smallTitleLabel.alpha = 0
+        self.largeTitleLabel.alpha = 0
         
-        if smallTitleLabel.isHidden == true {
-            smallTitleLabel.isHidden = false
-            largeTitleLabel.isHidden = false
-            largeTitleLabel.snp.makeConstraints {
-                $0.top.equalTo(smallTitleLabel.snp.bottom).offset(10)
-                $0.leading.equalToSuperview().offset(26)
-            }
-            smallTitleLabel.snp.makeConstraints {
-                $0.top.equalTo(backBt.snp.bottom).offset(24)
-                $0.leading.equalToSuperview().offset(26)
-            }
-            progressView.snp.makeConstraints {
-                $0.top.equalTo(largeTitleLabel.snp.bottom).offset(51)
-            }
-        } else {
-            smallTitleLabel.isHidden = true
-            largeTitleLabel.isHidden = true
-            progressView.snp.makeConstraints {
-                
-                $0.top.equalTo(backBt.snp.bottom).offset(32)
-            }
-        }
         UIView.animate(withDuration: 0.5) {
+            
+            self.progressView.snp.remakeConstraints {
+                $0.top.equalTo(self.backBt.snp.bottom).offset(32)
+                $0.leading.equalToSuperview().offset(26)
+                $0.trailing.equalToSuperview().offset(-25)
+                $0.height.equalTo(8)
+            }
+            self.view.layoutIfNeeded()
+        }
+        
+    }
+    
+    func animateStepOne() {
+        
+        UIView.animate(withDuration: 0.5) {
+            self.progressView.snp.remakeConstraints {
+                $0.top.equalTo(self.largeTitleLabel.snp.bottom).offset(51)
+                $0.leading.equalToSuperview().offset(26)
+                $0.trailing.equalToSuperview().offset(-25)
+                $0.height.equalTo(8)
+            }
+            self.smallTitleLabel.alpha = 1.0
+            self.largeTitleLabel.alpha = 1.0
             self.view.layoutIfNeeded()
         }
         
@@ -282,7 +286,7 @@ extension ExtraSignUpViewController {
                     self.goToStepThree(dismiss: true)
                 case .step5:
                     self.goToStepFour()
-                
+                    
                 }
             }).disposed(by: disposeBag)
     }
@@ -308,6 +312,10 @@ extension ExtraSignUpViewController {
             self.presentPanModal(vc)
         }).disposed(by: disposeBag)
         
+        vm.stepThree.output.goSchoolView.subscribe(onNext: {
+            let vc = SchoolViewController()
+            self.presentPanModal(vc)
+        }).disposed(by: disposeBag)
         
         
         vm.rootView.output.nextBtValid.drive(onNext: { value in
@@ -333,15 +341,13 @@ extension ExtraSignUpViewController {
                 case .step4:
                     self.goToStepFive()
                 case .step5:
-                    print("step5")
+                    self.goNext()
                 }
             }.disposed(by: disposeBag)
-        
-        
     }
     
     func goToStepOne() {
-        self.animateView()
+        self.animateStepOne()
         self.progressView.setProgress(0.2, animated: true)
         self.oneLabel.isHidden = false
         self.twoLabel.isHidden = true
@@ -351,7 +357,7 @@ extension ExtraSignUpViewController {
     }
     
     func goToStepTwo(dismiss: Bool = false) {
-        self.animateView()
+        self.animateStepTwo()
         self.progressView.setProgress(0.4, animated: true)
         self.oneLabel.isHidden = true
         self.twoLabel.isHidden = false
@@ -396,21 +402,30 @@ extension ExtraSignUpViewController {
         vm.currentStep = .step5
     }
     
+    func goNext() {
+        let vc = AddPostCategoryViewController()
+        vc.vm.user = vm.user
+        vc.modalTransitionStyle = .crossDissolve
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true)
+        
+    }
+    
     func setSV() {
         let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(myTapMethod))
-
+        
         singleTapGestureRecognizer.numberOfTapsRequired = 1
-
+        
         singleTapGestureRecognizer.isEnabled = true
-
+        
         singleTapGestureRecognizer.cancelsTouchesInView = false
-
+        
         footerView.addGestureRecognizer(singleTapGestureRecognizer)
         
         NotificationCenter.default.addObserver(self,selector: #selector(self.keyboardDidShow(notification:)),
-            name: UIResponder.keyboardDidShowNotification, object: nil)
-            NotificationCenter.default.addObserver(self,selector: #selector(self.keyboardDidHide(notification:)),
-            name: UIResponder.keyboardDidHideNotification, object: nil)
+                                               name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self,selector: #selector(self.keyboardDidHide(notification:)),
+                                               name: UIResponder.keyboardDidHideNotification, object: nil)
     }
     
     @objc func myTapMethod(sender: UITapGestureRecognizer) {
@@ -424,7 +439,7 @@ extension ExtraSignUpViewController {
         footerView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyBoardSize.height, right: 0.0)
         footerView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyBoardSize.height, right: 0.0)
     }
-
+    
     @objc func keyboardDidHide(notification: NSNotification) {
         
         footerView.contentInset = UIEdgeInsets.zero

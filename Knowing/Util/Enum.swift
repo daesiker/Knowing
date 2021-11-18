@@ -21,3 +21,15 @@ enum SignUpStep {
     case step4
     case step5
 }
+
+enum EmailValid {
+    case notAvailable
+    case alreadyExsist
+    case serverError
+    case correct
+}
+
+public struct KnowingError: Error {
+    var code: Int
+    var msg: String
+}

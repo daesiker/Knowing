@@ -7,6 +7,8 @@
 
 import UIKit
 import Firebase
+import Alamofire
+import SwiftyJSON
 
 class ViewController: UIViewController {
 
@@ -19,7 +21,7 @@ class ViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let viewController = ExtraSignUpViewController()
+            let viewController = SchoolViewController()
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
             self.present(viewController, animated: true)

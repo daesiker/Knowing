@@ -1,17 +1,17 @@
 //
-//  TmpAddressViewController.swift
+//  SchoolViewController.swift
 //  Knowing
 //
-//  Created by Jun on 2021/11/16.
+//  Created by Jun on 2021/11/18.
 //
 
 import UIKit
-import PanModal
-import RxSwift
 import RxCocoa
+import RxSwift
+import PanModal
 
-class TmpAddressViewController: UIViewController {
-
+class SchoolViewController: UIViewController {
+    let cellId = "cellId"
     let disposeBag = DisposeBag()
     let vm = ExtraSignUpViewModel.instance
     
@@ -20,7 +20,7 @@ class TmpAddressViewController: UIViewController {
         $0.layer.cornerRadius = 40.0
     }
     let titleLabel = UILabel().then {
-        $0.text = "시/도 선택"
+        $0.text = "학교 선택"
         $0.textColor = UIColor.rgb(red: 101, green: 101, blue: 101)
         $0.font = UIFont(name: "GodoM", size: 20)
     }
@@ -46,30 +46,6 @@ class TmpAddressViewController: UIViewController {
         return collectionView
     }()
     
-    let midSeparator = UIView().then {
-        $0.layer.cornerRadius = 3.0
-        $0.backgroundColor = UIColor.rgb(red: 216, green: 216, blue: 216)
-    }
-    
-    let subTitle = UILabel().then {
-        $0.text = "다른 지역은 다음에 업데이트 예정이에요!"
-        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 14)
-        $0.textColor = UIColor.rgb(red: 105, green: 105, blue: 105)
-    }
-    
-    let subTitle2 = UILabel().then {
-        $0.text = "조금만 더 기다려 주세요."
-        $0.textColor = UIColor.rgb(red: 147, green: 147, blue: 147)
-        $0.font = UIFont.init(name: "AppleSDGothicNeo-Regular", size: 12)
-    }
-    
-    let nextTimeImg = UIImageView(image: UIImage(named: "nextTimeImg")!)
-    
-    let cellId = "cellId"
-    var allItem = ["서울특별시", "인천광역시", "경기도", "세종특별자치시"]
-    var selectedItem = Observable<[String]>.of(["서울특별시", "인천광역시", "경기도", "세종특별자치시"])
-    var isCity:Bool = true
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setCollectionView()
@@ -78,10 +54,14 @@ class TmpAddressViewController: UIViewController {
         
     }
     
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
+
+}
+
+
+extension SchoolViewController {
     
     func setUI() {
         view.backgroundColor = .clear
@@ -120,40 +100,9 @@ class TmpAddressViewController: UIViewController {
         
         backgroundView.addSubview(collectionView)
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(separator.snp.bottom).offset(15)
+            $0.top.equalTo(separator.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.bottom.equalTo(backgroundView.snp.top).offset(249)
-            
         }
-        
-        backgroundView.addSubview(midSeparator)
-        midSeparator.snp.makeConstraints {
-            $0.top.equalTo(collectionView.snp.bottom).offset(28)
-            $0.centerX.equalToSuperview()
-            $0.width.equalTo(40)
-            $0.height.equalTo(6)
-        }
-        
-        backgroundView.addSubview(subTitle)
-        subTitle.snp.makeConstraints {
-            $0.top.equalTo(midSeparator.snp.bottom).offset(28)
-            $0.centerX.equalToSuperview()
-        }
-        
-        backgroundView.addSubview(subTitle2)
-        subTitle2.snp.makeConstraints {
-            $0.top.equalTo(subTitle.snp.bottom).offset(8)
-            $0.centerX.equalToSuperview()
-        }
-        
-        backgroundView.addSubview(nextTimeImg)
-        nextTimeImg.snp.makeConstraints {
-            $0.top.equalTo(subTitle2.snp.bottom).offset(9)
-            $0.centerX.equalToSuperview()
-        }
-        
-        
-        
     }
     
     func bind() {
@@ -162,22 +111,15 @@ class TmpAddressViewController: UIViewController {
                 self.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        vm.stepOne.output.cityValue.drive(onNext: { _ in
-            self.dismiss(animated: true, completion: nil)
-        }).disposed(by: disposeBag)
-        
-        vm.stepOne.output.guValue.drive(onNext: { _ in
-            self.dismiss(animated: true, completion: nil)
-        }).disposed(by: disposeBag)
-        
-        selectedItem.bind(to: vm.addressSelect.input.cellObserver).disposed(by: disposeBag)
-        
-        searchBar.rx.text
-            .orEmpty
-            .throttle(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance)
+        searchBar.rx.searchButtonClicked
+            .map { self.searchBar.text ?? "" }
             .distinctUntilChanged()
-            .bind(to: vm.addressSelect.input.searchObserver)
+            .bind(to: vm.schoolSelect.input.searchObserver)
             .disposed(by: disposeBag)
+        
+        vm.schoolSelect.output.schoolValue.drive(onNext: { _ in
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
         
     }
     
@@ -188,11 +130,11 @@ class TmpAddressViewController: UIViewController {
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
         
         
-        
-        vm.addressSelect.output.target
+        vm.schoolSelect.output.target
             .drive(collectionView.rx.items(cellIdentifier: cellId, cellType: AddressCell.self)) {row, element, cell in
                 cell.title.text = element
             }.disposed(by: disposeBag)
+        
         
         collectionView.rx
             .itemSelected
@@ -200,16 +142,15 @@ class TmpAddressViewController: UIViewController {
                 let cell = self.collectionView.cellForItem(at: index) as? AddressCell
                 return cell?.title.text ?? ""
             }
-            .bind(to: self.isCity ? vm.stepOne.input.cityValueObserver : vm.stepOne.input.guValueObserver)
+            .bind(to: vm.schoolSelect.input.schoolValueObserver)
             .disposed(by: disposeBag)
         
         
     }
     
-    
 }
 
-extension TmpAddressViewController: PanModalPresentable {
+extension SchoolViewController: PanModalPresentable {
     
     var panScrollable: UIScrollView? {
         return nil
@@ -231,7 +172,7 @@ extension TmpAddressViewController: PanModalPresentable {
     
 }
 
-extension TmpAddressViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension SchoolViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
@@ -246,7 +187,7 @@ extension TmpAddressViewController: UICollectionViewDelegate, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (view.frame.width - 73) / 2
+        let width = (view.frame.width - 100) 
         return CGSize(width: width, height: 41)
     }
     

@@ -56,6 +56,8 @@
 		BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA07977271FD51600912C18 /* NotificationViewController.swift */; };
 		BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA07979271FD5C900912C18 /* BookMarkViewController.swift */; };
 		BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA0797B271FD5F100912C18 /* MyPageViewController.swift */; };
+		BFA4689C2746341A0056224A /* SchoolViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA4689B2746341A0056224A /* SchoolViewController.swift */; };
+		BFA4689E27463BA50056224A /* School.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA4689D27463BA50056224A /* School.swift */; };
 		BFC38CF327365AE400F94876 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC38CF227365AE400F94876 /* User.swift */; };
 		BFC74512273A0ADE00090BCB /* AddPostCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC74511273A0ADE00090BCB /* AddPostCategoryViewController.swift */; };
 		BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFECE1CB2738DCAF0055FA9D /* Enum.swift */; };
@@ -119,6 +121,8 @@
 		BFA07977271FD51600912C18 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		BFA07979271FD5C900912C18 /* BookMarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkViewController.swift; sourceTree = "<group>"; };
 		BFA0797B271FD5F100912C18 /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
+		BFA4689B2746341A0056224A /* SchoolViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolViewController.swift; sourceTree = "<group>"; };
+		BFA4689D27463BA50056224A /* School.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = School.swift; sourceTree = "<group>"; };
 		BFC38CF227365AE400F94876 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		BFC74511273A0ADE00090BCB /* AddPostCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostCategoryViewController.swift; sourceTree = "<group>"; };
 		BFECE1CB2738DCAF0055FA9D /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
@@ -373,6 +377,7 @@
 			isa = PBXGroup;
 			children = (
 				BFC38CF227365AE400F94876 /* User.swift */,
+				BFA4689D27463BA50056224A /* School.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -420,6 +425,7 @@
 				BF151BAE2732760F0065E766 /* AddressViewController.swift */,
 				BFECE1CB2738DCAF0055FA9D /* Enum.swift */,
 				BF273BAA273CB5200028EF07 /* SpecialViewController.swift */,
+				BFA4689B2746341A0056224A /* SchoolViewController.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -566,6 +572,7 @@
 				BF151BAB273246790065E766 /* StepFourView.swift in Sources */,
 				BF8379372729208900584E33 /* HomeChartView.swift in Sources */,
 				BFA07970271FD2F800912C18 /* MainTabViewController.swift in Sources */,
+				BFA4689C2746341A0056224A /* SchoolViewController.swift in Sources */,
 				BF151BA5273243BC0065E766 /* StepOneView.swift in Sources */,
 				BF151BA92732466B0065E766 /* StepThreeView.swift in Sources */,
 				BF5351CB2733C2230040ECFE /* ExtraSignUpViewModel.swift in Sources */,
@@ -574,6 +581,7 @@
 				BF5C9BC02742A53C00005AC7 /* ApiSignUpViewModel.swift in Sources */,
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
 				BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */,
+				BFA4689E27463BA50056224A /* School.swift in Sources */,
 				BF85C62B27310883005D9EF1 /* FoundationExtension.swift in Sources */,
 				BF8A9A08273B879E00DA4DE4 /* FindEmailViewModel.swift in Sources */,
 				BF151BAF2732760F0065E766 /* AddressViewController.swift in Sources */,

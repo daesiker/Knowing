@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Alamofire
 
 class ExtraSignUpViewModel {
     
@@ -17,18 +18,21 @@ class ExtraSignUpViewModel {
     let disposeBag = DisposeBag()
     var rootView = RootView()
     var stepOne = StepOne()
+    var addressSelect = AddressSelect()
     var stepTwo = StepTwo()
     var stepThree = StepThree()
+    var schoolSelect = SchoolSelect()
     var stepFour = StepFour()
     var stepFive = StepFive()
     var currentStep = SignUpStep.step1
     
-    
     init() {
         
         bindStepOne()
+        bindAddressSelect()
         bindStepTwo()
         bindStepThree()
+        bindSchoolSelect()
         bindStepFour()
         bindStepFive()
         bindRootView()
@@ -88,6 +92,20 @@ extension ExtraSignUpViewModel {
         
     }
     
+    struct AddressSelect {
+        let input = Input()
+        var output = Output()
+        struct Input {
+            let searchObserver = BehaviorRelay<String>(value: "")
+            let cellObserver = PublishRelay<[String]>()
+        }
+        
+        struct Output {
+            var target = PublishRelay<[String]>().asDriver(onErrorJustReturn: [])
+        }
+        
+    }
+    
     struct StepTwo {
         let input = Input()
         var output = Output()
@@ -115,6 +133,7 @@ extension ExtraSignUpViewModel {
         
         struct Output {
             var buttonValid = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
+            let goSchoolView = PublishRelay<Void>()
         }
         
     }
@@ -131,6 +150,23 @@ extension ExtraSignUpViewModel {
         
         struct Output {
             var buttonValid = BehaviorRelay<Bool>(value: true).asDriver(onErrorJustReturn: false)
+        }
+        
+    }
+    
+    struct SchoolSelect {
+        let input = Input()
+        var output = Output()
+        
+        struct Input {
+            let searchObserver = PublishRelay<String>()
+            let schoolValueObserver = PublishRelay<String>()
+        }
+        
+        struct Output {
+            var target = PublishRelay<[String]>().asDriver(onErrorJustReturn: [])
+            var schoolValue = PublishRelay<String>().asDriver(onErrorJustReturn: "")
+            
         }
         
     }
@@ -172,7 +208,7 @@ extension ExtraSignUpViewModel {
         case .step2:
             currentStep = .step2
             rootView.output.nextBtValid = BehaviorRelay<Bool>(value: true).asDriver(onErrorJustReturn: true).debug()
-        
+            
         case .step3:
             currentStep = .step3
             rootView.output.nextBtValid = stepThree.output.buttonValid
@@ -182,12 +218,20 @@ extension ExtraSignUpViewModel {
         case .step5:
             currentStep = .step5
             rootView.output.nextBtValid = BehaviorRelay<Bool>(value: true).asDriver(onErrorJustReturn: true)
-        
+            
         }
         
     }
     
     func bindStepOne() {
+        
+        stepOne.input.cityValueObserver.subscribe(onNext: {value in
+            self.user.address = value
+        }).disposed(by: disposeBag)
+        
+        stepOne.input.guValueObserver.subscribe(onNext: { value in
+            self.user.addressDetail = value
+        }).disposed(by: disposeBag)
         
         stepOne.input.cityObserver
             .bind(to: self.stepOne.output.goCityView)
@@ -241,6 +285,19 @@ extension ExtraSignUpViewModel {
         stepOne.output.nextBtValid = Driver.combineLatest(stepOne.output.cityValue, stepOne.output.guValue, stepOne.output.dismissSpecialView)
             .map { $0 != "" && $1 != "" && $2 != "특별사항 선택"}
             .asDriver(onErrorJustReturn: false)
+    }
+    
+    func bindAddressSelect() {
+        
+        addressSelect.output.target = addressSelect.input.searchObserver
+            .startWith("")
+            .withLatestFrom(addressSelect.input.cellObserver) { (search, targets) in (search, targets)}
+            .map { (search, targets) -> [String] in
+                if search == "" {
+                    return targets
+                }
+                return targets.filter{ $0.hasPrefix(search) || $0.contains(search) }
+            }.asDriver(onErrorJustReturn: [])
     }
     
     func bindStepTwo() {
@@ -312,29 +369,78 @@ extension ExtraSignUpViewModel {
     }
     
     func bindStepThree() {
+        stepThree.input.schoolViewObserver
+            .bind(to: stepThree.output.goSchoolView)
+            .disposed(by: disposeBag)
+        
         stepThree.input.recordsObserver
             .subscribe(onNext: { value in
-                if value == "전체" {
-                    if self.user.schollRecords.contains(value) {
-                        self.user.schollRecords = []
-                    } else {
-                        self.user.schollRecords = [value]
-                    }
-                } else {
-                    if self.user.schollRecords == ["전체"] {
-                        self.user.schollRecords = [value]
-                    } else if self.user.schollRecords.contains(value) {
-                        let index = self.user.schollRecords.firstIndex(of: value) ?? 0
-                        self.user.schollRecords.remove(at: index)
-                    } else {
-                        self.user.schollRecords.append(value)
-                    }
-                }
+                self.user.schollRecords = value
             }).disposed(by: disposeBag)
         
         stepThree.output.buttonValid = stepThree.input.recordsObserver.map { _ in
             self.user.schollRecords.count != 0
         }.asDriver(onErrorJustReturn: false)
+    }
+    
+    func bindSchoolSelect() {
+        
+        schoolSelect.input.schoolValueObserver.subscribe { valid in
+            self.user.school = valid
+        }.disposed(by: disposeBag)
+        
+        schoolSelect.output.schoolValue = schoolSelect.input.schoolValueObserver.asDriver(onErrorJustReturn: "")
+        
+        schoolSelect.output.target = schoolSelect.input.searchObserver
+            .flatMap(searchSchool)
+            .asDriver(onErrorJustReturn: [])
+        
+        func searchSchool(_ search: String) -> Observable<[String]> {
+            
+            return Observable.create { observer in
+                
+                let url = "https://www.career.go.kr/cnet/openapi/getOpenApi"
+                let parameter:Parameters = ["apiKey": "d0e485edcb7264e0e9f5d120b7c9fc11",
+                                            "svcType": "api",
+                                            "svcCode": "SCHOOL",
+                                            "gubun": "univ_list",
+                                            "contentType": "json",
+                                            "searchSchulNm": search]
+                
+                AF.request(url, method: .get, parameters: parameter)
+                    .validate(statusCode: 200..<300)
+                    .response { response in
+                        switch response.result {
+                        case .success(let value):
+                            var result:[String] = []
+                            if let value = value {
+                                do {
+                                    let schoolJson = try JSONSerialization.jsonObject(with: value, options: []) as? [String:Any]
+                                    let data = schoolJson?["dataSearch"] as? [String:Any] ?? [:]
+                                    let content = data["content"] as? [[String:Any]] ?? [[:]]
+                                    
+                                    for info in content {
+                                        if let school = info["schoolName"] as? String {
+                                            result.append(school)
+                                        }
+                                    }
+                                } catch {
+                                    observer.onNext([])
+                                }
+                            }
+                            print(result)
+                            observer.onNext(result)
+                        case .failure(_):
+                            observer.onNext([])
+                        }
+                    }
+                
+                return Disposables.create()
+            }
+            
+        }
+        
+        
     }
     
     func bindStepFour() {
@@ -397,10 +503,10 @@ extension ExtraSignUpViewModel {
                 }
                 return nextValue
             }.asDriver(onErrorJustReturn: false)
-            
+        
         
         rootView.output.goSignUp = rootView.input.nextBt.asSignal()
-    
+        
     }
     
 }

@@ -26,6 +26,7 @@ pod 'KakaoSDKAuth'
 pod 'KakaoSDKUser' 
 #Server API
 pod 'Alamofire', '~> 5.4'
+pod 'SwiftyJSON', '~> 4.0'
   # Pods for Knowing
 
 end

@@ -7,17 +7,18 @@
 
 import Foundation
 
-struct User {
+struct User: Codable {
     //default
     var name:String = ""
     var email:String = ""
     var pwd:String = ""
-    var gender:Bool = true
+    var gender:String = ""
     var birth:Int = 0
-    var phNumber:String = ""
+    var phNum:String = ""
     
     //step1
     var address:String = ""
+    var addressDetail:String = ""
     var specialStatus:[String] = []
     
     //step2
@@ -26,8 +27,8 @@ struct User {
     var employmentState:[String] = []
     
     //step3
-    var schollRecords:[String] = []
-    var school: String? = nil
+    var schollRecords:String = ""
+    var school: String = ""
     
     //step4
     var mainMajor:String = ""
@@ -35,13 +36,18 @@ struct User {
     
     //step5
     var semester:String = ""
-    var addSemester:Bool = false
+    //var addSemester:Bool = false
     var lastSemesterScore:String = ""
     
-    
-    
-    var category:[[String]] = [[], [], [], [], []]
-    var bookmark:String = ""
+    //category
+    var studentCategory:[String] = []
+    var empolyCategory:[String] = []
+    var foundationCategory:[String] = []
+    var residentCategory:[String] = []
+    var lifeCategory:[String] = []
+    var covidCategory:[String] = []
+   
+    var bookmark:[String] = []
     var provider:String = ""
     var fcmToken:String = ""
 }

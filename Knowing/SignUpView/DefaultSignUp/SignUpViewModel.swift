@@ -8,6 +8,8 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Alamofire
+import SwiftyJSON
 
 class SignUpViewModel {
    
@@ -31,7 +33,7 @@ class SignUpViewModel {
     }
     
     struct Output {
-        var emailValid:Driver<Bool> = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
+        var emailValid:Driver<EmailValid> = PublishRelay<EmailValid>().asDriver(onErrorJustReturn: .notAvailable)
         var pwValid:Driver<Bool> = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
         var pwConfirmValid:Driver<Bool> =  PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
         var genderValid:Driver<Gender> = PublishRelay<Gender>().asDriver(onErrorJustReturn: .notSelected)
@@ -53,15 +55,15 @@ class SignUpViewModel {
         }).disposed(by: disposeBag)
         
         input.phoneObserver.subscribe(onNext: {valid in
-            self.user.phNumber = valid
+            self.user.phNum = valid
         }).disposed(by: disposeBag)
         
         input.genderObserver.subscribe(onNext: {valid in
             switch valid {
             case .male:
-                self.user.gender = true
+                self.user.gender = "남성"
             case .female:
-                self.user.gender = false
+                self.user.gender = "여성"
             case .notSelected:
                 break
             }
@@ -84,14 +86,8 @@ class SignUpViewModel {
         
         
         output.emailValid = input.emailObserver
-            .map ({ valid in
-                if !(!valid.isEmpty && valid.contains(".") && valid.contains("@")) {
-                    return false
-                } else {
-                    return true
-                }
-            })
-            .asDriver(onErrorJustReturn: false)
+            .flatMap(self.emailCheck)
+            .asDriver(onErrorJustReturn: .notAvailable)
         
         output.pwValid = input.pwObserver
             .map { $0.validpassword() }
@@ -103,9 +99,60 @@ class SignUpViewModel {
         
         output.genderValid = input.genderObserver.asDriver(onErrorJustReturn: .notSelected)
         
-        output.buttonValid = Driver.combineLatest(output.emailValid, output.pwValid, input.nameObserver.asDriver(onErrorJustReturn: ""), input.genderObserver.asDriver(onErrorJustReturn: .notSelected), input.birthObserver.asDriver(onErrorJustReturn: ""), output.pwConfirmValid, input.phoneObserver.asDriver(onErrorJustReturn: ""))
-            { $0  && $1 && $2 != "" && $3 != .notSelected && $4 != ""  && $5 && $6 != "" }
+        output.buttonValid = Driver.combineLatest(output.emailValid, output.pwValid, input.nameObserver.asDriver(onErrorJustReturn: ""), input.genderObserver.asDriver(onErrorJustReturn: .notSelected), input.birthObserver.asDriver(onErrorJustReturn: ""), output.pwConfirmValid, input.phoneObserver.asDriver(onErrorJustReturn: "")).map { a, b, c, d, e, f, g in
+            
+            if a == .correct {
+                if b && c != "" {
+                    if d != .notSelected && e != "" {
+                        if f && g != "" {
+                            return true
+                        }
+                    }
+                }
+            }
+            return false
+            
+        }
             .asDriver(onErrorJustReturn: false)
+        
+    }
+    
+    func emailCheck(_ string: String) -> Observable<EmailValid> {
+        
+        return Observable.create { valid in
+            
+            if !(!string.isEmpty && string.contains(".") && string.contains("@")) {
+                valid.onNext(.notAvailable)
+                valid.onCompleted()
+            }
+            
+            let url = "https://www.makeus-hyun.shop/app/users/checkemail?email=\(string)"
+            AF.request(url, method: .get, encoding: JSONEncoding.default)
+                .validate(statusCode: 200..<300)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                        let result = json["result"].dictionaryObject
+                        
+                        if let result = result?["status"] as? Bool {
+                            if result {
+                                valid.onNext(.correct)
+                            } else {
+                                valid.onNext(.alreadyExsist)
+                            }
+                        }
+                    default:
+                        valid.onNext(.serverError)
+                    }
+                    
+                    
+                }
+            
+            
+            
+            return Disposables.create()
+        }
         
     }
     

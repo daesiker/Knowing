@@ -37,9 +37,9 @@ class ApiSignUpViewModel {
         input.genderObserver.subscribe(onNext: {valid in
             switch valid {
             case .male:
-                self.user.gender = true
+                self.user.gender = "남성"
             case .female:
-                self.user.gender = false
+                self.user.gender = "여성"
             case .notSelected:
                 break
             }

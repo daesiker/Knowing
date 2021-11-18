@@ -145,6 +145,13 @@ class AddressViewController: UIViewController {
         vm.stepOne.output.guValue.drive(onNext: { _ in
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
+        selectedItem.bind(to: vm.addressSelect.input.cellObserver).disposed(by: disposeBag)
+        searchBar.rx.text
+            .orEmpty
+            .throttle(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .bind(to: vm.addressSelect.input.searchObserver)
+            .disposed(by: disposeBag)
         
     }
     
@@ -154,8 +161,8 @@ class AddressViewController: UIViewController {
         collectionView.register(AddressCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
         
-        selectedItem
-            .bind(to: collectionView.rx.items(cellIdentifier: cellId, cellType: AddressCell.self)) {row, element, cell in
+        vm.addressSelect.output.target
+            .drive(collectionView.rx.items(cellIdentifier: cellId, cellType: AddressCell.self)) {row, element, cell in
                 cell.title.text = element
             }.disposed(by: disposeBag)
         

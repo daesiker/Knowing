@@ -12,6 +12,7 @@ import RxCocoa
 class AddPostCategoryViewController: UIViewController {
     
     let disposeBag = DisposeBag()
+    let vm = AddPostCategoryViewModel()
     
     let scrollView = UIScrollView().then {
         $0.showsHorizontalScrollIndicator = false
@@ -36,7 +37,7 @@ class AddPostCategoryViewController: UIViewController {
     }
     
     let studentCV: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
+        let flowLayout = CollectionViewLeftAlignFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = .white
         return collectionView
@@ -52,7 +53,8 @@ class AddPostCategoryViewController: UIViewController {
     }
     
     let employCV: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
+        let flowLayout = CollectionViewLeftAlignFlowLayout()
+        flowLayout.estimatedItemSize = .zero
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = .white
         return collectionView
@@ -68,7 +70,7 @@ class AddPostCategoryViewController: UIViewController {
     }
     
     let startUpCV: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
+        let flowLayout = CollectionViewLeftAlignFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.register(AddCategoryCell.self, forCellWithReuseIdentifier: "startUpCell")
         collectionView.backgroundColor = .white
@@ -85,7 +87,7 @@ class AddPostCategoryViewController: UIViewController {
     }
     
     let residentCV: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
+        let flowLayout = CollectionViewLeftAlignFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.register(AddCategoryCell.self, forCellWithReuseIdentifier: "residentCell")
         collectionView.backgroundColor = .white
@@ -102,7 +104,7 @@ class AddPostCategoryViewController: UIViewController {
     }
     
     let lifeCV: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
+        let flowLayout = CollectionViewLeftAlignFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.register(AddCategoryCell.self, forCellWithReuseIdentifier: "lifeCell")
         collectionView.backgroundColor = .white
@@ -119,7 +121,7 @@ class AddPostCategoryViewController: UIViewController {
     }
     
     let covidCV: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
+        let flowLayout = CollectionViewLeftAlignFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.register(AddCategoryCell.self, forCellWithReuseIdentifier: "covidCell")
         collectionView.backgroundColor = .white
@@ -133,9 +135,10 @@ class AddPostCategoryViewController: UIViewController {
         $0.setTitle("적용하기", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
         $0.titleLabel?.textColor = .white
-        $0.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
+        $0.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
         $0.layer.cornerRadius = 27.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 139, bottom: 16, right: 139)
+        $0.isEnabled = false
     }
     
     override func viewDidLoad() {
@@ -154,7 +157,7 @@ extension AddPostCategoryViewController {
         
         view.backgroundColor = .white
         safeArea.addSubview(scrollView)
-        scrollView.contentSize = CGSize(width: view.frame.width, height: 1406)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 1410)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -230,7 +233,7 @@ extension AddPostCategoryViewController {
         scrollView.addSubview(lifeCV)
         lifeCV.snp.makeConstraints {
             $0.top.equalTo(lifeLb.snp.bottom).offset(20)
-            $0.centerX.equalToSuperview()
+            $0.leading.equalToSuperview().offset(20)
             $0.width.equalTo(self.view.frame.width - 40)
             $0.height.equalTo(48)
         }
@@ -268,6 +271,32 @@ extension AddPostCategoryViewController {
                 cell.configure(name: title)
             }.disposed(by: disposeBag)
         
+        studentCV.rx.itemSelected
+            .map { index in
+                let cell = self.studentCV.cellForItem(at: index) as? AddCategoryCell
+                return cell?.titleLabel.text ?? ""
+            }
+            .bind(to: self.vm.input.studentObserver)
+            .disposed(by: disposeBag)
+        
+        studentCV.rx.itemSelected
+            .subscribe(onNext: { value in
+                for i in 0..<self.studentDomy.count {
+                    let cell = self.studentCV.cellForItem(at: [0, i]) as? AddCategoryCell
+                    if self.vm.user.studentCategory.contains(self.studentDomy[i]) {
+                        cell?.titleLabel.textColor = .white
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    } else {
+                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    }
+                }
+            }).disposed(by: disposeBag)
+        
+        
+        
         
         employCV.delegate = nil
         employCV.dataSource = nil
@@ -278,6 +307,30 @@ extension AddPostCategoryViewController {
                 cell.configure(name: title)
             }.disposed(by: disposeBag)
         
+        employCV.rx.itemSelected
+            .map { index in
+                let cell = self.employCV.cellForItem(at: index) as? AddCategoryCell
+                return cell?.titleLabel.text ?? ""
+            }
+            .bind(to: self.vm.input.empolyObserver)
+            .disposed(by: disposeBag)
+        
+        employCV.rx.itemSelected
+            .subscribe(onNext: { value in
+                for i in 0..<self.employDomy.count {
+                    let cell = self.employCV.cellForItem(at: [0, i]) as? AddCategoryCell
+                    if self.vm.user.empolyCategory.contains(self.employDomy[i]) {
+                        cell?.titleLabel.textColor = .white
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    } else {
+                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    }
+                }
+            }).disposed(by: disposeBag)
+        
         startUpCV.delegate = nil
         startUpCV.dataSource = nil
         startUpCV.rx.setDelegate(self).disposed(by: disposeBag)
@@ -285,6 +338,30 @@ extension AddPostCategoryViewController {
             .bind(to: self.startUpCV.rx.items(cellIdentifier: "startUpCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
                 cell.configure(name: title)
             }.disposed(by: disposeBag)
+        
+        startUpCV.rx.itemSelected
+            .map { index in
+                let cell = self.startUpCV.cellForItem(at: index) as? AddCategoryCell
+                return cell?.titleLabel.text ?? ""
+            }
+            .bind(to: self.vm.input.foundationObserver)
+            .disposed(by: disposeBag)
+        
+        startUpCV.rx.itemSelected
+            .subscribe(onNext: { value in
+                for i in 0..<self.startUpDomy.count {
+                    let cell = self.startUpCV.cellForItem(at: [0, i]) as? AddCategoryCell
+                    if self.vm.user.foundationCategory.contains(self.startUpDomy[i]) {
+                        cell?.titleLabel.textColor = .white
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    } else {
+                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    }
+                }
+            }).disposed(by: disposeBag)
         
         residentCV.delegate = nil
         residentCV.dataSource = nil
@@ -294,6 +371,30 @@ extension AddPostCategoryViewController {
                 cell.configure(name: title)
             }.disposed(by: disposeBag)
         
+        residentCV.rx.itemSelected
+            .map { index in
+                let cell = self.residentCV.cellForItem(at: index) as? AddCategoryCell
+                return cell?.titleLabel.text ?? ""
+            }
+            .bind(to: self.vm.input.residentObserver)
+            .disposed(by: disposeBag)
+        
+        residentCV.rx.itemSelected
+            .subscribe(onNext: { value in
+                for i in 0..<self.residentDomy.count {
+                    let cell = self.residentCV.cellForItem(at: [0, i]) as? AddCategoryCell
+                    if self.vm.user.residentCategory.contains(self.residentDomy[i]) {
+                        cell?.titleLabel.textColor = .white
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    } else {
+                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    }
+                }
+            }).disposed(by: disposeBag)
+        
         lifeCV.delegate = nil
         lifeCV.dataSource = nil
         lifeCV.rx.setDelegate(self).disposed(by: disposeBag)
@@ -302,6 +403,30 @@ extension AddPostCategoryViewController {
                 cell.configure(name: title)
             }.disposed(by: disposeBag)
         
+        lifeCV.rx.itemSelected
+            .map { index in
+                let cell = self.lifeCV.cellForItem(at: index) as? AddCategoryCell
+                return cell?.titleLabel.text ?? ""
+            }
+            .bind(to: self.vm.input.lifeObserver)
+            .disposed(by: disposeBag)
+        
+        lifeCV.rx.itemSelected
+            .subscribe(onNext: { value in
+                for i in 0..<self.lifeDomy.count {
+                    let cell = self.lifeCV.cellForItem(at: [0, i]) as? AddCategoryCell
+                    if self.vm.user.lifeCategory.contains(self.lifeDomy[i]) {
+                        cell?.titleLabel.textColor = .white
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    } else {
+                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    }
+                }
+            }).disposed(by: disposeBag)
+        
         covidCV.delegate = nil
         covidCV.dataSource = nil
         covidCV.rx.setDelegate(self).disposed(by: disposeBag)
@@ -309,24 +434,60 @@ extension AddPostCategoryViewController {
             .bind(to: self.covidCV.rx.items(cellIdentifier: "covidCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
                 cell.configure(name: title)
             }.disposed(by: disposeBag)
+        
+        covidCV.rx.itemSelected
+            .map { index in
+                let cell = self.covidCV.cellForItem(at: index) as? AddCategoryCell
+                return cell?.titleLabel.text ?? ""
+            }
+            .bind(to: self.vm.input.covidObserver)
+            .disposed(by: disposeBag)
+        
+        covidCV.rx.itemSelected
+            .subscribe(onNext: { value in
+                for i in 0..<self.covidDomy.count {
+                    let cell = self.covidCV.cellForItem(at: [0, i]) as? AddCategoryCell
+                    if self.vm.user.covidCategory.contains(self.covidDomy[i]) {
+                        cell?.titleLabel.textColor = .white
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    } else {
+                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    }
+                }
+            }).disposed(by: disposeBag)
+        
+        vm.output.buttonValid.drive(onNext: {value in
+            if value {
+                print(self.vm.user)
+                self.signUpBt.isEnabled = true
+                self.signUpBt.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
+            } else {
+                self.signUpBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
+                self.signUpBt.isEnabled = false
+            }
+        }).disposed(by: disposeBag)
+        
+        signUpBt.rx.tap
+            .bind(to: vm.input.btObserver)
+            .disposed(by: disposeBag)
+        
+        vm.output.goSignUp
+            .emit { user in
+                print(user)
+            }.disposed(by: disposeBag)
+        
+        vm.output.error
+            .emit { error in
+                print(error)
+            }.disposed(by: disposeBag)
     }
-    
     
 }
 
 extension AddPostCategoryViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
-    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == studentCV {
@@ -358,7 +519,7 @@ final class AddCategoryCell: UICollectionViewCell {
         return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .required)
     }
     
-    private let titleLabel: UILabel = UILabel()
+    let titleLabel: UILabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -393,4 +554,27 @@ final class AddCategoryCell: UICollectionViewCell {
         titleLabel.text = name
     }
     
+}
+
+
+class CollectionViewLeftAlignFlowLayout: UICollectionViewFlowLayout {
+    let cellSpacing: CGFloat = 16
+ 
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        self.minimumLineSpacing = 16.0
+        self.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let attributes = super.layoutAttributesForElements(in: rect)
+ 
+        var leftMargin = sectionInset.left
+        var maxY: CGFloat = -1.0
+        attributes?.forEach { layoutAttribute in
+            if layoutAttribute.frame.origin.y >= maxY {
+                leftMargin = sectionInset.left
+            }
+            layoutAttribute.frame.origin.x = leftMargin
+            leftMargin += layoutAttribute.frame.width + cellSpacing
+            maxY = max(layoutAttribute.frame.maxY, maxY)
+        }
+        return attributes
+    }
 }
