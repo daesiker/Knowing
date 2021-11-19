@@ -23,6 +23,7 @@
 		BF5A2B8A272A67E200234429 /* GodoM.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B88272A5D4F00234429 /* GodoM.ttf */; };
 		BF5A2B8B272A67E500234429 /* GodoB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B89272A62D500234429 /* GodoB.ttf */; };
 		BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */; };
+		BF5AD0AB2747F4AD003E03A1 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5AD0AA2747F4AD003E03A1 /* ChartView.swift */; };
 		BF5C9BBE2742939E00005AC7 /* ApiSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C9BBD2742939E00005AC7 /* ApiSignUpViewController.swift */; };
 		BF5C9BC02742A53C00005AC7 /* ApiSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C9BBF2742A53C00005AC7 /* ApiSignUpViewModel.swift */; };
 		BF6086A32740ABB900D63BF6 /* AgreeTermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */; };
@@ -86,6 +87,7 @@
 		BF5A2B88272A5D4F00234429 /* GodoM.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoM.ttf; sourceTree = "<group>"; };
 		BF5A2B89272A62D500234429 /* GodoB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoB.ttf; sourceTree = "<group>"; };
 		BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginViewController.swift; sourceTree = "<group>"; };
+		BF5AD0AA2747F4AD003E03A1 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		BF5C9BBD2742939E00005AC7 /* ApiSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiSignUpViewController.swift; sourceTree = "<group>"; };
 		BF5C9BBF2742A53C00005AC7 /* ApiSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiSignUpViewModel.swift; sourceTree = "<group>"; };
 		BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreeTermsViewController.swift; sourceTree = "<group>"; };
@@ -426,6 +428,7 @@
 				BFECE1CB2738DCAF0055FA9D /* Enum.swift */,
 				BF273BAA273CB5200028EF07 /* SpecialViewController.swift */,
 				BFA4689B2746341A0056224A /* SchoolViewController.swift */,
+				BF5AD0AA2747F4AD003E03A1 /* ChartView.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -560,6 +563,7 @@
 				BF85C63427311203005D9EF1 /* ExtraSignUpViewController.swift in Sources */,
 				BF85C62927310147005D9EF1 /* SignUpViewModel.swift in Sources */,
 				BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */,
+				BF5AD0AB2747F4AD003E03A1 /* ChartView.swift in Sources */,
 				BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */,
 				BFC38CF327365AE400F94876 /* User.swift in Sources */,
 				BF8A9A06273B83A600DA4DE4 /* FindEmailViewController.swift in Sources */,

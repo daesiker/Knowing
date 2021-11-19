@@ -14,7 +14,8 @@ pod 'SnapKit', '~> 5.0.0'
 pod 'Then'
 pod 'lottie-ios'
 pod 'PanModal'
-
+pod 'BetterSegmentedControl', '~> 2.0'
+pod "Macaw", "~> 0.9.7"
 #Design Framework
 pod 'RxSwift'
 pod 'RxCocoa'

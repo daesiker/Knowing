@@ -42,10 +42,10 @@ class MainTabViewController: UITabBarController {
     
     
     func setupViewControllers() {
-        let homeViewController = templateNavController(unselectedImage: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"), title: "홈", rootViewController: HomeViewController())
-        let notificationViewController = templateNavController(unselectedImage: UIImage(systemName: "bell"), selectedImage: UIImage(systemName: "bell.fill"), title: "Notice", rootViewController: NotificationViewController())
-        let bookMarkViewController = templateNavController(unselectedImage: UIImage(systemName: "bookmark"), selectedImage: UIImage(systemName: "bookmark.fill"), title: "BookMark", rootViewController: BookMarkViewController())
-        let myPageViewController = templateNavController(unselectedImage: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"), title: "MyPage", rootViewController: MyPageViewController())
+        let homeViewController = templateNavController(unselectedImage: UIImage(named: "home_unselected"), selectedImage: UIImage(named: "home_selected"), title: "홈", rootViewController: HomeViewController())
+        let notificationViewController = templateNavController(unselectedImage: UIImage(named: "alarm_unselected"), selectedImage: UIImage(named: "alarm_selected"), title: "알림 내역", rootViewController: NotificationViewController())
+        let bookMarkViewController = templateNavController(unselectedImage: UIImage(named: "bookmark_unselected"), selectedImage: UIImage(named: "bookmark_unselected"), title: "북마크", rootViewController: BookMarkViewController())
+        let myPageViewController = templateNavController(unselectedImage: UIImage(named: "mypage_unselected"), selectedImage: UIImage(named: "mypage_selected"), title: "마이페이지", rootViewController: MyPageViewController())
         
         viewControllers = [homeViewController, notificationViewController, bookMarkViewController, myPageViewController]
         
@@ -85,16 +85,6 @@ class MainTabViewController: UITabBarController {
             self.tabBar.tintColor = UIColor.rgb(red: 204, green: 108, blue: 45)
             self.tabBar.unselectedItemTintColor = UIColor.rgb(red: 205, green: 153, blue: 117)
             
-//            // Remove the line
-//            if #available(iOS 13.0, *) {
-//                let appearance = self.tabBar.standardAppearance
-//                appearance.shadowImage = nil
-//                appearance.shadowColor = nil
-//                self.tabBar.standardAppearance = appearance
-//            } else {
-//                self.tabBar.shadowImage = UIImage()
-//                self.tabBar.backgroundImage = UIImage()
-//            }
         }
         
         private func addCustomTabBarView() {
