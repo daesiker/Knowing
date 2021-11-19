@@ -50,4 +50,7 @@ struct User: Codable {
     var bookmark:[String] = []
     var provider:String = ""
     var fcmToken:String = ""
+    
+    
+    
 }

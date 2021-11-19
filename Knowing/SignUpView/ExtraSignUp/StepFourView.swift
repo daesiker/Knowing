@@ -89,18 +89,20 @@ class StepFourView: UIView {
             $0.bottom.equalTo(detailLabel.snp.top)
         }
         
-        addSubview(subLabel)
-        subLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-103)
-            $0.top.equalTo(detailLabel.snp.bottom).offset(26)
-        }
-        
         addSubview(detailTextField)
         detailTextField.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(25)
-            $0.top.equalTo(detailLabel.snp.bottom).offset(26)
-            $0.trailing.equalTo(subLabel.snp.leading).offset(-10)
+            $0.top.equalTo(detailLabel.snp.bottom).offset(20)
+            $0.width.equalTo(208)
         }
+        
+        addSubview(subLabel)
+        subLabel.snp.makeConstraints {
+            $0.leading.equalTo(detailTextField.snp.trailing).offset(10)
+            $0.top.equalTo(detailLabel.snp.bottom).offset(26)
+        }
+        
+        
     }
     
     func bind() {

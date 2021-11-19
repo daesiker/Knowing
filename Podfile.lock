@@ -16,6 +16,9 @@ PODS:
     - FirebaseAnalytics (~> 8.4.0)
   - Firebase/CoreOnly (8.4.0):
     - FirebaseCore (= 8.4.0)
+  - Firebase/Messaging (8.4.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 8.4.0)
   - FirebaseAnalytics (8.4.0):
     - FirebaseAnalytics/AdIdSupport (= 8.4.0)
     - FirebaseCore (~> 8.0)
@@ -53,6 +56,13 @@ PODS:
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/UserDefaults (~> 7.4)
     - PromisesObjC (< 3.0, >= 1.2)
+  - FirebaseMessaging (8.4.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Reachability (~> 7.4)
+    - GoogleUtilities/UserDefaults (~> 7.4)
   - GoogleAppMeasurement (8.4.0):
     - GoogleAppMeasurement/AdIdSupport (= 8.4.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
@@ -136,6 +146,7 @@ DEPENDENCIES:
   - Firebase/Analytics (~> 8.4.0)
   - Firebase/Auth (~> 8.4.0)
   - Firebase/Core (~> 8.4.0)
+  - Firebase/Messaging (~> 8.4.0)
   - GoogleSignIn (~> 6.0.2)
   - KakaoSDKAuth
   - KakaoSDKCommon
@@ -161,6 +172,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseInstallations
+    - FirebaseMessaging
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleSignIn
@@ -193,6 +205,7 @@ SPEC CHECKSUMS:
   FirebaseCore: 31f389c37ac1ea52454a53d3081f2d7019485a4a
   FirebaseCoreDiagnostics: cad03be1904b975f845e632f2720c3337da27faf
   FirebaseInstallations: 1585729afc787877763208c2088ed84221161f77
+  FirebaseMessaging: 78025c56654f05c7ebd6f7f87f9d4b12c5231207
   GoogleAppMeasurement: 6b6a08fd9c71f4dbc89e0e812acca81d797aa342
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleSignIn: fd381840dbe7c1137aa6dc30849a5c3e070c034a
@@ -215,6 +228,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: ddbeefc0656d10c4222f8c4d8c441a8376026fe9
+PODFILE CHECKSUM: 1ac2340fda284e1373ceacfb07bfebda62c8227f
 
 COCOAPODS: 1.10.1

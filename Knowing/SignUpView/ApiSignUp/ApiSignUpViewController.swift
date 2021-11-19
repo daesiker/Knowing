@@ -87,16 +87,12 @@ class ApiSignUpViewController: UIViewController {
     }
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
         bind()
-       
     }
     
-
-
 }
 
 extension ApiSignUpViewController {

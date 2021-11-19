@@ -15,6 +15,7 @@ class HomeChartView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = UIColor.rgb(red: 255, green: 228, blue: 182)
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()

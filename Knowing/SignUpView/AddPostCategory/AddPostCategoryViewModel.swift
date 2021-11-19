@@ -35,7 +35,7 @@ class AddPostCategoryViewModel {
         var goSignUp = PublishRelay<User>().asSignal()
         var error = PublishRelay<Error>().asSignal()
     }
-
+    
     init() {
         
         let signUpRelay = PublishRelay<User>()
@@ -193,40 +193,35 @@ class AddPostCategoryViewModel {
                     return
                 }
                 guard let uid = user?.user.uid else { return }
-                let header:HTTPHeaders = ["uid": uid]
+                let header:HTTPHeaders = ["uid": uid,
+                                          "Content-Type":"application/json"]
+                
                 let url = "https://www.makeus-hyun.shop/app/users/sign-up"
-                do {
-                    let userInfo = try JSONEncoder().encode(self.user)
-//                    let jsonString = String.init(data: userInfo, encoding: .utf8)
-//                    
-//                    let jsonData = jsonString?.data(using: .utf8)
-                    AF.request(url, method: .post, headers: header)
-                        { urlRequest in urlRequest.httpBody = userInfo }
-                        .responseJSON { response in
-                            switch response.result {
-                            case .success(let value):
-                                let json = JSON(value)
-                                print(json)
-                                let result = json["result"].dictionaryObject
-                                if let isSuccess = result?["isSuccess"] as? Bool,
-                                   let code = result?["code"] as? Int,
-                                   let message = result?["message"] as? String {
-                                    if isSuccess {
-                                        observer.onNext(self.user)
-                                    } else {
-                                        let error = KnowingError(code: code, msg: message)
-                                        observer.onError(error)
-                                    }
+                
+                let jsonData = try? JSONEncoder().encode(self.user)
+                AF.request(url, method: .post, headers: header)
+                    { urlRequest in urlRequest.httpBody = jsonData }
+                    .responseJSON { response in
+                        switch response.result {
+                        case .success(let value):
+                            let json = JSON(value)
+                            let result = json["result"].dictionaryObject
+                            if let isSuccess = result?["isSuccess"] as? Bool,
+                               let code = result?["code"] as? Int,
+                               let message = result?["message"] as? String {
+                                if isSuccess {
+                                    observer.onNext(self.user)
+                                } else {
+                                    let error = KnowingError(code: code, msg: message)
+                                    observer.onError(error)
                                 }
-                            case .failure(let error):
-                                print(error)
-                                observer.onError(error)
                             }
+                        case .failure(let error):
+                            observer.onError(error)
                         }
-                    
-                } catch {
-                    observer.onError(error)
-                }
+                    }
+                
+                
                 
                 
                 

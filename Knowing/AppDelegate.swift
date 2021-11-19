@@ -12,6 +12,7 @@ import SnapKit
 import NaverThirdPartyLogin
 import KakaoSDKCommon
 import KakaoSDKAuth
+import FirebaseMessaging
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,6 +23,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Firebase
         FirebaseApp.configure()
         
+        //Push Notifications
+        Messaging.messaging().delegate = self
+        UNUserNotificationCenter.current().delegate = self
+        let authOptions:UNAuthorizationOptions = [.alert, .badge, .sound]
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { _, _ in
+            DispatchQueue.main.async {
+                application.registerForRemoteNotifications()
+            }
+        }
+        
+        
         //Naver
         let naverInstance = NaverThirdPartyLoginConnection.getSharedInstance()
         naverInstance?.isInAppOauthEnable = true
@@ -31,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.appName = kServiceAppName
         
         //Kakao
-        KakaoSDKCommon.initSDK(appKey: "c705c8d6c41cc65f942de4506e52456c")
+        KakaoSDKCommon.initSDK(appKey: "d8e0e3e9398b5db90db367e587268a49")
         
         //Google
         GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
@@ -43,6 +56,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         return true
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let deviceTokenString = deviceToken.reduce("", { $0 + String(format: "%02X", $1) })
+        print("[Log] deviceToken :", deviceTokenString)
+        Messaging.messaging().apnsToken = deviceToken
+        
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -73,3 +93,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .badge, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        completionHandler()
+    }
+    
+    
+}
+
+extension AppDelegate: MessagingDelegate {
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        if let fcmToken = fcmToken {
+            let dataDict:[String:String] = ["token" : fcmToken]
+            
+            NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+        }
+        
+    }
+    
+}

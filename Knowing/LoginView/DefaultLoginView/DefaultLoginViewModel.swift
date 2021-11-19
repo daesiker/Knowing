@@ -31,6 +31,7 @@ class DefaultLoginViewModel {
     }
     
     init() {
+        
         output.emailValid = input.emailObserver
             .map ({ valid in
                 if !(!valid.isEmpty && valid.contains(".") && valid.contains("@")) {
@@ -50,6 +51,26 @@ class DefaultLoginViewModel {
             .asDriver(onErrorJustReturn: false)
         
         
+    }
+    
+    func doLogin(_ email: String, pwd: String) -> Observable<User> {
+        
+        Observable.create { observe in
+            
+            Auth.auth().signIn(withEmail: email, password: pwd) { auth, error in
+                if let error = error {
+                    observe.onError(error)
+                    return
+                }
+                
+                guard let uid = auth?.user.uid else { return}
+                
+                
+                
+            }
+            
+            return Disposables.create()
+        }
     }
     
 }

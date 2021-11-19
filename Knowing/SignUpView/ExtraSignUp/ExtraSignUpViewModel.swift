@@ -303,7 +303,7 @@ extension ExtraSignUpViewModel {
     func bindStepTwo() {
         
         stepTwo.input.incomeObserver.subscribe(onNext: {value in
-            let income = Int(value) ?? 0
+            let income = Int(value.replacingOccurrences(of: ",", with: "")) ?? 0
             print(income)
             incomeQuintile(income)
         }).disposed(by: disposeBag)

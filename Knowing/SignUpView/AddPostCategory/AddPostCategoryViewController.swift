@@ -14,6 +14,10 @@ class AddPostCategoryViewController: UIViewController {
     let disposeBag = DisposeBag()
     let vm = AddPostCategoryViewModel()
     
+    let backBt = UIButton(type: .custom).then {
+        $0.setImage(UIImage(named: "backArrow"), for: .normal)
+    }
+    
     let scrollView = UIScrollView().then {
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
@@ -157,14 +161,20 @@ extension AddPostCategoryViewController {
         
         view.backgroundColor = .white
         safeArea.addSubview(scrollView)
-        scrollView.contentSize = CGSize(width: view.frame.width, height: 1410)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 1450)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
+        scrollView.addSubview(backBt)
+        backBt.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(6)
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
         scrollView.addSubview(titleLb)
         titleLb.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(40)
+            $0.top.equalTo(backBt.snp.bottom).offset(13)
             $0.leading.equalToSuperview().offset(20)
         }
         
@@ -262,6 +272,11 @@ extension AddPostCategoryViewController {
     }
     
     func bind() {
+        backBt.rx.tap
+            .subscribe(onNext:{
+                self.dismiss(animated: true)
+            }).disposed(by: disposeBag)
+        
         studentCV.delegate = nil
         studentCV.dataSource = nil
         studentCV.register(AddCategoryCell.self, forCellWithReuseIdentifier: "studentCell")

@@ -8,12 +8,15 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Firebase
+import FirebaseMessaging
 
 class AgreeTermsViewModel {
     
     let disposeBag = DisposeBag()
     let input = Input()
     var output = Output()
+    var user:User = User()
     
     var checkBox:[Bool] = [false, false, false, false]
     
@@ -31,20 +34,43 @@ class AgreeTermsViewModel {
         var secondValid = BehaviorRelay<[Bool]>(value: [false, false, false, false]).asDriver(onErrorJustReturn: [])
         var thirdValid = BehaviorRelay<[Bool]>(value: [false, false, false, false]).asDriver(onErrorJustReturn: [])
         var nextBtValid = BehaviorRelay<Bool>(value: false).asDriver(onErrorJustReturn: false)
+        var goToSignUp = PublishRelay<User>().asSignal()
+        var errorRelay = PublishRelay<Error>().asSignal()
     }
     
     
     init() {
+        
+        let goToSignUp = PublishRelay<User>()
+        let errorRelay = PublishRelay<Error>()
+        
+        input.nextBtObserver
+            .map { self.checkBox[4] }
+            .flatMap(getUserToken).subscribe({ event in
+                switch event {
+                case .completed:
+                    break
+                case .next(let user):
+                    goToSignUp.accept(user)
+                case .error(let error):
+                    errorRelay.accept(error)
+                }
+            }).disposed(by: disposeBag)
+        
+        output.goToSignUp = goToSignUp.asSignal()
+        output.errorRelay = errorRelay.asSignal()
         
         output.firstValid = input.firstObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         output.secondValid = input.secondObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         output.thirdValid = input.thirdObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         output.allValid = input.allObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         
+        
+        
         output.nextBtValid = Observable.of(input.allObserver, input.firstObserver, input.secondObserver, input.thirdObserver).merge().map {
             return self.checkBox[1] && self.checkBox[2]
         }.asDriver(onErrorJustReturn: false)
-            
+        
         input.allObserver.subscribe(onNext: {
             if self.checkBox[0] {
                 self.checkBox = [false, false, false, false]
@@ -94,6 +120,31 @@ class AgreeTermsViewModel {
                 self.checkBox[3] = true
             }
         }).disposed(by: disposeBag)
+        
+    }
+    
+    func getUserToken(_ getToken: Bool) -> Observable<User> {
+        
+        return Observable.create { observer in
+            
+            if getToken {
+                UIApplication.shared.registerForRemoteNotifications()
+            } else {
+                UIApplication.shared.unregisterForRemoteNotifications()
+            }
+            
+            Messaging.messaging().token { token, error in
+                if let error = error {
+                    observer.onError(error)
+                } else if let token = token {
+                    self.user.fcmToken = token
+                    observer.onNext(self.user)
+                } else {
+                    observer.onNext(self.user)
+                }
+            }
+            return Disposables.create()
+        }
         
     }
     

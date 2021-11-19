@@ -144,13 +144,6 @@ extension FindEmailViewController {
             .bind(to: self.vm.input.buttonObserver)
             .disposed(by: disposeBag)
         
-        confirmBt.rx.tap
-            .subscribe(onNext: {
-                let vc = ConfirmEmailViewController()
-                vc.modalTransitionStyle = .crossDissolve
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true)
-            }).disposed(by: disposeBag)
     }
     
     func bindOutput() {
@@ -165,7 +158,18 @@ extension FindEmailViewController {
             }
         }).disposed(by: disposeBag)
         
+        vm.output.findEmail.emit(onNext: {value in
+            let vc = ConfirmEmailViewController()
+            vc.email = value
+            vc.name = self.nameTextField.text ?? ""
+            vc.modalTransitionStyle = .crossDissolve
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true)
+        }).disposed(by: disposeBag)
         
+        vm.output.error.emit(onNext: { error in
+            print(error)
+        }).disposed(by: disposeBag)
         
     }
 }

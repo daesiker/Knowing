@@ -127,6 +127,7 @@ extension StepThreeView {
         
         vm.schoolSelect.output.schoolValue.drive(onNext: { valid in
             self.schoolBt.label.text = valid
+            self.schoolBt.label.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
         }).disposed(by: disposeBag)
     }
     

@@ -12,15 +12,17 @@ import NaverThirdPartyLogin
 import Alamofire
 import AuthenticationServices
 import CommonCrypto
+import Firebase
 import FirebaseAuth
 import KakaoSDKAuth
 import KakaoSDKCommon
 import KakaoSDKUser
+import SwiftyJSON
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
-    let loginViewModel = LoginViewModel()
     let disposeBag = DisposeBag()
     fileprivate var currentNonce: String?
     
@@ -36,6 +38,7 @@ class LoginViewController: UIViewController {
     
     let kakaoLoginBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "kakaoLogo"), for: .normal)
+        $0.addTarget(self, action: #selector(kakaoLogin), for: .touchUpInside)
     }
     
     @objc private func kakaoLogin(_ sender: UIButton) {
@@ -45,13 +48,16 @@ class LoginViewController: UIViewController {
                     print(error)
                     return
                 }
-                print(oauthToken)
+                if let token = oauthToken?.accessToken {
+                    self.getJWT(token, provider: "kakao")
+                }
             }
         }
     }
     
     let naverLoginBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "naverLogo"), for: .normal)
+        $0.addTarget(self, action: #selector(naverLogin), for: .touchUpInside)
     }
     
     @objc private func naverLogin(_ sender: UIButton) {
@@ -61,10 +67,39 @@ class LoginViewController: UIViewController {
     
     let googleLoginBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "googleLogo"), for: .normal)
+        $0.addTarget(self, action: #selector(googleLogin), for: .touchUpInside)
+    }
+    
+    @objc private func googleLogin(_ sender: UIButton) {
+        let clientID = FirebaseApp.app()?.options.clientID ?? ""
+        let signInConfig = GIDConfiguration.init(clientID: clientID)
+        
+        GIDSignIn.sharedInstance.signIn(with: signInConfig, presenting: self) { user, error in
+            if let error = error {
+                print(error)
+            }
+            
+            guard let authentication = user?.authentication,
+                  let idToken = authentication.idToken
+            else { return }
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
+            
+            Auth.auth().signIn(with: credential) { result, error in
+                if let error = error {
+                    print(error)
+                }
+                if result != nil {
+                    guard let uid = Auth.auth().currentUser?.uid else { return }
+                    self.googleAppleLogin(uid, provider: "google")
+                }
+            }
+        }
     }
     
     let appleLoginBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "appleLogo"), for: .normal)
+        $0.addTarget(self, action: #selector(appleLogin), for: .touchUpInside)
     }
     
     @objc private func appleLogin(_ sender: UIButton) {
@@ -105,6 +140,7 @@ class LoginViewController: UIViewController {
     
     @objc private func goToSignUp(_ sender: UIButton) {
         let viewController = SignUpViewController()
+        viewController.vm.user.provider = "default"
         viewController.modalTransitionStyle = .crossDissolve
         viewController.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(viewController, animated: true)
@@ -178,11 +214,6 @@ extension LoginViewController {
     }
     
     func bind() {
-        bindInput()
-        bindOutput()
-    }
-    
-    func bindInput() {
         defaultLoginBt.rx.tap.subscribe(onNext: {
             let viewController = DefaultLoginViewController()
             viewController.modalTransitionStyle = .crossDissolve
@@ -192,29 +223,14 @@ extension LoginViewController {
         
         signUpBt.rx.tap.subscribe(onNext: {
             let viewController = AgreeTermsViewController()
+            viewController.vm.user.provider = "default"
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
-            
             self.present(viewController, animated: true)
         }).disposed(by: disposeBag)
         
-        googleLoginBt.rx.tap
-            .map { self }
-            .bind(to: loginViewModel.input.googleLoginTap)
-            .disposed(by: disposeBag)
-        
-        
-        
-        
     }
     
-    func bindOutput() {
-        loginViewModel.output.apiSignUpRelay
-            .emit { value in
-                print(value)
-            }
-            .disposed(by: disposeBag)
-    }
     
 }
 
@@ -222,27 +238,11 @@ extension LoginViewController {
 extension LoginViewController: NaverThirdPartyLoginConnectionDelegate {
     
     private func getNaverInfo() {
+        
         guard let isValidAccessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
-        
         if !isValidAccessToken { return }
-        
-        guard let tokenType = naverLoginInstance?.tokenType else { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
-        let urlStr = "https://openapi.naver.com/v1/nid/me"
-        guard let url = URL(string: urlStr) else { return }
-        let authorization = "\(tokenType) \(accessToken)"
-        
-        let req = AF.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: ["Authorization": authorization])
-        req.responseJSON { response in
-            guard let result = response.value as? [String: Any] else { return }
-            guard let object = result["response"] as? [String: Any] else { return }
-            
-            guard let email = object["email"] as? String else { return }
-            DispatchQueue.main.async {
-                let vc = SignUpViewController()
-                self.present(vc, animated: true, completion: nil)
-            }
-        }
+        getJWT(accessToken, provider: "naver")
         
     }
     
@@ -290,11 +290,14 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             
             Auth.auth().signIn(with: credential) { authResult, error in
                 if let error = error {
+                    //MARK:- 에러처리
                     print(error)
                     return
                 }
+                if let uid = Auth.auth().currentUser?.uid {
+                    self.googleAppleLogin(uid, provider: "apple")
+                }
                 
-                print("success")
             }
             
             
@@ -358,3 +361,78 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
     
 }
 
+extension LoginViewController {
+    
+    func getJWT(_ token: String, provider: String) {
+        
+        let header:HTTPHeaders = ["access-token": token,
+                                  "Content-Type":"application/json"]
+        let url = "https://www.makeus-hyun.shop/app/users/\(provider)-login"
+        
+        AF.request(url, method: .get, headers: header)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    let result = json["result"].dictionaryObject
+                    if let status = result?["status"] as? String,
+                       let jwt = result?["jwt"] as? String {
+                        if status == "신규회원" {
+                            Auth.auth().signIn(withCustomToken: jwt) { user, error in
+                                if let error = error {
+                                    print(error)
+                                    return
+                                }
+                                DispatchQueue.main.async {
+                                    let vc = AgreeTermsViewController()
+                                    vc.vm.user.provider = provider
+                                    vc.modalPresentationStyle = .fullScreen
+                                    vc.modalTransitionStyle = .crossDissolve
+                                    self.present(vc, animated: true)
+                                }
+                            }
+                        } else {
+                            Auth.auth().signIn(withCustomToken: jwt) { user, error in
+                                if let error = error {
+                                    print(error)
+                                    return
+                                }
+                            }
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+    
+    func googleAppleLogin(_ uid: String, provider: String) {
+        let header:HTTPHeaders = ["uid": uid,
+                                  "Content-Type":"application/json"]
+        let url = "https://www.makeus-hyun.shop/app/users/checkuid"
+        AF.request(url, method: .get, headers: header)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    let result = json["result"].dictionaryObject
+                    if let isSuccess = result?["status"] as? Bool {
+                        if isSuccess {
+                            DispatchQueue.main.async {
+                                let vc = AgreeTermsViewController()
+                                vc.vm.user.provider = provider
+                                vc.modalPresentationStyle = .fullScreen
+                                vc.modalTransitionStyle = .crossDissolve
+                                self.present(vc, animated: true)
+                            }
+                        } else {
+                            //MARK: - 메인으로 가기
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+    
+}

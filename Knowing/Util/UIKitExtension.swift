@@ -43,8 +43,8 @@ extension UIColor {
 
 extension NSAttributedString {
     func withLineSpacing(_ spacing: CGFloat) -> NSAttributedString {
-
-
+        
+        
         let attributedString = NSMutableAttributedString(attributedString: self)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingTail
@@ -61,14 +61,14 @@ extension UITextField {
     func setLeft(image: UIImage, withPadding padding: CGFloat = 0) {
         let wrapperView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 31, height: 21))
         let imageView = UIImageView(frame: CGRect.init(x: 10, y: 0, width: 21, height: 21))
-
+        
         imageView.image = image
         imageView.contentMode = .scaleAspectFit
         wrapperView.addSubview(imageView)
         
         leftView = wrapperView
         leftViewMode = .always
-
+        
     }
     
     func setErrorRight() {
@@ -150,4 +150,12 @@ extension UITextField {
     
 }
 
-
+extension UITabBar {
+    
+    override open func sizeThatFits(_ size: CGSize) -> CGSize {
+        var sizeThatFits = super.sizeThatFits(size)
+        sizeThatFits.height = 56 // 원하는 길이
+        return sizeThatFits
+    }
+    
+}

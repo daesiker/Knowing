@@ -14,6 +14,10 @@ class AgreeTermsViewController: UIViewController {
     let disposeBag = DisposeBag()
     let vm = AgreeTermsViewModel()
     
+    let backBt = UIButton(type: .custom).then {
+        $0.setImage(UIImage(named: "backArrow"), for: .normal)
+    }
+    
     let titleLb = UIImageView(image: UIImage(named: "textLogo")!)
     
     let subLb = UILabel().then {
@@ -116,9 +120,15 @@ extension AgreeTermsViewController {
     func setUI() {
         view.backgroundColor = .white
         
+        safeArea.addSubview(backBt)
+        backBt.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(6)
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
         safeArea.addSubview(titleLb)
         titleLb.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(31)
+            $0.top.equalTo(backBt.snp.bottom).offset(13)
             $0.leading.equalToSuperview().offset(29)
         }
         
@@ -228,6 +238,11 @@ extension AgreeTermsViewController {
     }
     
     func bindInput() {
+        backBt.rx.tap
+            .subscribe(onNext: {
+                self.dismiss(animated: true)
+            }).disposed(by: disposeBag)
+        
         allCbImg.rx.tap
             .bind(to: vm.input.allObserver)
             .disposed(by: disposeBag)
@@ -245,12 +260,8 @@ extension AgreeTermsViewController {
             .disposed(by: disposeBag)
         
         nextBt.rx.tap
-            .subscribe(onNext: {
-                let vc = SignUpViewController()
-                vc.modalTransitionStyle = .crossDissolve
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true)
-            }).disposed(by: disposeBag)
+            .bind(to: vm.input.nextBtObserver)
+            .disposed(by: disposeBag)
         
     }
     
@@ -324,6 +335,25 @@ extension AgreeTermsViewController {
                 self.nextBt.backgroundColor = UIColor.rgb(red: 210, green: 210, blue: 210)
             }
         }).disposed(by: disposeBag)
+        
+        vm.output.goToSignUp.emit(onNext: { user in
+            if user.provider == "default" {
+                let vc = SignUpViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                vc.vm.user = user
+                self.present(vc, animated: true)
+            } else {
+                let vc = ApiSignUpViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                vc.vm.user = user
+                self.present(vc, animated: true)
+            }
+        }).disposed(by: disposeBag)
+        
+        
+        //MARK:-에러처리
         
     }
     
