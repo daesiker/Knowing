@@ -14,7 +14,7 @@ class MainTabViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.rgb(red: 255, green: 228, blue: 182)
+        view.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
         setupTabBarUI()
         addCustomTabBarView()
         setupViewControllers()
@@ -84,6 +84,8 @@ class MainTabViewController: UITabBarController {
             self.tabBar.backgroundColor = .clear
             self.tabBar.tintColor = UIColor.rgb(red: 204, green: 108, blue: 45)
             self.tabBar.unselectedItemTintColor = UIColor.rgb(red: 205, green: 153, blue: 117)
+            self.tabBar.itemSpacing = 34
+            
             
         }
         

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class HomeCalendarView: UIView {
+class HomeCalendarView: UIScrollView {
     let titleLabel = UILabel().then {
         $0.text = "HomeCalendarView"
     }

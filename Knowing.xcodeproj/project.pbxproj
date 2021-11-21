@@ -66,6 +66,7 @@
 		BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506F7271908D4003127CF /* LoginViewController.swift */; };
 		BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506FA27190D80003127CF /* UIKitExtension.swift */; };
 		BFF506FD27190EBB003127CF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506FC27190EBB003127CF /* LoginViewModel.swift */; };
+		BFFB7E97274A7EC7008FDF6A /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFB7E96274A7EC7008FDF6A /* PostCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,6 +134,7 @@
 		BFF506FA27190D80003127CF /* UIKitExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtension.swift; sourceTree = "<group>"; };
 		BFF506FC27190EBB003127CF /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		BFFA1D3B271E4ED500DD7E1A /* Knowing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Knowing.entitlements; sourceTree = "<group>"; };
+		BFFB7E96274A7EC7008FDF6A /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +172,18 @@
 				BF2E058227225D7E008CA167 /* GuideViewController.swift */,
 			);
 			path = GuideView;
+			sourceTree = "<group>";
+		};
+		BF3A03602748C4CE00832A3F /* Modal */ = {
+			isa = PBXGroup;
+			children = (
+				BF8D262E2743DD85002A9165 /* TmpAddressViewController.swift */,
+				BF151BAE2732760F0065E766 /* AddressViewController.swift */,
+				BF273BAA273CB5200028EF07 /* SpecialViewController.swift */,
+				BFA4689B2746341A0056224A /* SchoolViewController.swift */,
+				BF5AD0AA2747F4AD003E03A1 /* ChartView.swift */,
+			);
+			path = Modal;
 			sourceTree = "<group>";
 		};
 		BF5A2B87272A5D1100234429 /* Font */ = {
@@ -322,6 +336,7 @@
 				BF8D62742718FF53006D7227 /* LaunchScreen.storyboard */,
 				BF8D627D2719012A006D7227 /* GoogleService-Info.plist */,
 				BF8D62772718FF53006D7227 /* Info.plist */,
+				BF3A03602748C4CE00832A3F /* Modal */,
 				BFF506F927190BAE003127CF /* Util */,
 			);
 			path = Knowing;
@@ -336,6 +351,7 @@
 				BFA07971271FD3C200912C18 /* MyPageView */,
 				BFA0796F271FD2F800912C18 /* MainTabViewController.swift */,
 				BF2E058827229C30008CA167 /* LoadingViewController.swift */,
+				BFFB7E96274A7EC7008FDF6A /* PostCell.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -419,16 +435,11 @@
 		BFF506F927190BAE003127CF /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				BF8D262E2743DD85002A9165 /* TmpAddressViewController.swift */,
 				BFF506FA27190D80003127CF /* UIKitExtension.swift */,
 				BF2E058427226070008CA167 /* CustomComponent.swift */,
 				BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */,
 				BF85C62A27310883005D9EF1 /* FoundationExtension.swift */,
-				BF151BAE2732760F0065E766 /* AddressViewController.swift */,
 				BFECE1CB2738DCAF0055FA9D /* Enum.swift */,
-				BF273BAA273CB5200028EF07 /* SpecialViewController.swift */,
-				BFA4689B2746341A0056224A /* SchoolViewController.swift */,
-				BF5AD0AA2747F4AD003E03A1 /* ChartView.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -572,6 +583,7 @@
 				BF5C9BBE2742939E00005AC7 /* ApiSignUpViewController.swift in Sources */,
 				BF8A9A03273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
+				BFFB7E97274A7EC7008FDF6A /* PostCell.swift in Sources */,
 				BFC74512273A0ADE00090BCB /* AddPostCategoryViewController.swift in Sources */,
 				BF151BAB273246790065E766 /* StepFourView.swift in Sources */,
 				BF8379372729208900584E33 /* HomeChartView.swift in Sources */,

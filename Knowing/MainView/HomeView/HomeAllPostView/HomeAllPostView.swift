@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class HomeAllPostView: UIView {
+class HomeAllPostView: UIScrollView {
     let titleLabel = UILabel().then {
         $0.text = "HomeAllPostView"
     }

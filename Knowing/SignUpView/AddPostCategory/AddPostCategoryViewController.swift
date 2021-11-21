@@ -22,8 +22,9 @@ class AddPostCategoryViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = true
+        $0.automaticallyAdjustsScrollIndicatorInsets = true
+        $0.clipsToBounds = true
         $0.layoutIfNeeded()
-        
         $0.backgroundColor = .white
     }
     

@@ -22,10 +22,11 @@ class HomeViewController: UIViewController  {
         $0.isPagingEnabled = true
         $0.alwaysBounceVertical = false
         $0.isScrollEnabled = false
-        $0.bounces = false
+        $0.layoutIfNeeded()
     }
     
     let homeSegmentedControl = BetterSegmentedControl(frame: .zero, segments: LabelSegment.segments(withTitles: ["맞춤 복지", "나의 캘린더", "모든 복지"], numberOfLines: 1, normalBackgroundColor: UIColor.rgb(red: 252, green: 245, blue: 235), normalFont: UIFont.init(name: "AppleSDGothicNeo-Bold", size: 16), normalTextColor: UIColor.rgb(red: 139, green: 139, blue: 139), selectedBackgroundColor: UIColor.rgb(red: 255, green: 152, blue: 87), selectedFont: UIFont.init(name: "AppleSDGothicNeo-Bold", size: 16), selectedTextColor: .white), options: [.cornerRadius(25), .indicatorViewInset(5), .backgroundColor(UIColor.rgb(red: 252, green: 245, blue: 235))])
+    
     
     
     override func viewDidLoad() {
@@ -35,9 +36,6 @@ class HomeViewController: UIViewController  {
         bind()
     }
     
-    override func viewWillLayoutSubviews() {
-        homeSegmentedControl.layer.cornerRadius = 25
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -57,7 +55,8 @@ extension HomeViewController {
         view.backgroundColor = .white
         safeArea.addSubview(homeScrollView)
         homeScrollView.snp.makeConstraints {
-            $0.edges.equalTo(self.view.snp.edges)
+            $0.bottom.leading.trailing.equalToSuperview()
+            $0.top.equalTo(self.view.snp.top)
         }
         
         view.addSubview(homeSegmentedControl)
@@ -74,14 +73,22 @@ extension HomeViewController {
     }
     
     private func setScrollView() {
-        let homeView:[UIView] = [HomeChartView(), HomeCalendarView(), HomeAllPostView()]
+        let homeView:[UIScrollView] = [HomeChartView(), HomeCalendarView(), HomeAllPostView()]
         homeScrollView.frame = UIScreen.main.bounds
-        homeScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width * 3, height: UIScreen.main.bounds.height)
+        homeScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width * 3, height:1500)
         for i in 0..<homeView.count {
             let xPos = self.view.frame.width * CGFloat(i)
             homeView[i].frame = CGRect(x: xPos, y: 0, width: homeScrollView.bounds.width, height: homeScrollView.bounds.height)
+            let contentRect:CGRect = homeView[i].subviews.reduce(into: .zero) { rect, view in
+                rect = rect.union(view.frame)
+            }
+            
+            homeView[i].contentSize = contentRect.size
             homeScrollView.addSubview(homeView[i])
-            homeScrollView.contentSize.width = homeView[i].frame.width * CGFloat(i + 1)
+            
+            
+//            homeScrollView.contentSize.width = homeView[i].frame.width * CGFloat(i + 1)
+//            homeScrollView.contentSize.height = 1500
         }
     }
     
@@ -102,3 +109,4 @@ extension HomeViewController {
     }
     
 }
+

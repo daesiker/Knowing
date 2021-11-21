@@ -45,7 +45,7 @@ class AgreeTermsViewModel {
         let errorRelay = PublishRelay<Error>()
         
         input.nextBtObserver
-            .map { self.checkBox[4] }
+            .map { self.checkBox[3] }
             .flatMap(getUserToken).subscribe({ event in
                 switch event {
                 case .completed:
