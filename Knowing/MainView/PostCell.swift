@@ -13,26 +13,31 @@ class PostCell: UICollectionViewCell {
     let imgView = UIImageView()
     
     let subjectiveLb = UILabel().then {
+        $0.text = "서울시"
         $0.textColor = UIColor.rgb(red: 122, green: 122, blue: 122)
         $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
     }
     
     let mainLb = UILabel().then {
+        $0.text = "청년고용지원"
         $0.textColor = UIColor.rgb(red: 38, green: 38, blue: 38)
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 19)
     }
     
     let maxLb = UILabel().then {
+        $0.text = "최대 250만원 지원"
         $0.textColor = UIColor.rgb(red: 255, green: 126, blue: 68)
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
     }
     
     let minLb = UILabel().then {
+        $0.text = "최소 20만원"
         $0.textColor = UIColor.rgb(red: 123, green: 123, blue: 123)
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
     }
     
     let dayLb = UILabel().then {
+        $0.text = "2021.12.31까지"
         $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
         $0.textColor = UIColor.rgb(red: 148, green: 148, blue: 148)
     }
@@ -42,6 +47,7 @@ class PostCell: UICollectionViewCell {
     }
     
     let dDayLb = UILabel().then {
+        $0.text = "D-63"
         $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
         $0.textColor = UIColor.rgb(red: 148, green: 148, blue: 148)
     }

@@ -73,22 +73,16 @@ extension HomeViewController {
     }
     
     private func setScrollView() {
-        let homeView:[UIScrollView] = [HomeChartView(), HomeCalendarView(), HomeAllPostView()]
+        let homeView:[UIView] = [HomeChartView(), HomeCalendarView(), HomeAllPostView()]
         homeScrollView.frame = UIScreen.main.bounds
-        homeScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width * 3, height:1500)
+        homeScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width * 3, height:UIScreen.main.bounds.height)
         for i in 0..<homeView.count {
             let xPos = self.view.frame.width * CGFloat(i)
             homeView[i].frame = CGRect(x: xPos, y: 0, width: homeScrollView.bounds.width, height: homeScrollView.bounds.height)
-            let contentRect:CGRect = homeView[i].subviews.reduce(into: .zero) { rect, view in
-                rect = rect.union(view.frame)
-            }
             
-            homeView[i].contentSize = contentRect.size
             homeScrollView.addSubview(homeView[i])
+            homeScrollView.contentSize.width = homeView[i].frame.width * CGFloat(i + 1)
             
-            
-//            homeScrollView.contentSize.width = homeView[i].frame.width * CGFloat(i + 1)
-//            homeScrollView.contentSize.height = 1500
         }
     }
     

@@ -30,7 +30,7 @@ class CustomButton: UIButton {
 
 class CustomTextField: UITextField {
     
-    var isLogin:Bool = false
+    var useState:TextFieldState = .signUp
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,10 +40,10 @@ class CustomTextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(image: UIImage, text: String, isLogin: Bool = false) {
+    convenience init(image: UIImage, text: String, state: TextFieldState = .signUp) {
         self.init()
-        self.isLogin = isLogin
-        self.backgroundColor = isLogin ? UIColor.rgb(red: 243, green: 243, blue: 243) : UIColor.white
+        self.useState = state
+        self.backgroundColor = state == .signUp ? .white : UIColor.rgb(red: 243, green: 243, blue: 243)
         self.placeholder = text
         self.layer.cornerRadius = 20.0
         self.layer.masksToBounds = true
@@ -73,24 +73,34 @@ class CustomTextField: UITextField {
 extension CustomTextField: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if self.isLogin {
+        
+        switch useState {
+        case .login:
             self.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
-        } else {
+        case .signUp:
             self.backgroundColor = UIColor.rgb(red: 255, green: 236, blue: 210)
             self.layer.borderColor = CGColor(red: 255 / 255, green: 142 / 255, blue: 59 / 255, alpha: 1.0)
             self.layer.borderWidth = 1.0
+        case .search:
+            break
         }
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if self.isLogin {
+        
+        switch useState {
+        case .login:
             self.backgroundColor = UIColor.rgb(red: 243, green: 243, blue: 243)
-        } else {
+        case .signUp:
             self.backgroundColor = .white
             self.borderStyle = .none
             self.layer.borderColor = .none
             self.layer.borderWidth = 0.0
+        default:
+            break
         }
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -148,5 +158,50 @@ class CustomPicker: UIButton {
         self.init()
         label.text = text
     }
+    
+}
+
+class HomeAllPostBt: UIButton {
+    
+    let title = UILabel().then {
+        $0.text = ""
+        $0.textColor = UIColor.rgb(red: 205, green: 153, blue: 117)
+        $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+    }
+    
+    let border = UIView().then {
+        $0.backgroundColor = UIColor.rgb(red: 255, green: 199, blue: 143)
+        $0.layer.cornerRadius = 3.0
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        addSubview(title)
+        title.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        addSubview(border)
+        border.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalToSuperview()
+            $0.height.equalTo(10)
+        }
+        
+        bringSubviewToFront(title)
+        
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    convenience init(_ text: String) {
+        self.init()
+        title.text = text
+    }
+    
+    
     
 }

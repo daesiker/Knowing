@@ -31,7 +31,7 @@ class FindEmailViewController: UIViewController {
         $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
     }
     
-    let nameTextField = CustomTextField(image: UIImage(named: "person")!, text: "이름 입력", isLogin: true).then {
+    let nameTextField = CustomTextField(image: UIImage(named: "person")!, text: "이름 입력", state: .login).then {
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
         $0.keyboardType = .namePhonePad
     }
@@ -42,7 +42,7 @@ class FindEmailViewController: UIViewController {
         $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
     }
     
-    let phoneTextField = CustomTextField(image: UIImage(named: "phone")!, text: "'-'없이 입력", isLogin: true).then {
+    let phoneTextField = CustomTextField(image: UIImage(named: "phone")!, text: "'-'없이 입력", state: .login).then {
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
         $0.keyboardType = .numberPad
     }

@@ -7,118 +7,73 @@
 
 import Foundation
 import UIKit
-import Macaw
+import Charts
 
-import Foundation
-import UIKit
-import Macaw
-
-class AqiChartView: MacawView {
+class AqiChartView: BarChartView {
     
-    static var aqiBars = createData()
-    
-    static let maxValue = 200
-    static let maxValueLineHeight = 200
-    static let lineWidth: Double = 400
-    
-    static let dataDivisor = Double(maxValue/maxValueLineHeight)
-    static let adjustedData: [Double] = aqiBars.map({ $0.aqiIndex / dataDivisor }) // $0 : each item
-    static var animations: [Animation] = []
+    var category:[String] = ["학생", "취업", "창업", "주거\n금융", "생활\n복지", "코로나\n19"]
+    var unit:[Double] = [20.0, 15.0, 10.0, 5.0, 0.0, 0.0]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .white
+        setChart(dataPoints: category, values: unit)
     }
     
-    @objc required convenience init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    private static func createChart() -> Group { // group : array of nodes
-        var items:[Node] = addYAxisItems() + addXAxisItems()
-        items.append(createBars())
+    func setChart(dataPoints: [String], values: [Double]) {
         
-        return Group(contents: items, place: .identity)
-    }
-    
-    private static func addYAxisItems() -> [Node]{
-        let maxLines = 6
-        let yAxisHeight: Double = 200
-        let lineSpacing: Double = 30
+        var dataEntries:[BarChartDataEntry] = []
         
-        var newNodes: [Node] = []
-        
-        for i in 1...maxLines {
-            let y = yAxisHeight - (Double(i) * lineSpacing)
-            let valueLine = Line(x1: -5, y1: y, x2: lineWidth, y2: y).stroke(fill: Color.white)
-            newNodes.append(valueLine)
+        for i in 0..<dataPoints.count {
+            let dataEntry = BarChartDataEntry(x: Double(i), y: values[i] + 1.0)
+            
+            dataEntries.append(dataEntry)
         }
         
-        return newNodes
-    }
-    
-    private static func addXAxisItems() -> [Node]{
-        let chartBaseY: Double = 200
-        var newNodes: [Node] = []
+        let chartDataSet = BarChartDataSet(entries: dataEntries)
+        chartDataSet.colors = [ UIColor.rgb(red: 255, green: 228, blue: 182), UIColor.rgb(red: 255, green: 176, blue: 128), UIColor.rgb(red: 255, green: 176, blue: 97), UIColor.rgb(red: 255, green: 142, blue: 59), UIColor.rgb(red: 255, green: 136, blue: 84), UIColor.rgb(red: 210, green: 132, blue: 81)]
+        chartDataSet.highlightEnabled = false
+        chartDataSet.valueColors = [.clear]
+        chartDataSet.drawValuesEnabled = true
+        chartDataSet.drawIconsEnabled = true
         
-        for i in 1...adjustedData.count {
-            let x = (Double(i) * 50) // start
-            let valueText = Text(text: aqiBars[i-1].time, align: .max, baseline: .mid, place: .move(dx: x-8, dy: chartBaseY + 15))
-            valueText.fill = Color.gray
-            newNodes.append(valueText)
+        
+        let chartData = BarChartData(dataSet: chartDataSet)
+        chartData.barWidth = 0.4
+        
+        
+        self.doubleTapToZoomEnabled = false
+        self.data = chartData
+        self.rightAxis.enabled = false
+        self.leftAxis.enabled = false
+        
+        self.xAxis.labelPosition = .bottom
+        self.xAxis.valueFormatter = IndexAxisValueFormatter(values: category)
+        self.xAxis.labelFont = UIFont(name: "AppleSDGothicNeo-Regular", size: 12)!
+        self.xAxis.labelTextColor = UIColor.rgb(red: 102, green: 102, blue: 102)
+        self.xAxis.drawAxisLineEnabled = false
+        self.xAxis.drawGridLinesEnabled = false
+        
+        self.minOffset = 14
+        self.legend.enabled = false
+        self.drawValueAboveBarEnabled = true
+        
+        
+        for i in 0..<chartDataSet.count {
+            
+            
+            
+            let imgView = UIImageView(image: UIImage(named: "chartIndicator")!)
+            imgView.frame = CGRect(x: dataEntries[i].x, y: dataEntries[i].y, width: 25, height: 28)
+            self.addSubview(imgView)
         }
         
-        let xAxis = Line(x1: 0, y1: chartBaseY, x2: lineWidth, y2: chartBaseY).stroke(fill: Color.white.with(a: 0.25))
-        newNodes.append(xAxis)
-        
-        return newNodes
     }
     
-    private static func createBars() -> Group {
-        
-        let fill = LinearGradient(degree: 90, from: Color(val: 0xff4704), to: Color(val: 0xff4704).with(a: 0.33))
-        let items = adjustedData.map { _ in Group() }
-        
-        // each bar animations
-        animations = items.enumerated().map { (i:Int, item:Group) in // i : index
-            item.contentsVar.animation(delay: Double(i)*0.2) { t in // animation : left to right
-                let height = adjustedData[i]*t
-                let rect = Rect(x: Double(i)*50+20, y: 200-height, w: 20, h: height).round(rx: 7, ry: 7)
-                
-                return [rect.fill(with: fill)]
-            }
-        }
-        
-        return items.group()
-    }
     
-    // MARK : Animation Trigger
-    static func playAnimations(){
-        // reload aqi data
-        AqiChartView.aqiBars = createData()
-//        print(AqiChartView.aqiBars)
-        
-        animations.combine().play()
-    }
-        
-    // MARK : set Bar Data
-    static func createData() -> [AqiBar] {
-        
-        let aqi1 = AqiBar(time: "5시", aqiIndex: 45)
-        let aqi2 = AqiBar(time: "6시", aqiIndex: 30)
-        let aqi3 = AqiBar(time: "7시", aqiIndex: 20)
-        let aqi4 = AqiBar(time: "8시", aqiIndex: 10)
-        let aqi5 = AqiBar(time: "9시", aqiIndex: 30)
-        let aqi6 = AqiBar(time: "10시", aqiIndex: 50)
-        let aqi7 = AqiBar(time: "11시", aqiIndex: 40)
-        let aqi8 = AqiBar(time: "12시", aqiIndex: 70)
-        
-        return [aqi1, aqi2, aqi3, aqi4, aqi5, aqi6, aqi7, aqi8]
-    }
-
-}
-
-struct AqiBar {
-    var time: String
-    var aqiIndex: Double
+    
 }

@@ -33,3 +33,9 @@ public struct KnowingError: Error {
     var code: Int
     var msg: String
 }
+
+enum TextFieldState {
+    case signUp
+    case login
+    case search
+}

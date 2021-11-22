@@ -15,7 +15,8 @@ pod 'Then'
 pod 'lottie-ios'
 pod 'PanModal'
 pod 'BetterSegmentedControl', '~> 2.0'
-pod "Macaw", "~> 0.9.7"
+pod 'Charts'
+
 #Design Framework
 pod 'RxSwift'
 pod 'RxCocoa'

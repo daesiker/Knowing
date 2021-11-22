@@ -10,7 +10,107 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class HomeChartView: UIScrollView {
+class HomeChartView: UIView {
+    
+    let disposeBag = DisposeBag()
+    let cellID = "cellID"
+    let headerID = "headerID"
+    
+    let chartCV: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
+        return collectionView
+    }()
+    
+    let chartData = Observable<[String]>.of(["", "", "", "", "", ""])
+    let headerData = Observable<String>.of("")
+    
+    let testData = ["", "", "", "", "", ""]
+    
+    let imgView = UIImageView(image: UIImage(named: "chartView")!)
+    
+    let subScrollView = UIScrollView().then {
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.isScrollEnabled = true
+        $0.layoutIfNeeded()
+        $0.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
+    }
+    
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setCV()
+        addSubview(chartCV)
+        chartCV.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-91)
+        }
+        
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension HomeChartView {
+    
+    func setCV() {
+        chartCV.delegate = self
+        chartCV.dataSource = self
+        chartCV.register(PostCell.self, forCellWithReuseIdentifier: cellID)
+        chartCV.register(HomeChartHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerID)
+        
+    }
+}
+
+
+extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return testData.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! PostCell
+        cell.backgroundColor = .white
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: indexPath) as! HomeChartHeader
+        return header
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 17
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 17
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = frame.width - 40
+        return CGSize(width: width, height: 133)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let width = frame.width
+        return CGSize(width: width, height: 690)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 17, left: 20, bottom: 17, right: 20)
+    }
+}
+
+
+class HomeChartHeader: UICollectionViewCell {
     
     let disposeBag = DisposeBag()
     
@@ -60,6 +160,10 @@ class HomeChartView: UIScrollView {
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 17)
     }
     
+    let chartLayoutView = UIView().then {
+        $0.layer.cornerRadius = 30
+        $0.backgroundColor = .white
+    }
     let chartView = AqiChartView(frame: .zero)
     
     let cvTitle = UILabel().then {
@@ -82,14 +186,6 @@ class HomeChartView: UIScrollView {
         $0.setImage(UIImage(named: "filterImg")!, for: .normal)
     }
     
-    let subScrollView = UIScrollView().then {
-        $0.showsHorizontalScrollIndicator = false
-        $0.showsVerticalScrollIndicator = false
-        $0.isScrollEnabled = true
-        $0.layoutIfNeeded()
-        $0.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
-    }
-    
     let categoryCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
@@ -102,25 +198,16 @@ class HomeChartView: UIScrollView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        //setCV()
+        setCV()
         setUI()
-        
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-extension HomeChartView {
+    
     func setUI() {
-        showsHorizontalScrollIndicator = false
-        showsVerticalScrollIndicator = false
         backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
-        layoutSubviews()
-        
-        
         addSubview(imgView)
         imgView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
@@ -180,13 +267,21 @@ extension HomeChartView {
 
         }
         bringSubviewToFront(chartCount)
-
-        addSubview(chartView)
-        chartView.snp.makeConstraints {
+        
+        
+        addSubview(chartLayoutView)
+        chartLayoutView.snp.makeConstraints {
             $0.top.equalTo(chartTitleLb.snp.bottom).offset(22)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(246)
+        }
+        
+        chartLayoutView.addSubview(chartView)
+        chartView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-14)
+            $0.top.equalToSuperview().offset(13)
         }
 
         addSubview(cvUnderLine)
@@ -214,60 +309,48 @@ extension HomeChartView {
             $0.top.equalTo(chartView.snp.bottom).offset(41)
             $0.trailing.equalTo(sortBt.snp.leading)
         }
-
-        contentSize = CGSize(width: HomeCategoryCell.fittingWidth(name: self.categoryDomy) + 40, height: 33)
-        addSubview(subScrollView)
-        subScrollView.snp.makeConstraints {
-            $0.top.equalTo(imgView.snp.bottom).offset(23)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(33)
-        }
-
-        subScrollView.addSubview(categoryCV)
+        
+        addSubview(categoryCV)
         categoryCV.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(cvTitle.snp.bottom).offset(23)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(35)
         }
-        
-        
-        
     }
     
     func setCV() {
-        categoryCV.dataSource = nil
         categoryCV.delegate = nil
-        categoryCV.register(HomeCategoryCell.self, forCellWithReuseIdentifier: "categoryCell")
+        categoryCV.dataSource = nil
+        categoryCV.register(HomeCategoryCell.self, forCellWithReuseIdentifier: "cellId")
         categoryCV.rx.setDelegate(self).disposed(by: disposeBag)
-        
         categoryData
-            .bind(to: categoryCV.rx.items(cellIdentifier: "categoryCell", cellType: HomeCategoryCell.self)) {row, element, cell in
-                cell.titleLabel.text = element
-            }.disposed(by: disposeBag)
-        
+            .bind(to: categoryCV.rx.items(cellIdentifier: "cellId", cellType: HomeCategoryCell.self)) { indexPath, title, cell in
+                cell.configure(name: title)
+        }.disposed(by: disposeBag)
     }
+    
 }
 
-extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension HomeChartHeader: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return HomeCategoryCell.fittingSize(availableHeight: 33, name: categoryDomy[indexPath.item])
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 10
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return HomeCategoryCell.fittingSize(availableHeight: 33, name: categoryDomy[indexPath.item])
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+    }
     
 }
+
 
 final class HomeCategoryCell: UICollectionViewCell {
     
@@ -279,20 +362,6 @@ final class HomeCategoryCell: UICollectionViewCell {
         return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .required)
     }
     
-    static func fittingWidth(name: [String]) -> CGFloat {
-        
-        var totalWidth:CGFloat = 0
-        
-        for i in name {
-            let cell = HomeCategoryCell()
-            cell.configure(name: i)
-            let cellWidth = UIView.layoutFittingCompressedSize.width
-            totalWidth += cellWidth
-        }
-        
-        return totalWidth
-        
-    }
     
     let titleLabel: UILabel = UILabel()
     

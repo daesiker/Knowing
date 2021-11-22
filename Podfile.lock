@@ -6,6 +6,9 @@ PODS:
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
   - BetterSegmentedControl (2.0.1)
+  - Charts (3.6.0):
+    - Charts/Core (= 3.6.0)
+  - Charts/Core (3.6.0)
   - Differentiator (5.0.0)
   - Firebase/Analytics (8.4.0):
     - Firebase/Core
@@ -120,8 +123,6 @@ PODS:
   - KakaoSDKUser (2.8.1):
     - KakaoSDKAuth (= 2.8.1)
   - lottie-ios (3.2.3)
-  - Macaw (0.9.9):
-    - SWXMLHash
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -142,12 +143,12 @@ PODS:
   - RxSwift (6.2.0)
   - SnapKit (5.0.1)
   - SwiftyJSON (4.3.0)
-  - SWXMLHash (6.0.0)
   - Then (2.7.0)
 
 DEPENDENCIES:
   - Alamofire (~> 5.4)
   - BetterSegmentedControl (~> 2.0)
+  - Charts
   - Firebase/Analytics (~> 8.4.0)
   - Firebase/Auth (~> 8.4.0)
   - Firebase/Core (~> 8.4.0)
@@ -157,7 +158,6 @@ DEPENDENCIES:
   - KakaoSDKCommon
   - KakaoSDKUser
   - lottie-ios
-  - Macaw (~> 0.9.7)
   - naveridlogin-sdk-ios
   - PanModal
   - RxCocoa
@@ -172,6 +172,7 @@ SPEC REPOS:
     - Alamofire
     - AppAuth
     - BetterSegmentedControl
+    - Charts
     - Differentiator
     - Firebase
     - FirebaseAnalytics
@@ -190,7 +191,6 @@ SPEC REPOS:
     - KakaoSDKCommon
     - KakaoSDKUser
     - lottie-ios
-    - Macaw
     - nanopb
     - naveridlogin-sdk-ios
     - PanModal
@@ -201,13 +201,13 @@ SPEC REPOS:
     - RxSwift
     - SnapKit
     - SwiftyJSON
-    - SWXMLHash
     - Then
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BetterSegmentedControl: 09607b27861d49cbce48b7673b74f9150a3d371a
+  Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   Firebase: 54cdc8bc9c9b3de54f43dab86e62f5a76b47034f
   FirebaseAnalytics: 4751d6a49598a2b58da678cc07df696bcd809ab9
@@ -226,7 +226,6 @@ SPEC CHECKSUMS:
   KakaoSDKCommon: 701ef2a9b92215a4bf131b2a6139c3586b5e8d99
   KakaoSDKUser: c4bdbca17b05ce7a25c67176ac68b6b0c8b1db56
   lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
-  Macaw: d683339ff44d49c16776ec2bde7aecfd4ba2a3a4
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   naveridlogin-sdk-ios: b9d7c20677981177ed994ecb1c8c2b49f223277d
   PanModal: 3e16ead1a907fb06f4df3f13492fd00149fa4974
@@ -237,9 +236,8 @@ SPEC CHECKSUMS:
   RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
-  SWXMLHash: 9d851ed3edf48ec2bd0db98f0cda0ad4136d75e3
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: 88c4838392b7d660d4f834622ee6a6cbdecc2483
+PODFILE CHECKSUM: 1d45a858ffb9b57f108704b7f968d5c69bdaa0e2
 
 COCOAPODS: 1.10.1
