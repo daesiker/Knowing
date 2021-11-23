@@ -37,7 +37,8 @@ class AqiChartView: BarChartView {
         let chartDataSet = BarChartDataSet(entries: dataEntries)
         chartDataSet.colors = [ UIColor.rgb(red: 255, green: 228, blue: 182), UIColor.rgb(red: 255, green: 176, blue: 128), UIColor.rgb(red: 255, green: 176, blue: 97), UIColor.rgb(red: 255, green: 142, blue: 59), UIColor.rgb(red: 255, green: 136, blue: 84), UIColor.rgb(red: 210, green: 132, blue: 81)]
         chartDataSet.highlightEnabled = false
-        chartDataSet.valueColors = [.clear]
+        //chartDataSet.valueColors = [.clear]
+        
         chartDataSet.drawValuesEnabled = true
         chartDataSet.drawIconsEnabled = true
         
@@ -63,12 +64,13 @@ class AqiChartView: BarChartView {
         self.drawValueAboveBarEnabled = true
         
         
+        
         for i in 0..<chartDataSet.count {
             
-            
+            let position = self.getPosition(entry: dataEntries[i], axis: .left)
             
             let imgView = UIImageView(image: UIImage(named: "chartIndicator")!)
-            imgView.frame = CGRect(x: dataEntries[i].x, y: dataEntries[i].y, width: 25, height: 28)
+            imgView.frame = CGRect(x: position.x, y: position.y, width: 25, height: 28)
             self.addSubview(imgView)
         }
         

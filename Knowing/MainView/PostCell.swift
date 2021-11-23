@@ -7,8 +7,11 @@
 
 import Foundation
 import UIKit
+import SwipeCellKit
 
-class PostCell: UICollectionViewCell {
+class PostCell: SwipeCollectionViewCell {
+    
+    
     
     let imgView = UIImageView()
     
@@ -68,46 +71,46 @@ class PostCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        backgroundColor = .white
+        backgroundColor = .clear
         
-        addSubview(imgView)
+        contentView.addSubview(imgView)
         imgView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(18)
             $0.leading.equalToSuperview().offset(19)
         }
         
-        addSubview(subjectiveLb)
+        contentView.addSubview(subjectiveLb)
         subjectiveLb.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
             $0.leading.equalTo(imgView.snp.trailing).offset(7)
         }
         
-        addSubview(mainLb)
+        contentView.addSubview(mainLb)
         mainLb.snp.makeConstraints {
             $0.top.equalTo(subjectiveLb.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(19)
             $0.trailing.equalToSuperview().offset(-19)
         }
         
-        addSubview(maxLb)
+        contentView.addSubview(maxLb)
         maxLb.snp.makeConstraints {
             $0.top.equalTo(mainLb.snp.bottom).offset(5)
             $0.leading.equalToSuperview().offset(19)
         }
         
-        addSubview(minLb)
+        contentView.addSubview(minLb)
         minLb.snp.makeConstraints {
             $0.bottom.equalTo(maxLb.snp.bottom)
             $0.leading.equalTo(maxLb.snp.trailing).offset(10)
         }
         
-        addSubview(dayLb)
+        contentView.addSubview(dayLb)
         dayLb.snp.makeConstraints {
             $0.top.equalTo(maxLb.snp.bottom).offset(6)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        addSubview(separator)
+        contentView.addSubview(separator)
         separator.snp.makeConstraints {
             $0.top.equalTo(maxLb.snp.bottom).offset(10)
             $0.leading.equalTo(dayLb.snp.trailing).offset(8)
@@ -115,7 +118,7 @@ class PostCell: UICollectionViewCell {
             $0.height.equalTo(9)
         }
         
-        addSubview(dDayLb)
+        contentView.addSubview(dDayLb)
         dDayLb.snp.makeConstraints {
             $0.bottom.equalTo(dayLb.snp.bottom)
             $0.leading.equalTo(separator.snp.trailing).offset(8)

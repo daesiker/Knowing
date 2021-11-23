@@ -14,7 +14,7 @@ class MainTabViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
+        view.backgroundColor = .clear
         setupTabBarUI()
         addCustomTabBarView()
         setupViewControllers()
@@ -44,18 +44,11 @@ class MainTabViewController: UITabBarController {
     func setupViewControllers() {
         let homeViewController = templateNavController(unselectedImage: UIImage(named: "home_unselected"), selectedImage: UIImage(named: "home_selected"), title: "홈", rootViewController: HomeViewController())
         let notificationViewController = templateNavController(unselectedImage: UIImage(named: "alarm_unselected"), selectedImage: UIImage(named: "alarm_selected"), title: "알림 내역", rootViewController: NotificationViewController())
-        let bookMarkViewController = templateNavController(unselectedImage: UIImage(named: "bookmark_unselected"), selectedImage: UIImage(named: "bookmark_unselected"), title: "북마크", rootViewController: BookMarkViewController())
+        let bookMarkViewController = templateNavController(unselectedImage: UIImage(named: "bookmark_unselected"), selectedImage: UIImage(named: "bookmark_selected"), title: "북마크", rootViewController: BookMarkViewController())
         let myPageViewController = templateNavController(unselectedImage: UIImage(named: "mypage_unselected"), selectedImage: UIImage(named: "mypage_selected"), title: "마이페이지", rootViewController: MyPageViewController())
         
         viewControllers = [homeViewController, notificationViewController, bookMarkViewController, myPageViewController]
         
-        
-        
-        if let items = tabBar.items {
-            for item in items {
-                item.imageInsets = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0)
-            }
-        }
         
     }
     
@@ -85,8 +78,8 @@ class MainTabViewController: UITabBarController {
             self.tabBar.tintColor = UIColor.rgb(red: 204, green: 108, blue: 45)
             self.tabBar.unselectedItemTintColor = UIColor.rgb(red: 205, green: 153, blue: 117)
             self.tabBar.itemSpacing = 34
-            
-            
+            self.tabBar.largeContentImageInsets = UIEdgeInsets(top: 4, left: 33, bottom: 35, right: 33)
+        
         }
         
         private func addCustomTabBarView() {
@@ -96,7 +89,6 @@ class MainTabViewController: UITabBarController {
             self.customTabBarView.backgroundColor = UIColor.rgb(red: 250, green: 239, blue: 221)
             self.customTabBarView.layer.cornerRadius = 30
             self.customTabBarView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            
             self.customTabBarView.layer.borderWidth = 1.0
             self.customTabBarView.layer.borderColor = CGColor.init(red: 233 / 255, green: 206 / 255, blue: 181 / 255, alpha: 1.0)
             self.view.addSubview(customTabBarView)
@@ -117,6 +109,9 @@ class MainTabViewController: UITabBarController {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        
+        
+        
         return true
     }
     

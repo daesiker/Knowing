@@ -10,13 +10,15 @@ import Foundation
 import Then
 import RxCocoa
 import RxSwift
+import SwipeCellKit
 
 class BookMarkViewController: UIViewController {
 
     let disposeBag = DisposeBag()
     
     let searchBar = CustomTextField(image: UIImage(named: "search")!, text: "검색", state: .search)
-    
+    var defaultOptions = SwipeOptions()
+    var buttonStyle: ButtonStyle = .circular
     
     let countLb = UILabel().then {
         $0.text = "총 68건"
@@ -106,6 +108,7 @@ extension BookMarkViewController {
         
     }
     
+    
     func setCV() {
         bookmarkCV.dataSource = nil
         bookmarkCV.delegate = nil
@@ -114,7 +117,9 @@ extension BookMarkViewController {
         
         bookmarkData
             .bind(to: bookmarkCV.rx.items(cellIdentifier: "cellId", cellType: PostCell.self)) { row, element, cell in
-                cell.backgroundColor = UIColor.rgb(red: 255, green: 246, blue: 232)
+                cell.contentView.layer.cornerRadius = 30
+                cell.contentView.backgroundColor = UIColor.rgb(red: 255, green: 246, blue: 232)
+                cell.delegate = self
             }.disposed(by: disposeBag)
         
     }
@@ -140,5 +145,37 @@ extension BookMarkViewController: UICollectionViewDelegate, UICollectionViewDele
         let width = view.frame.width - 40
         return CGSize(width: width, height: 133)
     }
+    
+}
+
+extension BookMarkViewController: SwipeCollectionViewCellDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        
+        guard orientation == .right else { return nil }
+        
+        let delete = SwipeAction(style: .default, title: "삭제") { action, indexPath in
+            print("swife")
+        }
+        
+        delete.backgroundColor = UIColor.rgb(red: 255, green: 152, blue: 87)
+        delete.image = UIImage(named: "trash")!
+        
+        delete.transitionDelegate = ScaleTransition.default
+       
+        
+        
+        return [delete]
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        
+        options.buttonSpacing = 7
+        
+        
+        return options
+    }
+    
     
 }

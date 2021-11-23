@@ -16,7 +16,7 @@ pod 'lottie-ios'
 pod 'PanModal'
 pod 'BetterSegmentedControl', '~> 2.0'
 pod 'Charts'
-
+pod 'SwipeCellKit'
 #Design Framework
 pod 'RxSwift'
 pod 'RxCocoa'

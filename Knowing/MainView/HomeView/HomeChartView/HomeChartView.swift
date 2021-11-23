@@ -18,6 +18,7 @@ class HomeChartView: UIView {
     
     let chartCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
+        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
         return collectionView
@@ -188,6 +189,7 @@ class HomeChartHeader: UICollectionViewCell {
     
     let categoryCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = UICollectionView.ScrollDirection.horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
         return collectionView

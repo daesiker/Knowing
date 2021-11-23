@@ -28,6 +28,7 @@
 		BF5C9BC02742A53C00005AC7 /* ApiSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C9BBF2742A53C00005AC7 /* ApiSignUpViewModel.swift */; };
 		BF6086A32740ABB900D63BF6 /* AgreeTermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */; };
 		BF6086A52740B3D100D63BF6 /* AgreeTermsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6086A42740B3D100D63BF6 /* AgreeTermsViewModel.swift */; };
+		BF768BCC274CD4390050C0EF /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF768BCB274CD4390050C0EF /* Post.swift */; };
 		BF8379372729208900584E33 /* HomeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8379362729208900584E33 /* HomeChartView.swift */; };
 		BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8379392729238300584E33 /* HomeCalendarVIew.swift */; };
 		BF83793D272924B100584E33 /* HomeAllPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF83793C272924B100584E33 /* HomeAllPostView.swift */; };
@@ -93,6 +94,7 @@
 		BF5C9BBF2742A53C00005AC7 /* ApiSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiSignUpViewModel.swift; sourceTree = "<group>"; };
 		BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreeTermsViewController.swift; sourceTree = "<group>"; };
 		BF6086A42740B3D100D63BF6 /* AgreeTermsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreeTermsViewModel.swift; sourceTree = "<group>"; };
+		BF768BCB274CD4390050C0EF /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		BF8379362729208900584E33 /* HomeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChartView.swift; sourceTree = "<group>"; };
 		BF8379392729238300584E33 /* HomeCalendarVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarVIew.swift; sourceTree = "<group>"; };
 		BF83793C272924B100584E33 /* HomeAllPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAllPostView.swift; sourceTree = "<group>"; };
@@ -396,6 +398,7 @@
 			children = (
 				BFC38CF227365AE400F94876 /* User.swift */,
 				BFA4689D27463BA50056224A /* School.swift */,
+				BF768BCB274CD4390050C0EF /* Post.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -585,6 +588,7 @@
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
 				BFFB7E97274A7EC7008FDF6A /* PostCell.swift in Sources */,
 				BFC74512273A0ADE00090BCB /* AddPostCategoryViewController.swift in Sources */,
+				BF768BCC274CD4390050C0EF /* Post.swift in Sources */,
 				BF151BAB273246790065E766 /* StepFourView.swift in Sources */,
 				BF8379372729208900584E33 /* HomeChartView.swift in Sources */,
 				BFA07970271FD2F800912C18 /* MainTabViewController.swift in Sources */,

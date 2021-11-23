@@ -14,6 +14,8 @@ import BetterSegmentedControl
 
 class HomeViewController: UIViewController  {
     
+    var goToAllView = false
+    
     var disposedBag = DisposeBag()
     
     let homeScrollView = UIScrollView().then {
@@ -97,6 +99,7 @@ extension HomeViewController {
         case 2:
             let contentOffset = CGPoint(x: view.frame.width * 2, y: 0)
             homeScrollView.setContentOffset(contentOffset, animated: true)
+            goToAllView = true
         default:
             return
         }
