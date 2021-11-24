@@ -13,7 +13,7 @@ class PostCell: SwipeCollectionViewCell {
     
     
     
-    let imgView = UIImageView()
+    let imgView = UIImageView(image: UIImage(named: "seoul")!)
     
     let subjectiveLb = UILabel().then {
         $0.text = "서울시"

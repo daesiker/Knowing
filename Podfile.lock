@@ -67,6 +67,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Reachability (~> 7.4)
     - GoogleUtilities/UserDefaults (~> 7.4)
+  - FSCalendar (2.8.2)
   - GoogleAppMeasurement (8.4.0):
     - GoogleAppMeasurement/AdIdSupport (= 8.4.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
@@ -154,6 +155,7 @@ DEPENDENCIES:
   - Firebase/Auth (~> 8.4.0)
   - Firebase/Core (~> 8.4.0)
   - Firebase/Messaging (~> 8.4.0)
+  - FSCalendar
   - GoogleSignIn (~> 6.0.2)
   - KakaoSDKAuth
   - KakaoSDKCommon
@@ -183,6 +185,7 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseInstallations
     - FirebaseMessaging
+    - FSCalendar
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleSignIn
@@ -219,6 +222,7 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: cad03be1904b975f845e632f2720c3337da27faf
   FirebaseInstallations: 1585729afc787877763208c2088ed84221161f77
   FirebaseMessaging: 78025c56654f05c7ebd6f7f87f9d4b12c5231207
+  FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
   GoogleAppMeasurement: 6b6a08fd9c71f4dbc89e0e812acca81d797aa342
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleSignIn: fd381840dbe7c1137aa6dc30849a5c3e070c034a
@@ -242,6 +246,6 @@ SPEC CHECKSUMS:
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: be8db096a6a9c3aa049289d44c67664e0234d02b
+PODFILE CHECKSUM: cecec98c118bdf8c2dc751f45755fa1ae6d2b50e
 
 COCOAPODS: 1.10.1

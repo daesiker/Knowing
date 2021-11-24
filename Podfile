@@ -17,6 +17,7 @@ pod 'PanModal'
 pod 'BetterSegmentedControl', '~> 2.0'
 pod 'Charts'
 pod 'SwipeCellKit'
+pod 'FSCalendar'
 #Design Framework
 pod 'RxSwift'
 pod 'RxCocoa'

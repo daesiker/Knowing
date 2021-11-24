@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxDataSources
 
 struct Post: Codable {
     var uid:String = ""
@@ -31,4 +32,23 @@ struct Post: Codable {
     var url:String = ""
     var document:String = ""
     var manageOffice:String = ""
+}
+
+struct PostSectionModel {
+    
+    var header: [Post]
+    var items: [Post]
+    
+    init() {
+        self.header = []
+        self.items = []
+    }
+    
+}
+
+extension PostSectionModel: SectionModelType {
+    init(original: PostSectionModel, items: [Post]) {
+        self = original
+        self.items = items
+    }
 }

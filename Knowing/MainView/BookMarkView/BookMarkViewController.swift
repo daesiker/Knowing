@@ -160,6 +160,7 @@ extension BookMarkViewController: SwipeCollectionViewCellDelegate {
         
         delete.backgroundColor = UIColor.rgb(red: 255, green: 152, blue: 87)
         delete.image = UIImage(named: "trash")!
+        delete.accessibilityContainerType = .none
         
         delete.transitionDelegate = ScaleTransition.default
        

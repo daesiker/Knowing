@@ -31,15 +31,6 @@ class HomeChartView: UIView {
     
     let imgView = UIImageView(image: UIImage(named: "chartView")!)
     
-    let subScrollView = UIScrollView().then {
-        $0.showsHorizontalScrollIndicator = false
-        $0.showsVerticalScrollIndicator = false
-        $0.isScrollEnabled = true
-        $0.layoutIfNeeded()
-        $0.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
-    }
-    
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -65,6 +56,7 @@ extension HomeChartView {
         chartCV.dataSource = self
         chartCV.register(PostCell.self, forCellWithReuseIdentifier: cellID)
         chartCV.register(HomeChartHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerID)
+    
         
     }
 }
@@ -84,6 +76,8 @@ extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowL
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: indexPath) as! HomeChartHeader
+        
+        
         return header
     }
     
@@ -202,6 +196,7 @@ class HomeChartHeader: UICollectionViewCell {
         super.init(frame: frame)
         setCV()
         setUI()
+        
     }
     
     required init?(coder: NSCoder) {

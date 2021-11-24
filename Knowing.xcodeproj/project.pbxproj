@@ -19,6 +19,8 @@
 		BF2E058527226070008CA167 /* CustomComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058427226070008CA167 /* CustomComponent.swift */; };
 		BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */; };
 		BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058827229C30008CA167 /* LoadingViewController.swift */; };
+		BF368C46274E14110035DA50 /* AppleSDGothicNeoEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF368C45274E14110035DA50 /* AppleSDGothicNeoEB.ttf */; };
+		BF368C48274E298F0035DA50 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF368C47274E298F0035DA50 /* HomeViewModel.swift */; };
 		BF5351CB2733C2230040ECFE /* ExtraSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5351CA2733C2230040ECFE /* ExtraSignUpViewModel.swift */; };
 		BF5A2B8A272A67E200234429 /* GodoM.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B88272A5D4F00234429 /* GodoM.ttf */; };
 		BF5A2B8B272A67E500234429 /* GodoB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B89272A62D500234429 /* GodoB.ttf */; };
@@ -85,6 +87,8 @@
 		BF2E058427226070008CA167 /* CustomComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponent.swift; sourceTree = "<group>"; };
 		BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_ng9j9lpx_1.json; sourceTree = "<group>"; };
 		BF2E058827229C30008CA167 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		BF368C45274E14110035DA50 /* AppleSDGothicNeoEB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleSDGothicNeoEB.ttf; sourceTree = "<group>"; };
+		BF368C47274E298F0035DA50 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		BF5351CA2733C2230040ECFE /* ExtraSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraSignUpViewModel.swift; sourceTree = "<group>"; };
 		BF5A2B88272A5D4F00234429 /* GodoM.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoM.ttf; sourceTree = "<group>"; };
 		BF5A2B89272A62D500234429 /* GodoB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoB.ttf; sourceTree = "<group>"; };
@@ -192,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				BF5A2B88272A5D4F00234429 /* GodoM.ttf */,
+				BF368C45274E14110035DA50 /* AppleSDGothicNeoEB.ttf */,
 				BF5A2B89272A62D500234429 /* GodoB.ttf */,
 			);
 			path = Font;
@@ -389,6 +394,7 @@
 				BF837938272921D400584E33 /* HomeCalendarVIew */,
 				BF8379352729206C00584E33 /* HomeChartView */,
 				BFA07975271FD47F00912C18 /* HomeViewController.swift */,
+				BF368C47274E298F0035DA50 /* HomeViewModel.swift */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -514,6 +520,7 @@
 				BF8D62732718FF53006D7227 /* Assets.xcassets in Resources */,
 				BF8D62712718FF51006D7227 /* Main.storyboard in Resources */,
 				BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */,
+				BF368C46274E14110035DA50 /* AppleSDGothicNeoEB.ttf in Resources */,
 				BF8A9A0F273B927000DA4DE4 /* lf20_rjrqsjob.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -614,6 +621,7 @@
 				BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */,
 				BF8A9A11273B929F00DA4DE4 /* FindPasswordViewController.swift in Sources */,
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,
+				BF368C48274E298F0035DA50 /* HomeViewModel.swift in Sources */,
 				BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */,
 				BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */,
 				BF2E058327225D7E008CA167 /* GuideViewController.swift in Sources */,
