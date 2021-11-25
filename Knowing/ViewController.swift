@@ -20,18 +20,18 @@ class ViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let vc = MainTabViewController()
-            let nav = UINavigationController(rootViewController: vc)
-            nav.navigationController?.isNavigationBarHidden = true
-            nav.modalTransitionStyle = .crossDissolve
-            nav.modalPresentationStyle = .fullScreen
-            self.present(nav, animated: true)
+//            let vc = MainTabViewController()
+//            let nav = UINavigationController(rootViewController: vc)
+//            nav.navigationController?.isNavigationBarHidden = true
+//            nav.modalTransitionStyle = .crossDissolve
+//            nav.modalPresentationStyle = .fullScreen
+//            self.present(nav, animated: true)
              
             
-//            let viewController = LoginViewController()
-//            viewController.modalTransitionStyle = .crossDissolve
-//            viewController.modalPresentationStyle = .fullScreen
-//            self.present(viewController, animated: true)
+            let viewController = PostDetailViewController()
+            viewController.modalTransitionStyle = .crossDissolve
+            viewController.modalPresentationStyle = .fullScreen
+            self.present(viewController, animated: true)
         }
     }
     
