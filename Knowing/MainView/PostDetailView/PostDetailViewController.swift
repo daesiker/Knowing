@@ -13,8 +13,12 @@ import RxSwift
 class PostDetailViewController: UIViewController {
     
     let disposeBag = DisposeBag()
+    let vm = PostDetailViewModel()
     
-    let scrollView = UIScrollView(frame: .zero).then {
+    
+
+    lazy var scrollView = UIScrollView(frame: .zero).then {
+        $0.delegate = self
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = true
@@ -22,6 +26,8 @@ class PostDetailViewController: UIViewController {
         $0.backgroundColor = .white
         
     }
+    
+    let stickyView = UIView()
     
     let backBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
@@ -346,69 +352,76 @@ extension PostDetailViewController {
             $0.edges.equalToSuperview()
         }
         
-        scrollView.addSubview(backBt)
+        scrollView.addSubview(stickyView)
+        stickyView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview()
+            $0.trailing.equalTo(safeArea.snp.trailing)
+            $0.height.equalTo(416)
+        }
+        
+        stickyView.addSubview(backBt)
         backBt.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        scrollView.addSubview(shareBt)
+        stickyView.addSubview(shareBt)
         shareBt.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
         }
         
-        scrollView.addSubview(bookmarkBt)
+        stickyView.addSubview(bookmarkBt)
         bookmarkBt.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.trailing.equalTo(shareBt.snp.leading).offset(-10)
         }
         
-        scrollView.addSubview(alarmBt)
+        stickyView.addSubview(alarmBt)
         alarmBt.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.trailing.equalTo(bookmarkBt.snp.leading).offset(-10)
         }
         
-        scrollView.addSubview(logoImg)
+        stickyView.addSubview(logoImg)
         logoImg.snp.makeConstraints {
             $0.top.equalTo(backBt.snp.bottom).offset(25)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        scrollView.addSubview(nameLb)
+        stickyView.addSubview(nameLb)
         nameLb.snp.makeConstraints {
             $0.top.equalTo(backBt.snp.bottom).offset(27)
             $0.leading.equalTo(logoImg.snp.trailing).offset(13)
         }
         
-        scrollView.addSubview(titleLb)
+        stickyView.addSubview(titleLb)
         titleLb.snp.makeConstraints {
             $0.top.equalTo(nameLb.snp.bottom).offset(22)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-19)
         }
         
-        scrollView.addSubview(detailLb)
+        stickyView.addSubview(detailLb)
         detailLb.snp.makeConstraints {
             $0.top.equalTo(titleLb.snp.bottom).offset(12)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
         }
         
-        scrollView.addSubview(largeCategoryLb)
+        stickyView.addSubview(largeCategoryLb)
         largeCategoryLb.snp.makeConstraints {
             $0.top.equalTo(detailLb.snp.bottom).offset(26)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        scrollView.addSubview(smallCategoryLb)
+        stickyView.addSubview(smallCategoryLb)
         smallCategoryLb.snp.makeConstraints {
             $0.top.equalTo(detailLb.snp.bottom).offset(26)
             $0.leading.equalTo(largeCategoryLb.snp.trailing).offset(8)
         }
         
-        scrollView.addSubview(mainStackView)
+        stickyView.addSubview(mainStackView)
         mainStackView.snp.makeConstraints {
             $0.top.equalTo(largeCategoryLb.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
@@ -452,7 +465,7 @@ extension PostDetailViewController {
             $0.centerX.equalTo(peopleTitle.snp.centerX)
         }
         
-        scrollView.addSubview(separatorOne)
+        stickyView.addSubview(separatorOne)
         separatorOne.snp.makeConstraints {
             $0.leading.equalToSuperview()
             $0.trailing.equalTo(safeArea.snp.trailing)
@@ -460,7 +473,7 @@ extension PostDetailViewController {
             $0.height.equalTo(6)
         }
         
-        scrollView.addSubview(scrollOffsetView)
+        stickyView.addSubview(scrollOffsetView)
         scrollOffsetView.snp.makeConstraints {
             $0.top.equalTo(separatorOne.snp.bottom)
             $0.leading.equalToSuperview()
@@ -512,7 +525,7 @@ extension PostDetailViewController {
         maxTitleLb.snp.makeConstraints {
             $0.top.equalTo(howMuchTitle.snp.bottom).offset(27)
             $0.leading.equalToSuperview().offset(20)
-           
+            
         }
         
         scrollView.addSubview(maxMoneyLb)
@@ -925,16 +938,85 @@ extension PostDetailViewController {
     }
     
     func bindInput() {
-        //contentsBt conditionBt methodBt etcBt
+        
+        contentsBt.rx.tap
+            .bind(to: vm.input.contentsObserver)
+            .disposed(by: disposeBag)
+        
+        conditionBt.rx.tap
+            .bind(to: vm.input.conditionObserver)
+            .disposed(by: disposeBag)
+        
+        methodBt.rx.tap
+            .bind(to: vm.input.methodObserver)
+            .disposed(by: disposeBag)
+        
+        etcBt.rx.tap
+            .bind(to: vm.input.etcObserver)
+            .disposed(by: disposeBag)
+        
     }
     
     func bindOutput() {
+        vm.output.contentsValue.drive(onNext: { value in
+            self.contentsBt.selected(value[0])
+            self.conditionBt.selected(value[1])
+            self.methodBt.selected(value[2])
+            self.etcBt.selected(value[3])
+            
+            self.scrollView.setContentOffset(CGPoint(x: self.separatorTwo.frame.origin.x, y: self.separatorTwo.frame.origin.y), animated: true)
+            
+        }).disposed(by: disposeBag)
+        
+        vm.output.conditionValue.drive(onNext: { value in
+            self.contentsBt.selected(value[0])
+            self.conditionBt.selected(value[1])
+            self.methodBt.selected(value[2])
+            self.etcBt.selected(value[3])
+            self.scrollView.setContentOffset(CGPoint(x: self.separatorThree.frame.origin.x, y: self.separatorThree.frame.origin.y), animated: true)
+        }).disposed(by: disposeBag)
+        
+        vm.output.methodValue.drive(onNext: { value in
+            self.contentsBt.selected(value[0])
+            self.conditionBt.selected(value[1])
+            self.methodBt.selected(value[2])
+            self.etcBt.selected(value[3])
+            self.scrollView.setContentOffset(CGPoint(x: self.separatorSix.frame.origin.x, y: self.separatorSix.frame.origin.y), animated: true)
+        }).disposed(by: disposeBag)
+        
+        vm.output.etcValue.drive(onNext: { value in
+            self.contentsBt.selected(value[0])
+            self.conditionBt.selected(value[1])
+            self.methodBt.selected(value[2])
+            self.etcBt.selected(value[3])
+            self.scrollView.setContentOffset(CGPoint(x: self.separatorTen.frame.origin.x, y: self.separatorTen.frame.origin.y), animated: true)
+        }).disposed(by: disposeBag)
         
     }
+    
+    
 }
 
+extension PostDetailViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        
+        
+        let maxTopHeigt:CGFloat = 416
+        let minTopHeight: CGFloat = 59
+        
+       
+        
+        
+        
+    }
+    
+}
 
 class ScrollButton: UIButton {
+    
+    var isSelect = false
     
     let label = UILabel().then {
         $0.text = ""
@@ -964,6 +1046,7 @@ class ScrollButton: UIButton {
     }
     
     func selected(_ isSelect: Bool) {
+        self.isSelect = isSelect
         if isSelect {
             label.textColor = UIColor.rgb(red: 255, green: 124, blue: 66)
             border.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
@@ -990,7 +1073,7 @@ class ScrollButton: UIButton {
     convenience init(_ text: String, isInit:Bool = false) {
         self.init()
         label.text = text
-        
+        isSelect = isInit
         if isInit {
             label.textColor = UIColor.rgb(red: 255, green: 124, blue: 66)
             border.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
