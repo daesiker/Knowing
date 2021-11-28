@@ -375,11 +375,11 @@ extension ExtraSignUpViewModel {
         
         stepThree.input.recordsObserver
             .subscribe(onNext: { value in
-                self.user.schollRecords = value
+                self.user.schoolRecords = value
             }).disposed(by: disposeBag)
         
         stepThree.output.buttonValid = stepThree.input.recordsObserver.map { _ in
-            self.user.schollRecords.count != 0
+            self.user.schoolRecords.count != 0
         }.asDriver(onErrorJustReturn: false)
     }
     

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 struct User: Codable {
     //default
@@ -27,7 +28,7 @@ struct User: Codable {
     var employmentState:[String] = []
     
     //step3
-    var schollRecords:String = ""
+    var schoolRecords:String = ""
     var school: String = ""
     
     //step4
@@ -49,8 +50,58 @@ struct User: Codable {
    
     var bookmark:[String] = []
     var provider:String = ""
-    var fcmToken:String = ""
+    var FCMTOKEN:String = ""
     
+    init() {
+        
+    }
+    
+    init(json: [String:JSON]) {
+        //default
+        self.name = json["name"]!.stringValue
+        self.email = json["email"]!.stringValue
+        self.pwd = json["pwd"]!.stringValue
+        self.gender = json["gender"]!.stringValue
+        self.birth = json["birth"]!.intValue
+        self.phNum = json["phNum"]!.stringValue
+        
+        //step1
+        self.address = json["address"]!.stringValue
+        self.addressDetail = json["addressDetail"]!.stringValue
+        self.specialStatus = json["specialStatus"]!.arrayValue.map { $0.stringValue }
+        
+        //step2
+        self.incomeLevel = json["incomeLevel"]!.stringValue
+        self.incomeAvg = json["incomeAvg"]!.stringValue
+        self.employmentState = json["employmentState"]!.arrayValue.map { $0.stringValue }
+        
+        //step3
+        self.schoolRecords = json["schoolRecords"]!.stringValue
+        self.school = json["school"]!.stringValue
+        
+        //step4
+        self.mainMajor = json["mainMajor"]!.stringValue
+        self.subMajor = json["subMajor"]!.stringValue
+        
+        //step5
+        self.semester = json["semester"]!.stringValue
+        //var addSemester:Bool = false
+        self.lastSemesterScore = json["lastSemesterScore"]!.stringValue
+        
+        //category
+        self.studentCategory = json["studentCategory"]!.arrayValue.map { $0.stringValue }
+        self.empolyCategory = json["empolyCategory"]!.arrayValue.map { $0.stringValue }
+        self.foundationCategory = json["foundationCategory"]!.arrayValue.map { $0.stringValue }
+        self.residentCategory = json["residentCategory"]!.arrayValue.map { $0.stringValue }
+        self.lifeCategory = json["lifeCategory"]!.arrayValue.map { $0.stringValue }
+        self.covidCategory = json["covidCategory"]!.arrayValue.map { $0.stringValue }
+       
+        self.bookmark = json["bookmark"]!.arrayValue.map { $0.stringValue }
+        self.provider = json["provider"]!.stringValue
+        //self.FCMTOKEN = json["FCMTOKEN"]!.stringValue
+        
+        
+    }
     
     
 }

@@ -15,7 +15,8 @@ import BetterSegmentedControl
 class HomeViewController: UIViewController  {
     
     var goToAllView = false
-    
+    var posts:[String:[Post]] = [:]
+    var user:User = User()
     var disposedBag = DisposeBag()
     
     let homeScrollView = UIScrollView().then {
@@ -24,7 +25,6 @@ class HomeViewController: UIViewController  {
         $0.isPagingEnabled = true
         $0.alwaysBounceVertical = false
         $0.isScrollEnabled = false
-        $0.layoutIfNeeded()
     }
     
     let homeSegmentedControl = BetterSegmentedControl(frame: .zero, segments: LabelSegment.segments(withTitles: ["맞춤 복지", "나의 캘린더", "모든 복지"], numberOfLines: 1, normalBackgroundColor: UIColor.rgb(red: 252, green: 245, blue: 235), normalFont: UIFont.init(name: "AppleSDGothicNeo-Bold", size: 16), normalTextColor: UIColor.rgb(red: 139, green: 139, blue: 139), selectedBackgroundColor: UIColor.rgb(red: 255, green: 152, blue: 87), selectedFont: UIFont.init(name: "AppleSDGothicNeo-Bold", size: 16), selectedTextColor: .white), options: [.cornerRadius(25), .indicatorViewInset(5), .backgroundColor(UIColor.rgb(red: 252, green: 245, blue: 235))])
@@ -75,7 +75,7 @@ extension HomeViewController {
     }
     
     private func setScrollView() {
-        let homeView:[UIView] = [HomeChartView(), HomeCalendarView(), HomeAllPostView()]
+        let homeView:[UIView] = [HomeChartView(user: user, posts: posts), HomeCalendarView(), HomeAllPostView()]
         homeScrollView.frame = UIScreen.main.bounds
         homeScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width * 3, height:UIScreen.main.bounds.height)
         for i in 0..<homeView.count {
@@ -84,7 +84,6 @@ extension HomeViewController {
             
             homeScrollView.addSubview(homeView[i])
             homeScrollView.contentSize.width = homeView[i].frame.width * CGFloat(i + 1)
-            
         }
     }
     

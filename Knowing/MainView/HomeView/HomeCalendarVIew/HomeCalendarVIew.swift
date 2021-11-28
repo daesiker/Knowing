@@ -18,7 +18,7 @@ class HomeCalendarView: UIView {
     let disposeBag = DisposeBag()
     let cellID = "cellID"
     let headerID = "headerID"
-    let vm = HomeViewModel.instance
+    
     
     let calendarCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -27,102 +27,9 @@ class HomeCalendarView: UIView {
         return collectionView
     }()
     
-    let leftBt = UIButton(type: .custom).then {
-        $0.setImage(UIImage(named: "calendarLf"), for: .normal)
-        $0.isEnabled = true
+    let imgView = UIImageView(image: UIImage(named: "calenderView")!).then {
+        $0.isUserInteractionEnabled = true
     }
-    
-    let chartData = Observable<[String]>.of(["", "", "", "", "", ""])
-    let headerData = Observable<String>.of("")
-    
-    let testData = ["", "", "", "", "", ""]
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setCV()
-        
-        addSubview(leftBt)
-        leftBt.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-        }
-        
-        leftBt.rx.tap.subscribe(onNext: {
-            print("asdf")
-        }).disposed(by: disposeBag)
-        
-//        addSubview(calendarCV)
-//        calendarCV.snp.makeConstraints {
-//            $0.leading.trailing.top.equalToSuperview()
-//            $0.bottom.equalToSuperview().offset(-91)
-//        }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension HomeCalendarView {
-    
-    func setCV() {
-        calendarCV.delegate = self
-        calendarCV.dataSource = self
-        calendarCV.register(CalendarCell.self, forCellWithReuseIdentifier: cellID)
-        calendarCV.register(HomeCalendarHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerID)
-    }
-    
-    
-}
-
-extension HomeCalendarView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return testData.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! CalendarCell
-
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: indexPath) as! HomeCalendarHeader
-
-        header.isUserInteractionEnabled = true
-
-        return header
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 17
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 17
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = frame.width - 40
-        return CGSize(width: width, height: 72)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let width = frame.width
-        return CGSize(width: width, height: 507)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 20)
-    }
-}
-
-
-
-class HomeCalendarHeader: UICollectionViewCell {
-    
-    let disposeBag = DisposeBag()
-    let imgView = UIImageView(image: UIImage(named: "calenderView")!)
     
     lazy var calendarView: FSCalendar = {
         let calendar = FSCalendar(frame: .zero)
@@ -161,24 +68,42 @@ class HomeCalendarHeader: UICollectionViewCell {
         $0.isEnabled = true
     }
     
+    
+    let chartData = Observable<[String]>.of(["", "", "", "", "", ""])
+    let headerData = Observable<String>.of("")
+    
+    let testData = ["", "", "", "", "", ""]
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setCV()
         setUI()
-        bindUI()
+        bind()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension HomeCalendarView {
+    
+    func setCV() {
+        calendarCV.delegate = self
+        calendarCV.dataSource = self
+        
+        calendarCV.register(CalendarCell.self, forCellWithReuseIdentifier: cellID)
+    }
     
     func setUI() {
+        backgroundColor = .white
         addSubview(imgView)
         imgView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
         }
         
-        
         setTitle()
+        
         imgView.addSubview(leftBt)
         leftBt.snp.makeConstraints {
             $0.top.equalToSuperview().offset(129)
@@ -205,6 +130,38 @@ class HomeCalendarHeader: UICollectionViewCell {
             $0.trailing.equalToSuperview().offset(-20)
             $0.top.equalTo(titleLb.snp.bottom).offset(20)
         }
+        
+        addSubview(calendarCV)
+        calendarCV.snp.makeConstraints {
+            $0.top.equalTo(imgView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-91)
+        }
+    }
+    
+    func bind() {
+        leftBt.rx.tap.subscribe(onNext: {
+            let _calendar = Calendar.current
+            var dateComponents = DateComponents()
+            
+            dateComponents.month = -1 // For prev button
+            self.calendarView.currentPage = _calendar.date(byAdding: dateComponents, to: self.calendarView.currentPage)!
+            
+            self.calendarView.setCurrentPage(self.calendarView.currentPage, animated: true)
+            self.setTitle()
+        }).disposed(by: disposeBag)
+        
+        rightBt.rx.tap.subscribe(onNext: {
+            let _calendar = Calendar.current
+            var dateComponents = DateComponents()
+            dateComponents.month = 1
+            self.calendarView.currentPage = _calendar.date(byAdding: dateComponents, to: self.calendarView.currentPage)!
+            
+            self.calendarView.setCurrentPage(self.calendarView.currentPage, animated: true)
+            self.setTitle()
+            
+        }).disposed(by: disposeBag)
+        
     }
     
     func setTitle() {
@@ -215,32 +172,10 @@ class HomeCalendarHeader: UICollectionViewCell {
         titleLb.text = title
     }
     
-    func bindUI() {
-        
-        leftBt.rx.tap.subscribe(onNext: {
-            let _calendar = Calendar.current
-            var dateComponents = DateComponents()
-            
-            dateComponents.month = -1 // For prev button
-            self.calendarView.currentPage = _calendar.date(byAdding: dateComponents, to: self.calendarView.currentPage)!
-                
-            self.calendarView.setCurrentPage(self.calendarView.currentPage, animated: true)
-        }).disposed(by: disposeBag)
-        
-        rightBt.rx.tap.subscribe(onNext: {
-            let _calendar = Calendar.current
-            var dateComponents = DateComponents()
-            dateComponents.month = 1
-            self.calendarView.currentPage = _calendar.date(byAdding: dateComponents, to: self.calendarView.currentPage)!
-            
-            self.calendarView.setCurrentPage(self.calendarView.currentPage, animated: true)
-        }).disposed(by: disposeBag)
-        
-    }
     
 }
 
-extension HomeCalendarHeader: FSCalendarDelegate, FSCalendarDataSource {
+extension HomeCalendarView: FSCalendarDelegate, FSCalendarDataSource {
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         return 3
@@ -255,9 +190,41 @@ extension HomeCalendarHeader: FSCalendarDelegate, FSCalendarDataSource {
         return cell
     }
     
-    
-    
 }
+
+extension HomeCalendarView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return testData.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! CalendarCell
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 17
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 17
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = frame.width - 40
+        return CGSize(width: width, height: 72)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 20)
+    }
+}
+
+
+
+
 
 class CalendarCell: SwipeCollectionViewCell {
     

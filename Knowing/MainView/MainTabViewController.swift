@@ -11,6 +11,8 @@ import UIKit
 class MainTabViewController: UITabBarController {
     
     let customTabBarView = UIView(frame: .zero)
+    var posts:[String:[Post]] = [:]
+    var user:User = User()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +44,11 @@ class MainTabViewController: UITabBarController {
     
     
     func setupViewControllers() {
-        let homeViewController = templateNavController(unselectedImage: UIImage(named: "home_unselected"), selectedImage: UIImage(named: "home_selected"), title: "홈", rootViewController: HomeViewController())
+        
+        let homeVC = HomeViewController()
+        homeVC.posts = posts
+        homeVC.user = user
+        let homeViewController = templateNavController(unselectedImage: UIImage(named: "home_unselected"), selectedImage: UIImage(named: "home_selected"), title: "홈", rootViewController: homeVC)
         let notificationViewController = templateNavController(unselectedImage: UIImage(named: "alarm_unselected"), selectedImage: UIImage(named: "alarm_selected"), title: "알림 내역", rootViewController: NotificationViewController())
         let bookMarkViewController = templateNavController(unselectedImage: UIImage(named: "bookmark_unselected"), selectedImage: UIImage(named: "bookmark_selected"), title: "북마크", rootViewController: BookMarkViewController())
         let myPageViewController = templateNavController(unselectedImage: UIImage(named: "mypage_unselected"), selectedImage: UIImage(named: "mypage_selected"), title: "마이페이지", rootViewController: MyPageViewController())

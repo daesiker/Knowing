@@ -28,7 +28,7 @@ class ViewController: UIViewController {
 //            self.present(nav, animated: true)
              
             
-            let viewController = PostDetailViewController()
+            let viewController = LoadingViewController()
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
             self.present(viewController, animated: true)

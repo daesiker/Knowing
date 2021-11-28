@@ -44,3 +44,13 @@ extension Encodable {
         return dictionary
     }
 }
+
+func dictionaryToObject<T:Decodable>(objectType:T.Type,dictionary:[[String:Any]]) -> [T]? {
+    
+    guard let dictionaries = try? JSONSerialization.data(withJSONObject: dictionary) else { return nil }
+    let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
+    guard let objects = try? decoder.decode([T].self, from: dictionaries) else { return nil }
+    return objects
+    
+}

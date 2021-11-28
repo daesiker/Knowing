@@ -17,5 +17,4 @@ struct School: Codable {
     var adres: String
     var collegeinfourl:String
     var link:String
-    
 }

@@ -145,6 +145,7 @@ class HomeAllPostHeader: UICollectionViewCell {
         super.init(frame: frame)
         setCV()
         setUI()
+        bind()
         
     }
     
@@ -184,6 +185,10 @@ class HomeAllPostHeader: UICollectionViewCell {
             $0.top.equalToSuperview().offset(193)
             $0.trailing.equalTo(sortBt.snp.leading).offset(-6)
         }
+    }
+    
+    func bind() {
+        
     }
     
     func setCV() {

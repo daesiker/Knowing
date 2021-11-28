@@ -112,7 +112,7 @@ extension StepThreeView {
             .subscribe(onNext: { value in
                 for i in 0..<self.data.count {
                     let cell = self.collectionView.cellForItem(at: [0, i]) as? ExtraSignUpCell
-                    if self.vm.user.schollRecords == self.data[i] {
+                    if self.vm.user.schoolRecords == self.data[i] {
                         cell?.title.textColor = .white
                         cell?.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
                         cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)

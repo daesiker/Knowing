@@ -15,6 +15,8 @@ class HomeChartView: UIView {
     let disposeBag = DisposeBag()
     let cellID = "cellID"
     let headerID = "headerID"
+    var posts:[String:[Post]] = [:]
+    var user:User = User()
     
     let chartCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -26,9 +28,7 @@ class HomeChartView: UIView {
     
     let chartData = Observable<[String]>.of(["", "", "", "", "", ""])
     let headerData = Observable<String>.of("")
-    
     let testData = ["", "", "", "", "", ""]
-    
     let imgView = UIImageView(image: UIImage(named: "chartView")!)
     
     
@@ -40,12 +40,16 @@ class HomeChartView: UIView {
             $0.top.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-91)
         }
-        
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    convenience init(user: User, posts: [String:[Post]]) {
+        self.init()
+        self.posts = posts
+        self.user = user
     }
 }
 
@@ -56,8 +60,6 @@ extension HomeChartView {
         chartCV.dataSource = self
         chartCV.register(PostCell.self, forCellWithReuseIdentifier: cellID)
         chartCV.register(HomeChartHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerID)
-    
-        
     }
 }
 
@@ -76,8 +78,8 @@ extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowL
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: indexPath) as! HomeChartHeader
-        
-        
+        header.user = user
+        header.posts = posts
         return header
     }
     
@@ -96,11 +98,11 @@ extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowL
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let width = frame.width
-        return CGSize(width: width, height: 690)
+        return CGSize(width: width, height: 705)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 17, left: 20, bottom: 17, right: 20)
+        return UIEdgeInsets(top: 0, left: 20, bottom: 17, right: 20)
     }
 }
 
@@ -108,8 +110,12 @@ extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowL
 class HomeChartHeader: UICollectionViewCell {
     
     let disposeBag = DisposeBag()
+    var user = User()
+    var posts:[String: [Post]] = [:]
     
-    let imgView = UIImageView(image: UIImage(named: "chartView")!)
+    let imgView = UIImageView(image: UIImage(named: "chartView")!).then {
+        $0.isUserInteractionEnabled = true
+    }
     
     let titleLb = UILabel().then {
         $0.text = "리즈님의 최대 수혜 금액"
@@ -194,13 +200,20 @@ class HomeChartHeader: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setTitle()
         setCV()
         setUI()
-        
+        bind()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setTitle() {
+        titleLb.text = "\(user.name)님의 최대 수혜 금액"
+        maxMoneyLb.text = posts["myPost"]?.first?.maxMoney
+        minMoneyLb.text = posts["myPost"]?.last?.minMoney
     }
     
     func setUI() {
@@ -313,6 +326,12 @@ class HomeChartHeader: UICollectionViewCell {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(35)
         }
+    }
+    
+    func bind() {
+        maxMoneyBt.rx.tap.subscribe(onNext: {
+            print("asdf")
+        }).disposed(by: disposeBag)
     }
     
     func setCV() {

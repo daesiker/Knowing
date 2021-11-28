@@ -137,7 +137,7 @@ class AgreeTermsViewModel {
                 if let error = error {
                     observer.onError(error)
                 } else if let token = token {
-                    self.user.fcmToken = token
+                    self.user.FCMTOKEN = token
                     observer.onNext(self.user)
                 } else {
                     observer.onNext(self.user)

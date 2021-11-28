@@ -6,49 +6,64 @@
 //
 
 import Foundation
-import RxDataSources
+import SwiftyJSON
 
 struct Post: Codable {
-    var uid:String = ""
-    var name:String = ""
-    var serviceType:String = ""
-    var maxMoney:String = ""
-    var minMoney:String = ""
+    
+    var manageOffice:String = ""
     var incomeLevel:String = ""
-    var category:String = ""
-    var contents:String = ""
-    var runDate:String = ""
-    var applyDate:String = ""
+    var detailTerms:String = ""
+    var schoolRecords:String = ""
+    var url:String = ""
+    var title:String = ""
     var scale:String = ""
     var age:String = ""
-    var address:String = ""
-    var detailTerms:String = ""
-    var schoolrecords:String = ""
+    var name:String = ""
     var employmentState:String = ""
-    var specialState:String = ""
-    var joinLimit:String = ""
+    var specialStatus:String = ""
     var applyMethod:String = ""
-    var judge:String = ""
-    var url:String = ""
+    var address:String = ""
     var document:String = ""
-    var manageOffice:String = ""
-}
+    var minMoney:String = ""
+    var uid:String = ""
+    var phNum:String = ""
+    var applyDate:String = ""
+    var serviceType:String = ""
+    var joinLimit:String = ""
+    var content:String = ""
+    var judge:String = ""
+    var category:String = ""
+    var runDate:String = ""
+    var maxMoney:String = ""
 
-struct PostSectionModel {
-    
-    var header: [Post]
-    var items: [Post]
-    
-    init() {
-        self.header = []
-        self.items = []
+    init(json: JSON) {
+        self.manageOffice = json["manageOffice"].stringValue
+        self.incomeLevel = json["incomeLevel"].stringValue
+        self.detailTerms = json["detailTerms"].stringValue
+        self.schoolRecords = json["schoolRecords"].stringValue
+        self.url = json["url"].stringValue
+        self.title = json["title"].stringValue
+        self.scale = json["scale"].stringValue
+        self.age = json["age"].stringValue
+        self.name = json["name"].stringValue
+        self.employmentState = json["employmentState"].stringValue
+        self.specialStatus = json["specialStatus"].stringValue
+        self.applyMethod = json["applyMethod"].stringValue
+        self.address = json["address"].stringValue
+        self.document = json["document"].stringValue
+        self.minMoney = json["minMoney"].stringValue
+        self.uid = json["uid"].stringValue
+        self.phNum = json["phNum"].stringValue
+        self.applyDate = json["applyDate"].stringValue
+        self.serviceType = json["serviceType"].stringValue
+        self.joinLimit = json["joinLimit"].stringValue
+        self.content = json["content"].stringValue
+        self.judge = json["judge"].stringValue
+        self.category = json["category"].stringValue
+        self.runDate = json["runDate"].stringValue
+        self.maxMoney = json["maxMoney"].stringValue
     }
     
+    
 }
 
-extension PostSectionModel: SectionModelType {
-    init(original: PostSectionModel, items: [Post]) {
-        self = original
-        self.items = items
-    }
-}
