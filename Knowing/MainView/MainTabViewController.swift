@@ -11,12 +11,11 @@ import UIKit
 class MainTabViewController: UITabBarController {
     
     let customTabBarView = UIView(frame: .zero)
-    var posts:[String:[Post]] = [:]
-    var user:User = User()
+    let vm = MainTabViewModel.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
+        view.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
         setupTabBarUI()
         addCustomTabBarView()
         setupViewControllers()
@@ -46,8 +45,7 @@ class MainTabViewController: UITabBarController {
     func setupViewControllers() {
         
         let homeVC = HomeViewController()
-        homeVC.posts = posts
-        homeVC.user = user
+        
         let homeViewController = templateNavController(unselectedImage: UIImage(named: "home_unselected"), selectedImage: UIImage(named: "home_selected"), title: "홈", rootViewController: homeVC)
         let notificationViewController = templateNavController(unselectedImage: UIImage(named: "alarm_unselected"), selectedImage: UIImage(named: "alarm_selected"), title: "알림 내역", rootViewController: NotificationViewController())
         let bookMarkViewController = templateNavController(unselectedImage: UIImage(named: "bookmark_unselected"), selectedImage: UIImage(named: "bookmark_selected"), title: "북마크", rootViewController: BookMarkViewController())

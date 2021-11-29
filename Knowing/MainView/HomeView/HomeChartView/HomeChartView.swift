@@ -15,8 +15,7 @@ class HomeChartView: UIView {
     let disposeBag = DisposeBag()
     let cellID = "cellID"
     let headerID = "headerID"
-    var posts:[String:[Post]] = [:]
-    var user:User = User()
+    let vm = HomeChartViewModel.instance
     
     let chartCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -26,19 +25,28 @@ class HomeChartView: UIView {
         return collectionView
     }()
     
-    let chartData = Observable<[String]>.of(["", "", "", "", "", ""])
-    let headerData = Observable<String>.of("")
-    let testData = ["", "", "", "", "", ""]
-    let imgView = UIImageView(image: UIImage(named: "chartView")!)
+    let imgView = UIImageView(image: UIImage(named: "slice1")!)
+    let imgView2 = UIImageView(image: UIImage(named: "slice2")!)
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setCV()
+        bind()
         addSubview(chartCV)
         chartCV.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-91)
+        }
+        
+        addSubview(imgView)
+        imgView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview()
+        }
+        
+        addSubview(imgView2)
+        imgView2.snp.makeConstraints {
+            $0.top.trailing.equalToSuperview()
         }
     }
     
@@ -46,11 +54,7 @@ class HomeChartView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(user: User, posts: [String:[Post]]) {
-        self.init()
-        self.posts = posts
-        self.user = user
-    }
+    
 }
 
 extension HomeChartView {
@@ -61,25 +65,35 @@ extension HomeChartView {
         chartCV.register(PostCell.self, forCellWithReuseIdentifier: cellID)
         chartCV.register(HomeChartHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerID)
     }
+    
+    func bind() {
+        vm.output.postChanged.drive(onNext: {value in
+            self.chartCV.reloadData()
+        }).disposed(by: disposeBag)
+    }
 }
 
 
 extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        vm.input.postObserver.accept(self.vm.posts[indexPath.row])
+        
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return testData.count
+        return vm.posts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! PostCell
         cell.backgroundColor = .white
+        cell.configure(vm.posts[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: indexPath) as! HomeChartHeader
-        header.user = user
-        header.posts = posts
         return header
     }
     
@@ -109,9 +123,8 @@ extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowL
 
 class HomeChartHeader: UICollectionViewCell {
     
+    let vm = HomeChartViewModel.instance
     let disposeBag = DisposeBag()
-    var user = User()
-    var posts:[String: [Post]] = [:]
     
     let imgView = UIImageView(image: UIImage(named: "chartView")!).then {
         $0.isUserInteractionEnabled = true
@@ -192,6 +205,8 @@ class HomeChartHeader: UICollectionViewCell {
         flowLayout.scrollDirection = UICollectionView.ScrollDirection.horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = UIColor.rgb(red: 255, green: 245, blue: 230)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
     
@@ -200,6 +215,7 @@ class HomeChartHeader: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        chartView.animate(xAxisDuration: 1, easingOption: .easeInQuad)
         setTitle()
         setCV()
         setUI()
@@ -211,9 +227,10 @@ class HomeChartHeader: UICollectionViewCell {
     }
     
     func setTitle() {
-        titleLb.text = "\(user.name)님의 최대 수혜 금액"
-        maxMoneyLb.text = posts["myPost"]?.first?.maxMoney
-        minMoneyLb.text = posts["myPost"]?.last?.minMoney
+        titleLb.text = "\(vm.main.user.name)님의 최대 수혜 금액"
+        maxMoneyLb.text = vm.main.posts["myPost"]!.first!.maxMoney
+        minMoneyLb.text = "최소 \(vm.main.posts["myPost"]!.last!.minMoney)원"
+        chartCount.text = "\(vm.main.posts["myPost"]!.count)건"
     }
     
     func setUI() {
@@ -233,7 +250,7 @@ class HomeChartHeader: UICollectionViewCell {
 
         imgView.addSubview(maxMoneyLb)
         maxMoneyLb.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(96)
+            $0.centerX.equalToSuperview()
             $0.top.equalTo(titleLb.snp.bottom).offset(11)
         }
 
@@ -343,6 +360,32 @@ class HomeChartHeader: UICollectionViewCell {
             .bind(to: categoryCV.rx.items(cellIdentifier: "cellId", cellType: HomeCategoryCell.self)) { indexPath, title, cell in
                 cell.configure(name: title)
         }.disposed(by: disposeBag)
+        
+        categoryCV.rx.itemSelected
+            .map { index in
+                let cell = self.categoryCV.cellForItem(at: index) as? HomeCategoryCell
+                return cell?.titleLabel.text ?? ""
+            }
+            .bind(to: self.vm.input.categoryObserver)
+            .disposed(by: disposeBag)
+        
+        categoryCV.rx.itemSelected
+            .subscribe(onNext: { value in
+                for i in 0..<self.categoryDomy.count {
+                    let cell = self.categoryCV.cellForItem(at: [0, i]) as? HomeCategoryCell
+                    if self.vm.category == self.categoryDomy[i] {
+                        cell?.titleLabel.textColor = .white
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 17)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 152, blue: 87)
+                    } else {
+                        cell?.titleLabel.textColor = UIColor.rgb(red: 210, green: 132, blue: 81)
+                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 17)
+                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 232, blue: 194)
+                    }
+                }
+            }).disposed(by: disposeBag)
+        
+        
     }
     
 }
@@ -366,6 +409,8 @@ extension HomeChartHeader: UICollectionViewDelegateFlowLayout {
     }
     
 }
+
+
 
 
 final class HomeCategoryCell: UICollectionViewCell {
@@ -411,7 +456,14 @@ final class HomeCategoryCell: UICollectionViewCell {
     }
     
     func configure(name: String?) {
-        titleLabel.text = name
+        if name == "학생 지원" {
+            backgroundColor = UIColor.rgb(red: 255, green: 152, blue: 87)
+            titleLabel.textColor = .white
+            titleLabel.text = name
+        } else {
+            titleLabel.text = name
+        }
+        
     }
     
 }

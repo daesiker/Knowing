@@ -8,12 +8,16 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Alamofire
 
 class PostDetailViewModel {
     
+    let main = MainTabViewModel.instance
+    let post:Post
     let disposeBag = DisposeBag()
     let input = Input()
     var output = Output()
+    
     
     var scrollOffset = [true, false, false, false]
     
@@ -22,6 +26,7 @@ class PostDetailViewModel {
         let conditionObserver = PublishRelay<Void>()
         let methodObserver = PublishRelay<Void>()
         let etcObserver = PublishRelay<Void>()
+        let bookmarkObserver = PublishRelay<String>()
     }
     
     struct Output {
@@ -29,9 +34,17 @@ class PostDetailViewModel {
         var conditionValue = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [true, false, false, false])
         var methodValue = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [true, false, false, false])
         var etcValue = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [true, false, false, false])
+        
+        var bookmarkEnable = PublishRelay<Bool>().asSignal()
+        var errorValid = PublishRelay<Error>().asSignal()
+        
+        
     }
     
-    init() {
+    init(_ post: Post) {
+        self.post = post
+        let bookmarkRelay = PublishRelay<Bool>()
+        let errorRelay = PublishRelay<Error>()
         
         output.contentsValue = input.contentsObserver
             .map { [true, false, false, false] }.asDriver(onErrorJustReturn: [true, false, false, false])
@@ -42,6 +55,32 @@ class PostDetailViewModel {
         
         output.etcValue = input.etcObserver.map {[false, false, false, true]}.asDriver(onErrorJustReturn: [false, false, false, true])
         
+        input.bookmarkObserver.subscribe(onNext: {value in
+            let uid = "MHQ72TN4d8dFFL2b74Ldy4s3EHa2"
+            let url = "https://www.makeus-hyun.shop/app/users/bookmark"
+            let header:HTTPHeaders = ["userUid": uid,
+                                      "welfareUid": self.post.uid]
+            
+            AF.request(url, method: .post, headers: header)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(_):
+                        if self.main.user.bookmark.contains(value) {
+                            let index = self.main.user.bookmark.firstIndex(of: value)
+                            self.main.user.bookmark.remove(at: index!)
+                            bookmarkRelay.accept(false)
+                        } else {
+                            self.main.user.bookmark.append(value)
+                            bookmarkRelay.accept(true)
+                        }
+                    case .failure(let error):
+                        errorRelay.accept(error)
+                    }
+                }
+        }).disposed(by: disposeBag)
+        
+        output.bookmarkEnable = bookmarkRelay.asSignal()
+        output.errorValid = errorRelay.asSignal()
         
     }
     

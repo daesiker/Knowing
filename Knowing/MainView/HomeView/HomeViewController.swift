@@ -14,6 +14,7 @@ import BetterSegmentedControl
 
 class HomeViewController: UIViewController  {
     
+    let chartVM = HomeChartViewModel.instance
     var goToAllView = false
     var posts:[String:[Post]] = [:]
     var user:User = User()
@@ -72,10 +73,19 @@ extension HomeViewController {
     
     func bind() {
         homeSegmentedControl.addTarget(self, action: #selector(segonChnaged), for: .valueChanged)
+        
+        chartVM.output.getPost.drive(onNext: { value in
+            let vm = PostDetailViewModel(value)
+            let vc = PostDetailViewController(vm: vm)
+            vc.modalTransitionStyle = .crossDissolve
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+        }).disposed(by: disposedBag)
+        
     }
     
     private func setScrollView() {
-        let homeView:[UIView] = [HomeChartView(user: user, posts: posts), HomeCalendarView(), HomeAllPostView()]
+        let homeView:[UIView] = [HomeChartView(), HomeCalendarView(), HomeAllPostView()]
         homeScrollView.frame = UIScreen.main.bounds
         homeScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width * 3, height:UIScreen.main.bounds.height)
         for i in 0..<homeView.count {
@@ -95,6 +105,8 @@ extension HomeViewController {
         case 1:
             let contentOffset = CGPoint(x: view.frame.width, y: 0)
             homeScrollView.setContentOffset(contentOffset, animated: true)
+            
+            
         case 2:
             let contentOffset = CGPoint(x: view.frame.width * 2, y: 0)
             homeScrollView.setContentOffset(contentOffset, animated: true)

@@ -126,7 +126,8 @@ class PostCell: SwipeCollectionViewCell {
         
     }
     
-    func configure(name: String?) {
+    func configure(_ post: Post) {
+        mainLb.text = post.manageOffice
         
     }
     

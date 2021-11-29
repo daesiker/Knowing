@@ -23,7 +23,7 @@ class MyPageViewController: UIViewController {
             $0.centerX.centerY.equalToSuperview()
         }
         
-        // Do any additional setup after loading the view.
+       
     }
     
 

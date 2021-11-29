@@ -56,7 +56,7 @@ class LoadingViewController: UIViewController {
                     let json = JSON(value)
                     let result = json["result"].dictionaryValue
                     let user = User(json: result)
-                    self.user = user
+                    MainTabViewModel.instance.user = user
                     self.getPostData()
                     
                     
@@ -129,12 +129,11 @@ class LoadingViewController: UIViewController {
                         }
                     }
                     myPost.sort { $0.maxMoney > $1.maxMoney }
-                    print(myPost)
+                 
                     self.postDic.updateValue(myPost, forKey: "myPost")
+                    MainTabViewModel.instance.posts = self.postDic
                     DispatchQueue.main.async {
                         let vc = MainTabViewController()
-                        vc.posts = self.postDic
-                        vc.user = self.user
                         let nav = UINavigationController(rootViewController: vc)
                         nav.navigationController?.isNavigationBarHidden = true
                         nav.modalTransitionStyle = .crossDissolve

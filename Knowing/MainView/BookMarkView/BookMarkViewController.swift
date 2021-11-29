@@ -164,8 +164,6 @@ extension BookMarkViewController: SwipeCollectionViewCellDelegate {
         
         delete.transitionDelegate = ScaleTransition.default
        
-        
-        
         return [delete]
     }
     

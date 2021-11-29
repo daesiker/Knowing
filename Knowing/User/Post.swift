@@ -35,7 +35,9 @@ struct Post: Codable {
     var category:String = ""
     var runDate:String = ""
     var maxMoney:String = ""
-
+    
+    init() {}
+    
     init(json: JSON) {
         self.manageOffice = json["manageOffice"].stringValue
         self.incomeLevel = json["incomeLevel"].stringValue

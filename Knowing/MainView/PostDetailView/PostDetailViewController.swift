@@ -13,10 +13,8 @@ import RxSwift
 class PostDetailViewController: UIViewController {
     
     let disposeBag = DisposeBag()
-    let vm = PostDetailViewModel()
+    let vm:PostDetailViewModel
     
-    
-
     lazy var scrollView = UIScrollView(frame: .zero).then {
         $0.delegate = self
         $0.showsHorizontalScrollIndicator = false
@@ -24,7 +22,6 @@ class PostDetailViewController: UIViewController {
         $0.isScrollEnabled = true
         $0.frame = UIScreen.main.bounds
         $0.backgroundColor = .white
-        
     }
     
     let stickyView = UIView()
@@ -333,8 +330,18 @@ class PostDetailViewController: UIViewController {
         
     }
     
+    init(vm: PostDetailViewModel) {
+        self.vm = vm
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        inputValue()
         setUI()
         bind()
     }
@@ -344,6 +351,25 @@ class PostDetailViewController: UIViewController {
 
 
 extension PostDetailViewController {
+    
+    func inputValue() {
+        if vm.main.user.bookmark.contains(vm.post.uid) {
+            bookmarkBt.setImage(UIImage(named: "docDetail_bookmarkOn")!, for: .normal)
+        }
+        nameLb.text = vm.post.manageOffice
+        titleLb.text = vm.post.name
+        detailLb.text = vm.post.detailTerms
+        let category = vm.post.category.components(separatedBy: " ")
+        largeCategoryLb.text = category[0]
+        smallCategoryLb.text = category[1]
+        serviceValue.text = vm.post.serviceType
+        dDayValue.text = vm.post.applyDate
+        peopleValue.text = vm.post.joinLimit
+        maxMoneyLb.text = vm.post.maxMoney
+        minMoneyLb.text = vm.post.minMoney
+        peopleDetailView.setValue(vm.post)
+        
+    }
     
     func setUI() {
         view.backgroundColor = .white
@@ -811,7 +837,7 @@ extension PostDetailViewController {
     }
     
     func getbenefitLabel() {
-        let component = ["취업취약계층에 취업지원이 되는데 2줄이 넘어야 하는 경우 어떻게 보이는지 예시로 쓴 글", "저소득층 소득지원 강화", "취업지원서비스 내실화", "구직활동 이행확보", "기존 취업지원 서비스 통합운영"]
+        let component = vm.post.content.components(separatedBy: "@")
         
         for i in 0..<component.count {
             let label = SubTitleLabel(component[i])
@@ -859,7 +885,7 @@ extension PostDetailViewController {
     }
     
     func getApplyHowLabel() {
-        let value = ["방문 신청", "온라인 신청"]
+        let value = vm.post.applyMethod.components(separatedBy: "@")
         
         for i in 0..<value.count {
             let label = ApplyHowValueLabel(value[i])
@@ -882,7 +908,7 @@ extension PostDetailViewController {
     }
     
     func getApplyAuditLabel() {
-        let value = ["신청 (워크넷 구직신청, 취업지원 신청서 제출)", "수급자격 결정 및 통보 (신청서 제출일 이후 1개월 이내)", "취업활동계획수립 (진로상담, 직업심리검사 등 실시)", "1차 구직촉진수당 지급 (신청서 제출 이후 14일 이내)"]
+        let value = vm.post.judge.components(separatedBy: "@")
         
         for i in 0..<value.count {
             let label = ApplyAuditTitle(String(i + 1), title: value[i])
@@ -908,7 +934,7 @@ extension PostDetailViewController {
     }
     
     func getApplyDocLabel() {
-        let value = ["취업지원신청서", "개인정보수집 · 이용 및 제공 동의서"]
+        let value = vm.post.document.components(separatedBy: "@")
         
         for i in 0..<value.count {
             let label = ApplyDocTitle(value[i])
@@ -938,6 +964,24 @@ extension PostDetailViewController {
     }
     
     func bindInput() {
+        backBt.rx.tap
+            .subscribe(onNext: {
+                self.dismiss(animated: true, completion: nil)
+            }).disposed(by: disposeBag)
+        
+        shareBt.rx.tap
+            .subscribe(onNext: {
+                if let url = URL(string:self.vm.post.url) {
+                    let shareObject:[URL] = [url]
+                    let activityController = UIActivityViewController(activityItems: shareObject, applicationActivities: nil)
+                    self.present(activityController, animated: true)
+                }
+            }).disposed(by: disposeBag)
+        
+        bookmarkBt.rx.tap
+            .map { self.vm.post.uid }
+            .bind(to: vm.input.bookmarkObserver)
+            .disposed(by: disposeBag)
         
         contentsBt.rx.tap
             .bind(to: vm.input.contentsObserver)
@@ -954,6 +998,12 @@ extension PostDetailViewController {
         etcBt.rx.tap
             .bind(to: vm.input.etcObserver)
             .disposed(by: disposeBag)
+        
+        goToWebBt.rx.tap.subscribe(onNext: {
+            if let url = URL(string: self.vm.post.url) {
+                UIApplication.shared.open(url, options: [:])
+            }
+        }).disposed(by: disposeBag)
         
     }
     
@@ -991,6 +1041,15 @@ extension PostDetailViewController {
             self.etcBt.selected(value[3])
             self.scrollView.setContentOffset(CGPoint(x: self.separatorTen.frame.origin.x, y: self.separatorTen.frame.origin.y), animated: true)
         }).disposed(by: disposeBag)
+        
+        vm.output.bookmarkEnable.emit(onNext: { value in
+            if value {
+                self.bookmarkBt.setImage(UIImage(named: "docDetail_bookmarkOn")!, for: .normal)
+            } else {
+                self.bookmarkBt.setImage(UIImage(named: "docDetail_bookmark")!, for: .normal)
+            }
+        }).disposed(by: disposeBag)
+        
         
     }
     
@@ -1427,7 +1486,13 @@ class PeopleDetailView: UIView {
         
     }
     
-    
+    func setValue(_ post: Post) {
+        ageValue.text = post.age
+        moneyValue.text = post.incomeLevel
+        schollValue.text = post.schoolRecords
+        employValue.text = post.employmentState
+        specialValue.text = post.specialStatus
+    }
     
     
     required init?(coder: NSCoder) {
