@@ -18,8 +18,6 @@ class SignUpViewModel {
     var output = Output()
     var user = User()
     
-    
-    
     struct Input {
         let nameObserver = PublishRelay<String>()
         let emailObserver = PublishRelay<String>()
@@ -41,7 +39,8 @@ class SignUpViewModel {
         
     }
     
-    init() {
+    init(_ user: User = User()) {
+        self.user = user
         input.nameObserver.subscribe(onNext: {valid in
             self.user.name = valid
         }).disposed(by: disposeBag)
@@ -70,18 +69,8 @@ class SignUpViewModel {
         }).disposed(by: disposeBag)
         
         input.birthObserver.subscribe(onNext: {valid in
-            let dateComponent = valid.components(separatedBy: " / ")
-            let year = Int(dateComponent[0]) ?? 1995
-            let month = Int(dateComponent[1]) ?? 10
-            let day = Int(dateComponent[2]) ?? 12
-            let date = DateComponents(year: year, month: month, day: day)
-            let calendar = Calendar.current
-            let now = calendar.dateComponents([.year, .month, .day], from: Date())
-            let ageComponents = calendar.dateComponents([.year], from: date, to: now)
-            let age = ageComponents.year ?? 20
-            
+            let age = Int(valid.replacingOccurrences(of: " / ", with: "")) ?? 0
             self.user.birth = age
-            
         }).disposed(by: disposeBag)
         
         

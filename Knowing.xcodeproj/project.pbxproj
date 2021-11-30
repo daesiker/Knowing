@@ -42,6 +42,14 @@
 		BF85C62B27310883005D9EF1 /* FoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF85C62A27310883005D9EF1 /* FoundationExtension.swift */; };
 		BF85C631273111B7005D9EF1 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF85C630273111B7005D9EF1 /* SignUpViewController.swift */; };
 		BF85C63427311203005D9EF1 /* ExtraSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF85C63327311203005D9EF1 /* ExtraSignUpViewController.swift */; };
+		BF8772102755E6D700EC9C9A /* TermsAndConditionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF87720F2755E6D700EC9C9A /* TermsAndConditionsViewController.swift */; };
+		BF8772122755ED8000EC9C9A /* OpenSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8772112755ED8000EC9C9A /* OpenSourceViewController.swift */; };
+		BF8772142755F11C00EC9C9A /* PersonnalInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8772132755F11C00EC9C9A /* PersonnalInfoViewController.swift */; };
+		BF8772162756181900EC9C9A /* AlarmSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8772152756181900EC9C9A /* AlarmSettingViewController.swift */; };
+		BF877218275640DD00EC9C9A /* APIModifyUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF877217275640DD00EC9C9A /* APIModifyUserViewController.swift */; };
+		BF87721A2756412300EC9C9A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8772192756412300EC9C9A /* Category.swift */; };
+		BF87721C27565D4D00EC9C9A /* DefaultModifyUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF87721B27565D4D00EC9C9A /* DefaultModifyUserViewController.swift */; };
+		BF87721E275679E200EC9C9A /* NoticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF87721D275679E200EC9C9A /* NoticeViewController.swift */; };
 		BF8A9A03273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A02273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift */; };
 		BF8A9A06273B83A600DA4DE4 /* FindEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A05273B83A600DA4DE4 /* FindEmailViewController.swift */; };
 		BF8A9A08273B879E00DA4DE4 /* FindEmailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A07273B879E00DA4DE4 /* FindEmailViewModel.swift */; };
@@ -115,6 +123,14 @@
 		BF85C62A27310883005D9EF1 /* FoundationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtension.swift; sourceTree = "<group>"; };
 		BF85C630273111B7005D9EF1 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		BF85C63327311203005D9EF1 /* ExtraSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraSignUpViewController.swift; sourceTree = "<group>"; };
+		BF87720F2755E6D700EC9C9A /* TermsAndConditionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsViewController.swift; sourceTree = "<group>"; };
+		BF8772112755ED8000EC9C9A /* OpenSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceViewController.swift; sourceTree = "<group>"; };
+		BF8772132755F11C00EC9C9A /* PersonnalInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonnalInfoViewController.swift; sourceTree = "<group>"; };
+		BF8772152756181900EC9C9A /* AlarmSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingViewController.swift; sourceTree = "<group>"; };
+		BF877217275640DD00EC9C9A /* APIModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModifyUserViewController.swift; sourceTree = "<group>"; };
+		BF8772192756412300EC9C9A /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		BF87721B27565D4D00EC9C9A /* DefaultModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultModifyUserViewController.swift; sourceTree = "<group>"; };
+		BF87721D275679E200EC9C9A /* NoticeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeViewController.swift; sourceTree = "<group>"; };
 		BF8A9A02273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostCategoryViewModel.swift; sourceTree = "<group>"; };
 		BF8A9A05273B83A600DA4DE4 /* FindEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindEmailViewController.swift; sourceTree = "<group>"; };
 		BF8A9A07273B879E00DA4DE4 /* FindEmailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindEmailViewModel.swift; sourceTree = "<group>"; };
@@ -390,6 +406,13 @@
 			isa = PBXGroup;
 			children = (
 				BFA0797B271FD5F100912C18 /* MyPageViewController.swift */,
+				BF87720F2755E6D700EC9C9A /* TermsAndConditionsViewController.swift */,
+				BF8772112755ED8000EC9C9A /* OpenSourceViewController.swift */,
+				BF8772132755F11C00EC9C9A /* PersonnalInfoViewController.swift */,
+				BF8772152756181900EC9C9A /* AlarmSettingViewController.swift */,
+				BF877217275640DD00EC9C9A /* APIModifyUserViewController.swift */,
+				BF87721B27565D4D00EC9C9A /* DefaultModifyUserViewController.swift */,
+				BF87721D275679E200EC9C9A /* NoticeViewController.swift */,
 			);
 			path = MyPageView;
 			sourceTree = "<group>";
@@ -428,6 +451,7 @@
 				BFC38CF227365AE400F94876 /* User.swift */,
 				BFA4689D27463BA50056224A /* School.swift */,
 				BF768BCB274CD4390050C0EF /* Post.swift */,
+				BF8772192756412300EC9C9A /* Category.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -613,12 +637,14 @@
 				BF8A9A06273B83A600DA4DE4 /* FindEmailViewController.swift in Sources */,
 				BF6086A32740ABB900D63BF6 /* AgreeTermsViewController.swift in Sources */,
 				BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */,
+				BF8772102755E6D700EC9C9A /* TermsAndConditionsViewController.swift in Sources */,
 				BF5C9BBE2742939E00005AC7 /* ApiSignUpViewController.swift in Sources */,
 				BF8A9A03273B7EEA00DA4DE4 /* AddPostCategoryViewModel.swift in Sources */,
 				BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */,
 				BFFB7E97274A7EC7008FDF6A /* PostCell.swift in Sources */,
 				BFC74512273A0ADE00090BCB /* AddPostCategoryViewController.swift in Sources */,
 				BF7749832754C98D0062180A /* MainTabViewModel.swift in Sources */,
+				BF8772142755F11C00EC9C9A /* PersonnalInfoViewController.swift in Sources */,
 				BF768BCC274CD4390050C0EF /* Post.swift in Sources */,
 				BF151BAB273246790065E766 /* StepFourView.swift in Sources */,
 				BF3CF93E274FD6850018260B /* PostDetailViewModel.swift in Sources */,
@@ -629,26 +655,32 @@
 				BF151BA92732466B0065E766 /* StepThreeView.swift in Sources */,
 				BF5351CB2733C2230040ECFE /* ExtraSignUpViewModel.swift in Sources */,
 				BF8A9A15273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift in Sources */,
+				BF8772122755ED8000EC9C9A /* OpenSourceViewController.swift in Sources */,
 				BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */,
 				BF9A5D33274F1F0C005CC646 /* PostDetailViewController.swift in Sources */,
 				BF5C9BC02742A53C00005AC7 /* ApiSignUpViewModel.swift in Sources */,
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
 				BF7749872754F3550062180A /* HomeAllPostViewModel.swift in Sources */,
 				BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */,
+				BF87721A2756412300EC9C9A /* Category.swift in Sources */,
 				BFA4689E27463BA50056224A /* School.swift in Sources */,
+				BF87721C27565D4D00EC9C9A /* DefaultModifyUserViewController.swift in Sources */,
 				BF85C62B27310883005D9EF1 /* FoundationExtension.swift in Sources */,
 				BF8A9A08273B879E00DA4DE4 /* FindEmailViewModel.swift in Sources */,
 				BF151BAF2732760F0065E766 /* AddressViewController.swift in Sources */,
 				BFF506FD27190EBB003127CF /* LoginViewModel.swift in Sources */,
 				BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */,
 				BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */,
+				BF877218275640DD00EC9C9A /* APIModifyUserViewController.swift in Sources */,
 				BF151BAD273246850065E766 /* StepFiveView.swift in Sources */,
 				BF8D262F2743DD85002A9165 /* TmpAddressViewController.swift in Sources */,
 				BF6086A52740B3D100D63BF6 /* AgreeTermsViewModel.swift in Sources */,
+				BF8772162756181900EC9C9A /* AlarmSettingViewController.swift in Sources */,
 				BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */,
 				BF8A9A11273B929F00DA4DE4 /* FindPasswordViewController.swift in Sources */,
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,
 				BF7749852754E0290062180A /* HomeChartViewModel.swift in Sources */,
+				BF87721E275679E200EC9C9A /* NoticeViewController.swift in Sources */,
 				BF368C48274E298F0035DA50 /* HomeViewModel.swift in Sources */,
 				BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */,
 				BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */,

@@ -18,6 +18,7 @@ class AddPostCategoryViewModel {
     var user = User()
     let input = Input()
     var output = Output()
+    let isModify:Bool
     
     struct Input {
         let studentObserver = PublishRelay<String>()
@@ -36,8 +37,8 @@ class AddPostCategoryViewModel {
         var error = PublishRelay<Error>().asSignal()
     }
     
-    init() {
-        
+    init(isModify: Bool = false) {
+        self.isModify = isModify
         let signUpRelay = PublishRelay<User>()
         let errorRelay = PublishRelay<Error>()
         
@@ -167,7 +168,7 @@ class AddPostCategoryViewModel {
             return true
         }.asDriver(onErrorJustReturn: false)
         
-        input.btObserver.flatMap(doSignUp).subscribe { event in
+        input.btObserver.flatMap(isModify ? doModify : doSignUp).subscribe { event in
             switch event {
             case .next(let user):
                 signUpRelay.accept(user)
@@ -220,17 +221,44 @@ class AddPostCategoryViewModel {
                             observer.onError(error)
                         }
                     }
-                
-                
-                
-                
-                
             }
             
             
             return Disposables.create()
         }
         
+    }
+    
+    func doModify() -> Observable<User> {
+        
+        return Observable<User>.create { observer in
+            
+            let uid = "MHQ72TN4d8dFFL2b74Ldy4s3EHa2"//Auth.auth().currentUser!.uid
+            let header:HTTPHeaders = ["uid": uid,
+                                      "Content-Type":"application/json"]
+            let url = "https://www.makeus-hyun.shop/app/users/usermodify/welfare"
+            
+            let body:[String: [String]] = ["studentCategory": self.user.studentCategory,
+                                           "empolyCategory": self.user.empolyCategory,
+                                           "foundationCategory": self.user.foundationCategory,
+                                           "residentCategory": self.user.residentCategory,
+                                           "lifeCategory": self.user.lifeCategory,
+                                           "covidCategory": self.user.covidCategory]
+            
+            let jsonData = try? JSONSerialization.data(withJSONObject: body, options: [])
+            
+            AF.request(url, method: .post, encoding: JSONEncoding.default, headers: header)
+                { urlRequest in urlRequest.httpBody = jsonData }
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        print(value)
+                    case .failure(let error):
+                        observer.onError(error)
+                    }
+                }
+            return Disposables.create()
+        }
     }
     
 }

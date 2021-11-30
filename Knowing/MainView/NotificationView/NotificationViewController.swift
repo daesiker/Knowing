@@ -26,7 +26,7 @@ class NotificationViewController: UIViewController {
     let removeBt = RemoveButton()
     
     let countLb = PaddingLabel().then {
-        $0.text = "1건"
+        $0.text = "0건"
         $0.textColor = .white
         $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
         $0.backgroundColor = UIColor.rgb(red: 255, green: 142, blue: 59)
@@ -38,7 +38,20 @@ class NotificationViewController: UIViewController {
         $0.rightInset = 8
     }
     
+    let noAlarmImgView = UIImageView(image: UIImage(named: "noAlarm")!)
     
+    let noAlarmTitleLb = UILabel().then {
+        $0.text = "알람 설정한 게시물이 없습니다."
+        $0.textColor = UIColor.rgb(red: 101, green: 101, blue: 101)
+        $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
+    }
+    
+    let noAlarmSubTitleLb = UILabel().then {
+        $0.text = "기억해둘 복지에 알림 아이콘을 눌러 두면\n신청 마감일이 다가왔을 때 알림을 드려요!"
+        $0.textColor = UIColor.rgb(red: 146, green: 146, blue: 146)
+        $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+        $0.numberOfLines = 2
+    }
     
     
     override func viewDidLoad() {
@@ -46,6 +59,16 @@ class NotificationViewController: UIViewController {
         setUI()
         
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
 }
@@ -73,11 +96,30 @@ extension NotificationViewController {
             $0.leading.equalTo(subTitleLb.snp.trailing).offset(12)
         }
         
-        view.addSubview(removeBt)
-        removeBt.snp.makeConstraints {
-            $0.top.equalTo(countLb.snp.bottom).offset(11)
-            $0.trailing.equalToSuperview().offset(-13)
+        view.addSubview(noAlarmImgView)
+        noAlarmImgView.snp.makeConstraints {
+            $0.top.equalTo(countLb.snp.bottom).offset(129)
+            $0.centerX.equalToSuperview()
         }
+        
+        view.addSubview(noAlarmTitleLb)
+        noAlarmTitleLb.snp.makeConstraints {
+            $0.top.equalTo(noAlarmImgView.snp.bottom).offset(2)
+            $0.centerX.equalToSuperview()
+        }
+        
+        view.addSubview(noAlarmSubTitleLb)
+        noAlarmSubTitleLb.snp.makeConstraints {
+            $0.top.equalTo(noAlarmTitleLb.snp.bottom)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(232)
+        }
+        
+//        view.addSubview(removeBt)
+//        removeBt.snp.makeConstraints {
+//            $0.top.equalTo(countLb.snp.bottom).offset(11)
+//            $0.trailing.equalToSuperview().offset(-13)
+//        }
         
         
         

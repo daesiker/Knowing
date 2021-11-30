@@ -46,12 +46,8 @@ class ApiSignUpViewModel {
         }).disposed(by: disposeBag)
         
         input.birthObserver.subscribe(onNext: {valid in
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyyMMdd"
-            
-            let date = dateFormatter.date(from: valid)
-            
-            self.user.birth = date?.age ?? 0
+            let age = Int(valid.replacingOccurrences(of: " / ", with: "")) ?? 0
+            self.user.birth = age
         }).disposed(by: disposeBag)
         
         input.signUpObserver

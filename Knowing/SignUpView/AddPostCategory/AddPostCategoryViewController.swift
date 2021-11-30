@@ -12,7 +12,7 @@ import RxCocoa
 class AddPostCategoryViewController: UIViewController {
     
     let disposeBag = DisposeBag()
-    let vm = AddPostCategoryViewModel()
+    var vm = AddPostCategoryViewModel()
     
     let backBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
@@ -144,6 +144,15 @@ class AddPostCategoryViewController: UIViewController {
         $0.layer.cornerRadius = 27.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 139, bottom: 16, right: 139)
         $0.isEnabled = false
+    }
+    
+    init(_ vm: AddPostCategoryViewModel = AddPostCategoryViewModel()) {
+        self.vm = vm
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -284,7 +293,7 @@ extension AddPostCategoryViewController {
         studentCV.rx.setDelegate(self).disposed(by: disposeBag)
         studentData
             .bind(to: self.studentCV.rx.items(cellIdentifier: "studentCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.configure(name: title)
+                cell.configure(name: title, category: self.vm.user.studentCategory)
             }.disposed(by: disposeBag)
         
         studentCV.rx.itemSelected
@@ -311,16 +320,13 @@ extension AddPostCategoryViewController {
                 }
             }).disposed(by: disposeBag)
         
-        
-        
-        
         employCV.delegate = nil
         employCV.dataSource = nil
         employCV.register(AddCategoryCell.self, forCellWithReuseIdentifier: "employCell")
         employCV.rx.setDelegate(self).disposed(by: disposeBag)
         employData
             .bind(to: self.employCV.rx.items(cellIdentifier: "employCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.configure(name: title)
+                cell.configure(name: title, category: self.vm.user.empolyCategory)
             }.disposed(by: disposeBag)
         
         employCV.rx.itemSelected
@@ -352,7 +358,7 @@ extension AddPostCategoryViewController {
         startUpCV.rx.setDelegate(self).disposed(by: disposeBag)
         startUpData
             .bind(to: self.startUpCV.rx.items(cellIdentifier: "startUpCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.configure(name: title)
+                cell.configure(name: title, category: self.vm.user.foundationCategory)
             }.disposed(by: disposeBag)
         
         startUpCV.rx.itemSelected
@@ -384,7 +390,7 @@ extension AddPostCategoryViewController {
         residentCV.rx.setDelegate(self).disposed(by: disposeBag)
         residentData
             .bind(to: self.residentCV.rx.items(cellIdentifier: "residentCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.configure(name: title)
+                cell.configure(name: title, category: self.vm.user.residentCategory)
             }.disposed(by: disposeBag)
         
         residentCV.rx.itemSelected
@@ -416,7 +422,7 @@ extension AddPostCategoryViewController {
         lifeCV.rx.setDelegate(self).disposed(by: disposeBag)
         lifeData
             .bind(to: self.lifeCV.rx.items(cellIdentifier: "lifeCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.configure(name: title)
+                cell.configure(name: title, category: self.vm.user.lifeCategory)
             }.disposed(by: disposeBag)
         
         lifeCV.rx.itemSelected
@@ -448,7 +454,7 @@ extension AddPostCategoryViewController {
         covidCV.rx.setDelegate(self).disposed(by: disposeBag)
         covidData
             .bind(to: self.covidCV.rx.items(cellIdentifier: "covidCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.configure(name: title)
+                cell.configure(name: title, category: self.vm.user.covidCategory)
             }.disposed(by: disposeBag)
         
         covidCV.rx.itemSelected
@@ -527,9 +533,9 @@ extension AddPostCategoryViewController: UICollectionViewDelegate, UICollectionV
 
 final class AddCategoryCell: UICollectionViewCell {
     
-    static func fittingSize(availableHeight: CGFloat, name: String?) -> CGSize {
+    static func fittingSize(availableHeight: CGFloat, name: String) -> CGSize {
         let cell = AddCategoryCell()
-        cell.configure(name: name)
+        cell.configure(name: name, category: [])
         
         let targetSize = CGSize(width: UIView.layoutFittingCompressedSize.width, height: availableHeight)
         return cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .required)
@@ -566,7 +572,13 @@ final class AddCategoryCell: UICollectionViewCell {
         }
     }
     
-    func configure(name: String?) {
+    func configure(name: String, category:[String]) {
+        if category.contains(name) {
+            titleLabel.textColor = .white
+            titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+            backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+        }
+        
         titleLabel.text = name
     }
     

@@ -65,8 +65,6 @@ class BookMarkViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    
-    
 }
 
 extension BookMarkViewController {
@@ -171,7 +169,6 @@ extension BookMarkViewController: SwipeCollectionViewCellDelegate {
         var options = SwipeOptions()
         
         options.buttonSpacing = 7
-        
         
         return options
     }

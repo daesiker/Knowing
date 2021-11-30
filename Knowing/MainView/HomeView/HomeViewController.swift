@@ -105,8 +105,6 @@ extension HomeViewController {
         case 1:
             let contentOffset = CGPoint(x: view.frame.width, y: 0)
             homeScrollView.setContentOffset(contentOffset, animated: true)
-            
-            
         case 2:
             let contentOffset = CGPoint(x: view.frame.width * 2, y: 0)
             homeScrollView.setContentOffset(contentOffset, animated: true)

@@ -228,8 +228,8 @@ class HomeChartHeader: UICollectionViewCell {
     
     func setTitle() {
         titleLb.text = "\(vm.main.user.name)님의 최대 수혜 금액"
-        maxMoneyLb.text = vm.main.posts["myPost"]!.first!.maxMoney
-        minMoneyLb.text = "최소 \(vm.main.posts["myPost"]!.last!.minMoney)원"
+        //maxMoneyLb.text = vm.main.posts["myPost"]!.first!.maxMoney
+        //minMoneyLb.text = "최소 \(vm.main.posts["myPost"]!.last!.minMoney)원"
         chartCount.text = "\(vm.main.posts["myPost"]!.count)건"
     }
     
