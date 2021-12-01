@@ -56,10 +56,13 @@ class NotificationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        MainTabViewModel.instance.bcObserver.accept(.white)
         setUI()
         
         
     }
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

@@ -15,6 +15,7 @@ class APIModifyUserViewController: UIViewController {
     let vm:APIModifyUserViewModel
     let disposeBag = DisposeBag()
     
+    
     let backBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
     }
@@ -24,6 +25,17 @@ class APIModifyUserViewController: UIViewController {
         $0.textColor = UIColor.rgb(red: 101, green: 101, blue: 101)
         $0.font = UIFont(name: "GodoM", size: 26)
     }
+    
+    let accountLabel = UILabel().then {
+        $0.text = "계정"
+        $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+        $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
+    }
+    
+    lazy var accountView:AccountLabel = {
+        let view = AccountLabel(vm.user.provider)
+       return view
+    }()
     
     let nameLabel = UILabel().then {
         $0.text = "이름"
@@ -49,7 +61,7 @@ class APIModifyUserViewController: UIViewController {
         $0.layer.cornerRadius = 20.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 16, left: 61, bottom: 15, right: 61)
     }
-
+    
     let femaleBt = UIButton(type: .custom).then {
         $0.setTitle("여성", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
@@ -99,7 +111,7 @@ class APIModifyUserViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-
+    
     
     func setUI() {
         view.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
@@ -114,6 +126,20 @@ class APIModifyUserViewController: UIViewController {
         titleLb.snp.makeConstraints {
             $0.top.equalTo(backBt.snp.bottom).offset(13)
             $0.leading.equalToSuperview().offset(25)
+        }
+        
+        safeArea.addSubview(accountLabel)
+        accountLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLb.snp.bottom).offset(48)
+            $0.leading.equalToSuperview().offset(25)
+        }
+        
+        safeArea.addSubview(accountView)
+        accountView.snp.makeConstraints {
+            $0.top.equalTo(accountLabel.snp.bottom).offset(28)
+            $0.leading.equalToSuperview().offset(25)
+            $0.trailing.equalToSuperview().offset(-25)
+            $0.height.equalTo(42)
         }
         
         safeArea.addSubview(nameLabel)
@@ -267,7 +293,7 @@ class APIModifyUserViewController: UIViewController {
         
         
     }
-   
+    
 }
 
 class APIModifyUserViewModel {
@@ -354,11 +380,11 @@ class APIModifyUserViewModel {
                                       "Content-Type":"application/json"]
             
             let body:[String: Any] = ["email": self.user.email,
-                                           "name": self.user.name,
-                                           "pwd": self.user.pwd,
-                                           "phNum": self.user.phNum,
-                                           "gender": self.user.gender,
-                                           "birth": self.user.birth]
+                                      "name": self.user.name,
+                                      "pwd": self.user.pwd,
+                                      "phNum": self.user.phNum,
+                                      "gender": self.user.gender,
+                                      "birth": self.user.birth]
             
             let jsonData = try? JSONSerialization.data(withJSONObject: body, options: [])
             
@@ -380,3 +406,52 @@ class APIModifyUserViewModel {
     
 }
 
+class AccountLabel: UIView {
+    
+    let logoView = UIImageView()
+    
+    let titleLb = UILabel().then {
+        $0.textColor = UIColor.rgb(red: 55, green: 57, blue: 61)
+        $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 15)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        clipsToBounds = true
+        layer.cornerRadius = 20.0
+        layer.borderWidth = 1.0
+        layer.borderColor = CGColor(red: 210/255, green: 210/255, blue: 210/255, alpha: 1.0)
+        addSubview(logoView)
+        logoView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(10)
+        }
+        addSubview(titleLb)
+        titleLb.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(logoView.snp.trailing).offset(8)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    convenience init(_ provider: String) {
+        self.init()
+        if provider == "naver" {
+            logoView.image = UIImage(named: "logoNaverSmall")
+            titleLb.text = "네이버로 로그인한 계정"
+        } else if provider == "kakao" {
+            logoView.image = UIImage(named: "logoKakaoSmall")
+            titleLb.text = "카카오로 로그인한 계정"
+        } else if provider == "apple" {
+            logoView.image = UIImage(named: "logoAppleSmall")
+            titleLb.text = "애플로 로그인한 계정"
+        } else {
+            logoView.image = UIImage(named: "logoGoogleSmall")
+            titleLb.text = "구글로 로그인한 계정"
+        }
+    }
+    
+}

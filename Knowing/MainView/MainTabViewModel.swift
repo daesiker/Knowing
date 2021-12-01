@@ -16,9 +16,12 @@ class MainTabViewModel {
     
     var user = User()
     var posts:[String: [Post]] = [:]
+    var bookmarks:[Post] = []
     let disposeBag = DisposeBag()
     let bcObserver = PublishRelay<UIColor>()
     var bcOutput = PublishRelay<UIColor>().asDriver(onErrorJustReturn: .white)
+    
+    
     
     
     init() {

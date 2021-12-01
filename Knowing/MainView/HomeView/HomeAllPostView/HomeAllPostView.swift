@@ -167,6 +167,12 @@ extension HomeAllPostView: UICollectionViewDelegateFlowLayout, UICollectionViewD
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == allPostCV {
+        HomeChartViewModel.instance.input.postObserver.accept(vm.posts[indexPath.row])
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return collectionView == allPostCV ? 17 : 16
     }

@@ -102,12 +102,15 @@ extension HomeViewController {
         case 0:
             let contentOffset = CGPoint(x: 0, y: 0)
             homeScrollView.setContentOffset(contentOffset, animated: true)
+            MainTabViewModel.instance.bcObserver.accept(UIColor.rgb(red: 255, green: 245, blue: 230))
         case 1:
             let contentOffset = CGPoint(x: view.frame.width, y: 0)
             homeScrollView.setContentOffset(contentOffset, animated: true)
+            MainTabViewModel.instance.bcObserver.accept(.white)
         case 2:
             let contentOffset = CGPoint(x: view.frame.width * 2, y: 0)
             homeScrollView.setContentOffset(contentOffset, animated: true)
+            MainTabViewModel.instance.bcObserver.accept(.white)
             goToAllView = true
         default:
             return

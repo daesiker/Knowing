@@ -188,8 +188,8 @@ class AddPostCategoryViewModel {
         return Observable<User>.create { observer in
             
             Auth.auth().createUser(withEmail: self.user.email, password: self.user.pwd) { user, error in
-                if let error = error {
-                    print(error)
+                if let _ = error {
+                    let error = KnowingError(code: 101, msg: "일시적인 에러입니다. 잠시후 다시 시도해주세요")
                     observer.onError(error)
                     return
                 }
@@ -206,19 +206,20 @@ class AddPostCategoryViewModel {
                         switch response.result {
                         case .success(let value):
                             let json = JSON(value)
+                            print(json)
                             let result = json["result"].dictionaryObject
                             if let isSuccess = result?["isSuccess"] as? Bool,
-                               let code = result?["code"] as? Int,
-                               let message = result?["message"] as? String {
+                               let code = result?["code"] as? Int {
                                 if isSuccess {
                                     observer.onNext(self.user)
                                 } else {
-                                    let error = KnowingError(code: code, msg: message)
+                                    let error = KnowingError(code: code, msg: "일시적인 에러입니다. 잠시후 다시 시도해주세요")
                                     observer.onError(error)
                                 }
                             }
-                        case .failure(let error):
-                            observer.onError(error)
+                        case .failure(_):
+                            let knowingError = KnowingError(code: 404, msg: "네트워크 연결상태를 확인해주세요.")
+                            observer.onError(knowingError)
                         }
                     }
             }

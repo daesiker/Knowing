@@ -28,7 +28,7 @@ class HomeAllPostViewModel {
     
     init() {
         
-        posts = main.posts["allstudentCategory"]!
+        posts = main.posts["allstudentCategory"] ?? []
         
         input.categoryObserver.subscribe(onNext: {value in
             self.category = value

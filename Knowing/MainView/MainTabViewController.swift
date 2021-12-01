@@ -7,11 +7,14 @@
 
 import Foundation
 import UIKit
+import RxSwift
+import RxCocoa
 
 class MainTabViewController: UITabBarController {
     
     let customTabBarView = UIView(frame: .zero)
     let vm = MainTabViewModel.instance
+    let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +22,7 @@ class MainTabViewController: UITabBarController {
         setupTabBarUI()
         addCustomTabBarView()
         setupViewControllers()
+        bind()
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -41,6 +45,11 @@ class MainTabViewController: UITabBarController {
         self.setupCustomTabBarFrame()
     }
     
+    func bind() {
+        vm.bcOutput.drive(onNext: { value in
+            self.view.backgroundColor = value
+        }).disposed(by: disposeBag)
+    }
     
     func setupViewControllers() {
         

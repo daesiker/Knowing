@@ -107,19 +107,18 @@ extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowL
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = frame.width - 40
-        return CGSize(width: width, height: 133)
+        return CGSize(width: width, height: 140)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let width = frame.width
-        return CGSize(width: width, height: 705)
+        return CGSize(width: width, height: 710)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 20, bottom: 17, right: 20)
+        return UIEdgeInsets(top: 21, left: 20, bottom: 17, right: 20)
     }
 }
-
 
 class HomeChartHeader: UICollectionViewCell {
     
@@ -174,11 +173,7 @@ class HomeChartHeader: UICollectionViewCell {
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 17)
     }
     
-    let chartLayoutView = UIView().then {
-        $0.layer.cornerRadius = 30
-        $0.backgroundColor = .white
-    }
-    let chartView = AqiChartView(frame: .zero)
+    let chartView = TmpChart()
     
     let cvTitle = UILabel().then {
         $0.text = "카테고리별 맞춤 복지"
@@ -215,7 +210,6 @@ class HomeChartHeader: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        chartView.animate(xAxisDuration: 1, easingOption: .easeInQuad)
         setTitle()
         setCV()
         setUI()
@@ -228,6 +222,26 @@ class HomeChartHeader: UICollectionViewCell {
     
     func setTitle() {
         titleLb.text = "\(vm.main.user.name)님의 최대 수혜 금액"
+        let posts = vm.main.posts["myPost"] ?? []
+        if posts.count != 0 {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .decimal
+            var price = Int(posts[0].maxMoney) ?? 0
+            var result = numberFormatter.string(from: NSNumber(value:price))!
+            maxMoneyLb.text = result
+            if posts.count >= 2 {
+                price = Int(posts.last!.minMoney) ?? 0
+                result = numberFormatter.string(from: NSNumber(value:price))!
+                minMoneyLb.text = "최소 \(result)원"
+            } else {
+                minMoneyLb.text = "최소 0원"
+            }
+            
+        } else {
+            maxMoneyLb.text = "0"
+            minMoneyLb.text = "최소 0원"
+        }
+        
         //maxMoneyLb.text = vm.main.posts["myPost"]!.first!.maxMoney
         //minMoneyLb.text = "최소 \(vm.main.posts["myPost"]!.last!.minMoney)원"
         chartCount.text = "\(vm.main.posts["myPost"]!.count)건"
@@ -295,20 +309,12 @@ class HomeChartHeader: UICollectionViewCell {
         }
         bringSubviewToFront(chartCount)
         
-        
-        addSubview(chartLayoutView)
-        chartLayoutView.snp.makeConstraints {
+        addSubview(chartView)
+        chartView.snp.makeConstraints {
             $0.top.equalTo(chartTitleLb.snp.bottom).offset(22)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(246)
-        }
-        
-        chartLayoutView.addSubview(chartView)
-        chartView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-14)
-            $0.top.equalToSuperview().offset(13)
         }
 
         addSubview(cvUnderLine)
@@ -347,7 +353,10 @@ class HomeChartHeader: UICollectionViewCell {
     
     func bind() {
         maxMoneyBt.rx.tap.subscribe(onNext: {
-            print("asdf")
+            if self.maxMoneyLb.text != "0" {
+                let posts = self.vm.main.posts["myPost"] ?? []
+                self.vm.input.postObserver.accept(posts[0])
+            }
         }).disposed(by: disposeBag)
     }
     

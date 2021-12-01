@@ -12,13 +12,15 @@ import RxCocoa
 import RxSwift
 import SwipeCellKit
 import RxDataSources
+import Alamofire
+import SwiftyJSON
 
 class HomeCalendarView: UIView {
     
     let disposeBag = DisposeBag()
     let cellID = "cellID"
     let headerID = "headerID"
-    
+    let vm = MainTabViewModel.instance
     
     let calendarCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -68,17 +70,18 @@ class HomeCalendarView: UIView {
         $0.isEnabled = true
     }
     
+    let refreshControl = UIRefreshControl()
     
-    let chartData = Observable<[String]>.of(["", "", "", "", "", ""])
-    let headerData = Observable<String>.of("")
-    
-    let testData = ["", "", "", "", "", ""]
+    var bookmarkData:[Post] = []
+    var calendarData:[ClosedRange<Date>: Post] = [:]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        getData(posts: vm.bookmarks)
         setCV()
         setUI()
         bind()
+        calendarView.select(Date())
     }
     
     required init?(coder: NSCoder) {
@@ -88,10 +91,36 @@ class HomeCalendarView: UIView {
 
 extension HomeCalendarView {
     
+    func getData(posts:[Post]) {
+        bookmarkData = []
+        calendarData = [:]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        for post in posts {
+            if post.applyDate.components(separatedBy: "~").count == 2 {
+               let date = post.applyDate.components(separatedBy: "~")
+                let prevDate = dateFormatter.date(from: date[0])!
+                let nextDate = dateFormatter.date(from: date[1])!
+                let range = prevDate...nextDate
+                calendarData.updateValue(post, forKey: range)
+                if range.contains(Date()) {
+                    bookmarkData.append(post)
+                }
+            } else {
+                bookmarkData.append(post)
+            }
+        }
+        DispatchQueue.main.async {
+            self.calendarCV.reloadData()
+            self.calendarView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+        
+    }
+    
     func setCV() {
         calendarCV.delegate = self
         calendarCV.dataSource = self
-        
         calendarCV.register(CalendarCell.self, forCellWithReuseIdentifier: cellID)
     }
     
@@ -131,6 +160,8 @@ extension HomeCalendarView {
             $0.top.equalTo(titleLb.snp.bottom).offset(20)
         }
         
+        refreshControl.addTarget(self, action: #selector(fetchData), for: .valueChanged)
+        calendarCV.refreshControl = refreshControl
         addSubview(calendarCV)
         calendarCV.snp.makeConstraints {
             $0.top.equalTo(imgView.snp.bottom)
@@ -140,15 +171,15 @@ extension HomeCalendarView {
     }
     
     func bind() {
+        
         leftBt.rx.tap.subscribe(onNext: {
             let _calendar = Calendar.current
             var dateComponents = DateComponents()
-            
             dateComponents.month = -1 // For prev button
             self.calendarView.currentPage = _calendar.date(byAdding: dateComponents, to: self.calendarView.currentPage)!
-            
             self.calendarView.setCurrentPage(self.calendarView.currentPage, animated: true)
             self.setTitle()
+            self.calendarView.reloadData()
         }).disposed(by: disposeBag)
         
         rightBt.rx.tap.subscribe(onNext: {
@@ -156,10 +187,9 @@ extension HomeCalendarView {
             var dateComponents = DateComponents()
             dateComponents.month = 1
             self.calendarView.currentPage = _calendar.date(byAdding: dateComponents, to: self.calendarView.currentPage)!
-            
             self.calendarView.setCurrentPage(self.calendarView.currentPage, animated: true)
             self.setTitle()
-            
+            self.calendarView.reloadData()
         }).disposed(by: disposeBag)
         
     }
@@ -172,17 +202,60 @@ extension HomeCalendarView {
         titleLb.text = title
     }
     
+    @objc func fetchData() {
+        let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
+        let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
+        let header:HTTPHeaders = [ "uid": uid,
+                                   "Content-Type":"application/json"]
+        vm.bookmarks = []
+        AF.request(url, method: .get, headers: header)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    let result = json["result"].arrayValue
+                    for post in result {
+                        let postModel = Post(json: post)
+                        MainTabViewModel.instance.bookmarks.append(postModel)
+                    }
+                    self.getData(posts: self.vm.bookmarks)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+    
+    
     
 }
 
 extension HomeCalendarView: FSCalendarDelegate, FSCalendarDataSource {
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        return 3
+        var count = 0
+        for (k, _) in calendarData {
+            if k.contains(date) {
+                count += 1
+            }
+        }
+        if count >= 3 { count = 3}
+        return count
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        
+        for (k, v) in calendarData {
+            if k.contains(date) {
+                if !bookmarkData.contains(v) {
+                    bookmarkData.append(v)
+                }
+            } else {
+                if bookmarkData.contains(v) {
+                    let index = bookmarkData.firstIndex(of: v)!
+                    bookmarkData.remove(at: index)
+                }
+            }
+        }
+        calendarCV.reloadData()
     }
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
@@ -195,12 +268,13 @@ extension HomeCalendarView: FSCalendarDelegate, FSCalendarDataSource {
 extension HomeCalendarView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return testData.count
+        return bookmarkData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! CalendarCell
-        
+        cell.configure(post: bookmarkData[indexPath.row])
+        cell.delegate = self
         return cell
     }
     
@@ -220,11 +294,13 @@ extension HomeCalendarView: UICollectionViewDelegate, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 20)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        HomeChartViewModel.instance.input.postObserver.accept(self.bookmarkData[indexPath.row])
+    }
+    
+    
 }
-
-
-
-
 
 class CalendarCell: SwipeCollectionViewCell {
     
@@ -290,7 +366,58 @@ class CalendarCell: SwipeCollectionViewCell {
         
     }
     
-    func configure(name: String?) {
-        
+    func configure(post: Post) {
+        imgView.image = UIImage().getLogoImage(post.manageOffice)
+        titleLb.text = post.name
+        subLb.text = post.manageOffice
     }
+}
+
+
+extension HomeCalendarView: SwipeCollectionViewCellDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        
+        guard orientation == .right else { return nil }
+        
+        let delete = SwipeAction(style: .default, title: "삭제") { action, indexPath in
+            let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
+            let url = "https://www.makeus-hyun.shop/app/users/bookmark"
+            let header:HTTPHeaders = [ "userUid": uid,
+                                       "welfareUid": self.bookmarkData[indexPath.row].uid,
+                                       "Content-Type":"application/json"]
+            self.vm.bookmarks = []
+            AF.request(url, method: .post, headers: header)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                        let result = json["isSuccess"].boolValue
+                        if result {
+                            self.fetchData()
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+        }
+        
+        delete.backgroundColor = UIColor.rgb(red: 255, green: 152, blue: 87)
+        delete.image = UIImage(named: "trash")!
+        delete.accessibilityContainerType = .none
+        
+        delete.transitionDelegate = ScaleTransition.default
+       
+        return [delete]
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        
+        options.buttonSpacing = 7
+        
+        return options
+    }
+    
+    
 }

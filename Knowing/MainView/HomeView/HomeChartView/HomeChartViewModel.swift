@@ -32,7 +32,7 @@ class HomeChartViewModel {
     
     init() {
         
-        posts = main.posts["studentCategory"]!
+        posts = main.posts["studentCategory"] ?? []
         
         input.categoryObserver.subscribe(onNext: {value in
             self.category = value

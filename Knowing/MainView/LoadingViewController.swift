@@ -10,11 +10,10 @@ import Lottie
 import Then
 import Alamofire
 import SwiftyJSON
-
+import Firebase
 class LoadingViewController: UIViewController {
     var user = User()
     var postDic:[String:[Post]] = [:]
-    
     
     let animationView = AnimationView(name: "lf20_ng9j9lpx_1").then {
         $0.contentMode = .scaleAspectFill
@@ -44,7 +43,7 @@ class LoadingViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        let uid = "MHQ72TN4d8dFFL2b74Ldy4s3EHa2"
+        let uid = Auth.auth().currentUser!.uid
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
         let url = "https://www.makeus-hyun.shop/app/users/userInfo"
@@ -57,7 +56,7 @@ class LoadingViewController: UIViewController {
                     let result = json["result"].dictionaryValue
                     let user = User(json: result)
                     MainTabViewModel.instance.user = user
-                    self.getPostData()
+                    self.getBookmarkData()
                     
                     
                 case .failure(let error):
@@ -94,7 +93,7 @@ class LoadingViewController: UIViewController {
     }
     
     func getPostData() {
-        let uid = "MHQ72TN4d8dFFL2b74Ldy4s3EHa2"
+        let uid = Auth.auth().currentUser!.uid
         let url = "https://www.makeus-hyun.shop/app/mains/mainpage"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
@@ -145,6 +144,29 @@ class LoadingViewController: UIViewController {
                     print(error)
                 }
                 
+            }
+    }
+    
+    func getBookmarkData() {
+        let uid = Auth.auth().currentUser!.uid
+        let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
+        let header:HTTPHeaders = [ "uid": uid,
+                                   "Content-Type":"application/json"]
+        
+        AF.request(url, method: .get, headers: header)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    let result = json["result"].arrayValue
+                    for post in result {
+                        let postModel = Post(json: post)
+                        MainTabViewModel.instance.bookmarks.append(postModel)
+                    }
+                    self.getPostData()
+                case .failure(let error):
+                    print(error)
+                }
             }
     }
     

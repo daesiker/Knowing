@@ -8,7 +8,8 @@
 import UIKit
 import RxCocoa
 import RxSwift
-
+import Alamofire
+import SwiftyJSON
 
 class PostDetailViewController: UIViewController {
     
@@ -178,7 +179,8 @@ class PostDetailViewController: UIViewController {
     
     let benefitTitle = DetailTitleLabel("어떤 혜택을 받을 수 있나요?", image: UIImage(named: "docDetail_benefit")!)
     
-    var benefitsLabels:[UIView] = []
+    var benefitsLabels:[SubTitleLabel] = []
+    var subLabelDic:[Int: [UILabel]] = [:]
     
     let separatorThree = UIView().then {
         $0.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
@@ -346,6 +348,28 @@ class PostDetailViewController: UIViewController {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
+        let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
+        let header:HTTPHeaders = [ "uid": uid,
+                                   "Content-Type":"application/json"]
+        
+        AF.request(url, method: .get, headers: header)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    let result = json["result"].arrayValue
+                    for post in result {
+                        let postModel = Post(json: post)
+                        MainTabViewModel.instance.bookmarks.append(postModel)
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
     
 }
 
@@ -353,21 +377,64 @@ class PostDetailViewController: UIViewController {
 extension PostDetailViewController {
     
     func inputValue() {
-        if vm.main.user.bookmark.contains(vm.post.uid) {
+        logoImg.image = UIImage().getLogoImage(vm.post.manageOffice)
+        if vm.main.bookmarks.contains(vm.post) {
             bookmarkBt.setImage(UIImage(named: "docDetail_bookmarkOn")!, for: .normal)
         }
         nameLb.text = vm.post.manageOffice
         titleLb.text = vm.post.name
-        detailLb.text = vm.post.detailTerms
+        detailLb.text = vm.post.title
         let category = vm.post.category.components(separatedBy: " ")
         largeCategoryLb.text = category[0]
         smallCategoryLb.text = category[1]
         serviceValue.text = vm.post.serviceType
-        dDayValue.text = vm.post.applyDate
-        peopleValue.text = vm.post.joinLimit
-        maxMoneyLb.text = vm.post.maxMoney
-        minMoneyLb.text = vm.post.minMoney
+        let date = vm.post.applyDate.components(separatedBy: "~")
+        if date.count == 2 {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy.MM.dd"
+            
+            let applyDate = dateFormatter.date(from: date[1])!
+            
+            let distanceDay = Calendar.current.dateComponents([.day], from: Date(), to: applyDate).day!
+            dDayValue.text = "D-\(distanceDay)"
+            applyStartDateValue.text = date[0]
+            applyEndDateValue.text = date[1]
+        } else {
+            applyStartDateValue.text = vm.post.applyDate
+            applyEndDateValue.text = vm.post.applyDate
+            dDayValue.text = vm.post.applyDate
+        }
+        peopleValue.text = vm.post.scale
+        
+        if vm.post.maxMoney == "0" {
+            maxMoneyLb.text = "-"
+            minMoneyLb.text = "-"
+        } else {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .decimal
+            var price = Int(vm.post.maxMoney) ?? 0
+            var result = numberFormatter.string(from: NSNumber(value:price))!
+            maxMoneyLb.text = result
+            if vm.post.minMoney == "0" {
+                minMoneyLb.text = "조건별 상이"
+            } else {
+                price = Int(vm.post.minMoney) ?? 0
+                result = numberFormatter.string(from: NSNumber(value: price))!
+                minMoneyLb.text = result
+            }
+            
+        }
+        
+        
         peopleDetailView.setValue(vm.post)
+        
+        
+        
+        operationDateValue.text = vm.post.runDate
+        
+        etcPhNumSubValue.text = vm.post.address
+        etcPhNumValue.text = vm.post.phNum
+        etcOperationValue.text = vm.post.address
         
     }
     
@@ -839,8 +906,24 @@ extension PostDetailViewController {
     func getbenefitLabel() {
         let component = vm.post.content.components(separatedBy: "@")
         
+        
+        
         for i in 0..<component.count {
-            let label = SubTitleLabel(component[i])
+            let textValue = component[i].components(separatedBy: "^")
+            if textValue.count >= 2 {
+                var subLabels:[UILabel] = []
+                for j in 0..<textValue.count {
+                    if j == 0 { continue }
+                    let subLabel = UILabel().then {
+                        $0.text = textValue[j]
+                        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 13)
+                        $0.textColor = UIColor.rgb(red: 124, green: 124, blue: 124)
+                    }
+                    subLabels.append(subLabel)
+                }
+                subLabelDic.updateValue(subLabels, forKey: i)
+            }
+            let label = SubTitleLabel(textValue[0])
             benefitsLabels.append(label)
             scrollView.addSubview(benefitsLabels[i])
             if i == 0 {
@@ -856,12 +939,11 @@ extension PostDetailViewController {
                     $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
                 }
             }
-            
         }
     }
     
     func getRestinctLabel() {
-        let component = ["취업취약계층에 취업지원이 되는데 2줄이 넘어야 하는 경우 어떻게 보이는지 예시로 쓴 글", "저소득층 소득지원 강화", "취업지원서비스 내실화", "구직활동 이행확보", "기존 취업지원 서비스 통합운영"]
+        let component = vm.post.joinLimit.components(separatedBy: "=")
         
         for i in 0..<component.count {
             let label = SubTitleLabel(component[i])
@@ -885,7 +967,7 @@ extension PostDetailViewController {
     }
     
     func getApplyHowLabel() {
-        let value = vm.post.applyMethod.components(separatedBy: "@")
+        let value = vm.post.applyMethod.components(separatedBy: "/")
         
         for i in 0..<value.count {
             let label = ApplyHowValueLabel(value[i])
@@ -934,7 +1016,7 @@ extension PostDetailViewController {
     }
     
     func getApplyDocLabel() {
-        let value = vm.post.document.components(separatedBy: "@")
+        let value = vm.post.document.components(separatedBy: ",")
         
         for i in 0..<value.count {
             let label = ApplyDocTitle(value[i])
@@ -1065,7 +1147,7 @@ extension PostDetailViewController: UIScrollViewDelegate {
         let maxTopHeigt:CGFloat = 416
         let minTopHeight: CGFloat = 59
         
-       
+        
         
         
         
@@ -1173,7 +1255,6 @@ class DetailTitleLabel: UIView {
             $0.leading.equalTo(imageView.snp.trailing).offset(9)
             $0.centerY.equalToSuperview()
         }
-        
         
     }
     

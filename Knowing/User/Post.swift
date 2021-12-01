@@ -8,7 +8,7 @@
 import Foundation
 import SwiftyJSON
 
-struct Post: Codable {
+struct Post: Codable, Equatable{
     
     var manageOffice:String = ""
     var incomeLevel:String = ""

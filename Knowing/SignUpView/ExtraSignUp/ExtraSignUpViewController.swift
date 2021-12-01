@@ -123,6 +123,11 @@ class ExtraSignUpViewController: UIViewController {
         addContentScrollView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        largeTitleLabel.attributedText = NSAttributedString(string: "\(vm.user.name)님만의 혜택을 위해선\n추가 입력이 필요해요").withLineSpacing(6)
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -353,6 +358,8 @@ extension ExtraSignUpViewController {
         self.twoLabel.isHidden = true
         let contentOffset = CGPoint(x: 0, y: 0)
         self.footerView.setContentOffset(contentOffset, animated: true)
+        self.nextBt.isEnabled = true
+        self.nextBt.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
         vm.currentStep = .step1
     }
     
@@ -367,6 +374,9 @@ extension ExtraSignUpViewController {
         if !dismiss {
             nextBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
             nextBt.isEnabled = false
+        } else {
+            self.nextBt.isEnabled = true
+            self.nextBt.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
         }
         vm.currentStep = .step2
     }
@@ -381,6 +391,9 @@ extension ExtraSignUpViewController {
         if !dismiss {
             nextBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
             nextBt.isEnabled = false
+        } else {
+            self.nextBt.isEnabled = true
+            self.nextBt.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
         }
         vm.currentStep = .step3
     }
@@ -408,7 +421,6 @@ extension ExtraSignUpViewController {
         vc.modalTransitionStyle = .crossDissolve
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
-        
     }
     
     func setSV() {

@@ -20,18 +20,21 @@ class ViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//            let vc = MainTabViewController()
-//            let nav = UINavigationController(rootViewController: vc)
-//            nav.navigationController?.isNavigationBarHidden = true
-//            nav.modalTransitionStyle = .crossDissolve
-//            nav.modalPresentationStyle = .fullScreen
-//            self.present(nav, animated: true)
-             
             
-            let viewController = LoadingViewController()
-            viewController.modalTransitionStyle = .crossDissolve
-            viewController.modalPresentationStyle = .fullScreen
-            self.present(viewController, animated: true)
+            let isInitial = UserDefaults.standard.string(forKey: "isInitial")
+            if isInitial != "yes" {
+                let viewController = GuideViewController()
+                viewController.modalTransitionStyle = .crossDissolve
+                viewController.modalPresentationStyle = .fullScreen
+                self.present(viewController, animated: true)
+            } else {
+                let viewController = LoginViewController()
+                viewController.modalTransitionStyle = .crossDissolve
+                viewController.modalPresentationStyle = .fullScreen
+                self.present(viewController, animated: true)
+            }
+            
+            
         }
     }
     

@@ -9,6 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import Alamofire
+import SwiftyJSON
 
 class PostDetailViewModel {
     
@@ -56,7 +57,7 @@ class PostDetailViewModel {
         output.etcValue = input.etcObserver.map {[false, false, false, true]}.asDriver(onErrorJustReturn: [false, false, false, true])
         
         input.bookmarkObserver.subscribe(onNext: {value in
-            let uid = "MHQ72TN4d8dFFL2b74Ldy4s3EHa2"
+            let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
             let url = "https://www.makeus-hyun.shop/app/users/bookmark"
             let header:HTTPHeaders = ["userUid": uid,
                                       "welfareUid": self.post.uid]
@@ -64,7 +65,9 @@ class PostDetailViewModel {
             AF.request(url, method: .post, headers: header)
                 .responseJSON { response in
                     switch response.result {
-                    case .success(_):
+                    case .success(let data):
+                        
+                        print(JSON(data))
                         if self.main.user.bookmark.contains(value) {
                             let index = self.main.user.bookmark.firstIndex(of: value)
                             self.main.user.bookmark.remove(at: index!)

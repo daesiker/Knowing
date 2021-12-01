@@ -70,12 +70,11 @@ class GuideViewController: UIViewController {
                 self.guideScrollView.setContentOffset(contentOffset, animated: true)
                 self.nextButton.setTitle("시작하기", for: .normal)
             } else {
+                UserDefaults.standard.setValue("yes", forKey: "isInitial")
                 let viewController = LoginViewController()
-                let navController = UINavigationController(rootViewController: viewController)
-                navController.isNavigationBarHidden = true
-                navController.modalTransitionStyle = .crossDissolve
-                navController.modalPresentationStyle = .fullScreen
-                self.present(navController, animated: true)
+                viewController.modalTransitionStyle = .crossDissolve
+                viewController.modalPresentationStyle = .fullScreen
+                self.present(viewController, animated: true)
             }
         }).disposed(by: disposedBag)
         

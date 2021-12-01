@@ -67,6 +67,7 @@
 		BF8D62732718FF53006D7227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF8D62722718FF53006D7227 /* Assets.xcassets */; };
 		BF8D62762718FF53006D7227 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF8D62742718FF53006D7227 /* LaunchScreen.storyboard */; };
 		BF8D627E2719012A006D7227 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF8D627D2719012A006D7227 /* GoogleService-Info.plist */; };
+		BF8D8F6D2756FF98009E6696 /* TmpChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D8F6C2756FF98009E6696 /* TmpChartViewController.swift */; };
 		BF9A5D33274F1F0C005CC646 /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A5D32274F1F0C005CC646 /* PostDetailViewController.swift */; };
 		BFA07970271FD2F800912C18 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA0796F271FD2F800912C18 /* MainTabViewController.swift */; };
 		BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA07975271FD47F00912C18 /* HomeViewController.swift */; };
@@ -150,6 +151,7 @@
 		BF8D62752718FF53006D7227 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF8D62772718FF53006D7227 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BF8D627D2719012A006D7227 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BF8D8F6C2756FF98009E6696 /* TmpChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmpChartViewController.swift; sourceTree = "<group>"; };
 		BF9A5D32274F1F0C005CC646 /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
 		BFA0796F271FD2F800912C18 /* MainTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabViewController.swift; sourceTree = "<group>"; };
 		BFA07975271FD47F00912C18 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -496,6 +498,7 @@
 				BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */,
 				BF85C62A27310883005D9EF1 /* FoundationExtension.swift */,
 				BFECE1CB2738DCAF0055FA9D /* Enum.swift */,
+				BF8D8F6C2756FF98009E6696 /* TmpChartViewController.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -662,6 +665,7 @@
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
 				BF7749872754F3550062180A /* HomeAllPostViewModel.swift in Sources */,
 				BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */,
+				BF8D8F6D2756FF98009E6696 /* TmpChartViewController.swift in Sources */,
 				BF87721A2756412300EC9C9A /* Category.swift in Sources */,
 				BFA4689E27463BA50056224A /* School.swift in Sources */,
 				BF87721C27565D4D00EC9C9A /* DefaultModifyUserViewController.swift in Sources */,

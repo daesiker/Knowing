@@ -498,12 +498,17 @@ extension AddPostCategoryViewController {
         
         vm.output.goSignUp
             .emit { user in
-                print(user)
+                let vc = LoadingViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
             }.disposed(by: disposeBag)
         
         vm.output.error
             .emit { error in
-                print(error)
+                let knowingError = error as? KnowingError
+                let vc = UIAlertController(title: "에러", message: knowingError?.msg, preferredStyle: .alert)
+                self.present(vc, animated: true)
             }.disposed(by: disposeBag)
     }
     
