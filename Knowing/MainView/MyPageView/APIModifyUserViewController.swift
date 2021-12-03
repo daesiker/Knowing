@@ -9,12 +9,12 @@ import UIKit
 import RxCocoa
 import RxSwift
 import Alamofire
+import Firebase
 
 class APIModifyUserViewController: UIViewController {
     
     let vm:APIModifyUserViewModel
     let disposeBag = DisposeBag()
-    
     
     let backBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
@@ -86,10 +86,10 @@ class APIModifyUserViewController: UIViewController {
         $0.setTitle("수정하기", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
         $0.titleLabel?.textColor = .white
-        $0.backgroundColor = UIColor.rgb(red: 195, green: 195, blue: 195)
+        $0.backgroundColor = UIColor.rgb(red: 251, green: 136, blue: 85)
         $0.layer.cornerRadius = 27.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 134, bottom: 13, right: 134)
-        $0.isEnabled = false
+        $0.isEnabled = true
     }
     
     init(vm: APIModifyUserViewModel) {
@@ -111,7 +111,6 @@ class APIModifyUserViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
     
     func setUI() {
         view.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
@@ -136,7 +135,7 @@ class APIModifyUserViewController: UIViewController {
         
         safeArea.addSubview(accountView)
         accountView.snp.makeConstraints {
-            $0.top.equalTo(accountLabel.snp.bottom).offset(28)
+            $0.top.equalTo(accountLabel.snp.bottom).offset(8)
             $0.leading.equalToSuperview().offset(25)
             $0.trailing.equalToSuperview().offset(-25)
             $0.height.equalTo(42)
@@ -144,7 +143,7 @@ class APIModifyUserViewController: UIViewController {
         
         safeArea.addSubview(nameLabel)
         nameLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLb.snp.bottom).offset(48)
+            $0.top.equalTo(accountView.snp.bottom).offset(28)
             $0.leading.equalToSuperview().offset(25)
         }
         
@@ -202,6 +201,7 @@ class APIModifyUserViewController: UIViewController {
     }
     
     func bindInput() {
+        
         backBt.rx.tap
             .subscribe(onNext: {
                 self.dismiss(animated: true, completion: nil)
@@ -233,6 +233,7 @@ class APIModifyUserViewController: UIViewController {
     }
     
     func bindOutput() {
+        
         vm.output.genderValid.drive(onNext: {valid in
             switch valid{
             case .male:
@@ -260,21 +261,24 @@ class APIModifyUserViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
-        vm.output.modifyValue.emit(onNext: { value in
-            MainTabViewModel.instance.user = value
-            self.dismiss(animated: true, completion: nil)
+        vm.output.modifyValue.asSignal()
+            .emit(onNext: { value in
+                let vc = LoadingViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
         }).disposed(by: disposeBag)
         
-        vm.output.errorValue.emit(onNext: { error in
+        vm.output.errorValue.asSignal()
+            .emit(onNext: { error in
             let alert = UIAlertController(title: "에러", message: "네트워크 상태를 확인해 주세요.", preferredStyle: .alert)
             self.present(alert, animated: false)
         }).disposed(by: disposeBag)
         
-        
-        
     }
     
     func setValue() {
+        
         nameTextField.text = vm.user.name
         if vm.user.gender == "남성" {
             maleBt.setTitleColor(.white, for: .normal)
@@ -290,7 +294,6 @@ class APIModifyUserViewController: UIViewController {
         age.insert(contentsOf: " / ", at: age.index(age.endIndex, offsetBy: -2))
         
         birthTextField.text = age
-        
         
     }
     
@@ -314,20 +317,17 @@ class APIModifyUserViewModel {
     struct Output {
         var genderValid:Driver<Gender> = PublishRelay<Gender>().asDriver(onErrorJustReturn: .notSelected)
         var buttonValid:Driver<Bool> = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
-        var modifyValue = PublishRelay<User>().asSignal()
-        var errorValue = PublishRelay<Error>().asSignal()
+        var modifyValue = PublishRelay<User>()
+        var errorValue = PublishRelay<Error>()
     }
     
     init(_ user: User) {
         self.user = user
-        let modifyRelay = PublishRelay<User>()
-        let errorRelay = PublishRelay<Error>()
         
         input.nameObserver.subscribe(onNext: {valid in
             self.user.name = valid
             self.output.buttonValid = Observable<Bool>.just(true).asDriver(onErrorJustReturn: false)
         }).disposed(by: disposeBag)
-        
         
         input.genderObserver.subscribe(onNext: {valid in
             switch valid {
@@ -354,9 +354,9 @@ class APIModifyUserViewModel {
                 case .completed:
                     break
                 case .error(let error):
-                    errorRelay.accept(error)
+                    self.output.errorValue.accept(error)
                 case .next(let user):
-                    modifyRelay.accept(user)
+                    self.output.modifyValue.accept(user)
                 }
             })
             .disposed(by: disposeBag)
@@ -364,17 +364,13 @@ class APIModifyUserViewModel {
         
         output.genderValid = input.genderObserver.asDriver(onErrorJustReturn: .notSelected)
         
-        
-        output.modifyValue = modifyRelay.asSignal()
-        output.errorValue = errorRelay.asSignal()
-        
     }
     
     func modifyUser() -> Observable<User> {
         
         return Observable<User>.create { observer in
             
-            let uid = "MHQ72TN4d8dFFL2b74Ldy4s3EHa2"//Auth.auth().currentUser!.uid
+            let uid = Auth.auth().currentUser!.uid
             let url = "https://www.makeus-hyun.shop/app/users/usermodify/privacy"
             let header:HTTPHeaders = ["uid": uid,
                                       "Content-Type":"application/json"]

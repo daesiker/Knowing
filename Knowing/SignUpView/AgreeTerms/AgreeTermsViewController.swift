@@ -263,6 +263,22 @@ extension AgreeTermsViewController {
             .bind(to: vm.input.nextBtObserver)
             .disposed(by: disposeBag)
         
+        firstBt.rx.tap
+            .subscribe(onNext: {
+                let vc = PersonnalInfoViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            }).disposed(by: disposeBag)
+        
+        secondBt.rx.tap
+            .subscribe(onNext: {
+                let vc = PersonnalInfoViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            }).disposed(by: disposeBag)
+        
     }
     
     func bindOutput() {
@@ -336,7 +352,8 @@ extension AgreeTermsViewController {
             }
         }).disposed(by: disposeBag)
         
-        vm.output.goToSignUp.emit(onNext: { user in
+        vm.output.goToSignUp.asSignal()
+            .emit(onNext: { user in
             if user.provider == "default" {
                 let vc = SignUpViewController()
                 vc.modalTransitionStyle = .crossDissolve
@@ -353,7 +370,12 @@ extension AgreeTermsViewController {
         }).disposed(by: disposeBag)
         
         
-        //MARK:-에러처리
+        vm.output.errorRelay.asSignal()
+            .emit(onNext: { _ in
+                let alertController = UIAlertController(title: "에러", message: "인터넷 연결 상태를 확인해주세요.", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+                self.present(alertController, animated: true)
+            }).disposed(by: disposeBag)
         
     }
     

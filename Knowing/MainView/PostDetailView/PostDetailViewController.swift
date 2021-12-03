@@ -10,6 +10,7 @@ import RxCocoa
 import RxSwift
 import Alamofire
 import SwiftyJSON
+import Firebase
 
 class PostDetailViewController: UIViewController {
     
@@ -33,6 +34,7 @@ class PostDetailViewController: UIViewController {
     
     let alarmBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "docDetail_alarm"), for: .normal)
+        $0.alpha = 0
     }
     
     let bookmarkBt = UIButton(type: .custom).then {
@@ -206,11 +208,20 @@ class PostDetailViewController: UIViewController {
     
     let peopleDetailView = PeopleDetailView()
     
+    let separatorDetail = UIView().then {
+        $0.backgroundColor = UIColor.rgb(red: 250, green: 239, blue: 221)
+    }
+    
+    let detailTermsTitle = UnderLineLabel("자격 상세 조건")
+    var detailTermsLabels:[SubTitleLabel] = []
+    
+    
     let separatorFive = UIView().then {
         $0.backgroundColor = UIColor.rgb(red: 250, green: 239, blue: 221)
     }
     
     let restinctTitle = UnderLineLabel("참여 제한 대상")
+    
     
     var restinctLabels:[UIView] = []
     
@@ -265,7 +276,6 @@ class PostDetailViewController: UIViewController {
     let applyHowTitle = UnderLineLabel("신청 방법")
     
     var applyHowValues:[ApplyHowValueLabel] = []
-    
     
     let separatorEight = UIView().then {
         $0.backgroundColor = UIColor.rgb(red: 250, green: 239, blue: 221)
@@ -350,7 +360,7 @@ class PostDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
+        let uid = Auth.auth().currentUser!.uid
         let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
@@ -366,7 +376,10 @@ class PostDetailViewController: UIViewController {
                         MainTabViewModel.instance.bookmarks.append(postModel)
                     }
                 case .failure(let error):
-                    print(error)
+                    let vc = UIAlertController(title: "에러", message: "네트워크 연결을 확인하세요.", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "확인", style: .cancel)
+                    vc.addAction(action)
+                    self.present(vc, animated: true)
                 }
             }
     }
@@ -425,16 +438,17 @@ extension PostDetailViewController {
             
         }
         
-        
         peopleDetailView.setValue(vm.post)
-        
-        
-        
         operationDateValue.text = vm.post.runDate
-        
         etcPhNumSubValue.text = vm.post.address
         etcPhNumValue.text = vm.post.phNum
         etcOperationValue.text = vm.post.address
+        
+        if vm.post.url == "" {
+            shareBt.isEnabled = false
+            goToWebBt.isEnabled = false
+            goToWebBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
+        }
         
     }
     
@@ -716,9 +730,25 @@ extension PostDetailViewController {
             $0.trailing.equalTo(safeArea.snp.trailing)
         }
         
+        scrollView.addSubview(separatorDetail)
+        separatorDetail.snp.makeConstraints {
+            $0.top.equalTo(separatorFour.snp.bottom).offset(280)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+            $0.height.equalTo(1)
+        }
+        
+        scrollView.addSubview(detailTermsTitle)
+        detailTermsTitle.snp.makeConstraints {
+            $0.top.equalTo(separatorDetail.snp.bottom).offset(26)
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
+        getdetailTermsLabel()
+        
         scrollView.addSubview(separatorFive)
         separatorFive.snp.makeConstraints {
-            $0.top.equalTo(separatorFour.snp.bottom).offset(280)
+            $0.top.equalTo(detailTermsLabels.last!.snp.bottom).offset(26)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
             $0.height.equalTo(1)
@@ -905,9 +935,6 @@ extension PostDetailViewController {
     
     func getbenefitLabel() {
         let component = vm.post.content.components(separatedBy: "@")
-        
-        
-        
         for i in 0..<component.count {
             let textValue = component[i].components(separatedBy: "^")
             if textValue.count >= 2 {
@@ -935,6 +962,42 @@ extension PostDetailViewController {
             } else {
                 benefitsLabels[i].snp.makeConstraints {
                     $0.top.equalTo(benefitsLabels[i-1].snp.bottom)
+                    $0.leading.equalToSuperview().offset(20)
+                    $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+                }
+            }
+        }
+    }
+    
+    func getdetailTermsLabel() {
+        let component = vm.post.detailTerms.components(separatedBy: "@")
+        for i in 0..<component.count {
+            let textValue = component[i].components(separatedBy: "^")
+            if textValue.count >= 2 {
+                var subLabels:[UILabel] = []
+                for j in 0..<textValue.count {
+                    if j == 0 { continue }
+                    let subLabel = UILabel().then {
+                        $0.text = textValue[j]
+                        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 13)
+                        $0.textColor = UIColor.rgb(red: 124, green: 124, blue: 124)
+                    }
+                    subLabels.append(subLabel)
+                }
+                subLabelDic.updateValue(subLabels, forKey: i)
+            }
+            let label = SubTitleLabel(textValue[0])
+            detailTermsLabels.append(label)
+            scrollView.addSubview(detailTermsLabels[i])
+            if i == 0 {
+                detailTermsLabels[i].snp.makeConstraints {
+                    $0.top.equalTo(detailTermsTitle.snp.bottom).offset(32)
+                    $0.leading.equalToSuperview().offset(20)
+                    $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+                }
+            } else {
+                detailTermsLabels[i].snp.makeConstraints {
+                    $0.top.equalTo(detailTermsLabels[i-1].snp.bottom)
                     $0.leading.equalToSuperview().offset(20)
                     $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
                 }
@@ -1016,7 +1079,7 @@ extension PostDetailViewController {
     }
     
     func getApplyDocLabel() {
-        let value = vm.post.document.components(separatedBy: ",")
+        let value = vm.post.document.components(separatedBy: "@")
         
         for i in 0..<value.count {
             let label = ApplyDocTitle(value[i])
@@ -1124,13 +1187,21 @@ extension PostDetailViewController {
             self.scrollView.setContentOffset(CGPoint(x: self.separatorTen.frame.origin.x, y: self.separatorTen.frame.origin.y), animated: true)
         }).disposed(by: disposeBag)
         
-        vm.output.bookmarkEnable.emit(onNext: { value in
+        vm.output.bookmarkEnable.asSignal()
+            .emit(onNext: { value in
             if value {
                 self.bookmarkBt.setImage(UIImage(named: "docDetail_bookmarkOn")!, for: .normal)
             } else {
                 self.bookmarkBt.setImage(UIImage(named: "docDetail_bookmark")!, for: .normal)
             }
         }).disposed(by: disposeBag)
+        
+        vm.output.errorValid.asSignal()
+            .emit(onNext: { _ in
+                let alertController = UIAlertController(title: "에러", message: "네트워크 연결을 확인해주세요.", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+                self.present(alertController, animated: true)
+            }).disposed(by: disposeBag)
         
         
     }
@@ -1569,7 +1640,31 @@ class PeopleDetailView: UIView {
     
     func setValue(_ post: Post) {
         ageValue.text = post.age
-        moneyValue.text = post.incomeLevel
+        
+        let incomeAvg = Int(post.incomeLevel) ?? 0
+        
+        if incomeAvg <= 30 {
+            moneyValue.text = "1분위 이하"
+        } else if incomeAvg <= 50 {
+            moneyValue.text = "2분위 이하"
+        } else if incomeAvg <= 70 {
+            moneyValue.text = "3분위 이하"
+        } else if incomeAvg <= 90 {
+            moneyValue.text = "4분위 이하"
+        } else if incomeAvg <= 100 {
+            moneyValue.text = "5분위 이하"
+        } else if incomeAvg <= 130 {
+            moneyValue.text = "6분위 이하"
+        } else if incomeAvg <= 150 {
+            moneyValue.text = "7분위 이하"
+        } else if incomeAvg <= 200 {
+            moneyValue.text = "8분위 이하"
+        } else if incomeAvg <= 300 {
+            moneyValue.text = "9분위 이하"
+        } else {
+            moneyValue.text = "10분위 이하"
+        }
+        
         schollValue.text = post.schoolRecords
         employValue.text = post.employmentState
         specialValue.text = post.specialStatus

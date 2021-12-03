@@ -17,8 +17,6 @@ import FirebaseMessaging
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //Firebase
         FirebaseApp.configure()
@@ -70,10 +68,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if AuthApi.isKakaoTalkLoginUrl(url) {
             return AuthController.handleOpenUrl(url: url)
         }
-        
         let naverSession = NaverThirdPartyLoginConnection.getSharedInstance().application(app, open: url, options: options)
         let googleSession = GIDSignIn.sharedInstance.handle(url)
-        return googleSession || naverSession
+        return naverSession || googleSession
     }
     
     // MARK: UISceneSession Lifecycle

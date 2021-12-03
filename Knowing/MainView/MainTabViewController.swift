@@ -121,9 +121,8 @@ class MainTabViewController: UITabBarController {
         return navController
     }
     
+    
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        
-        
         
         return true
     }

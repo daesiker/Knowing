@@ -10,6 +10,7 @@ import Foundation
 import Then
 import RxSwift
 import RxCocoa
+import Firebase
 
 class MyPageViewController: UIViewController {
     
@@ -279,7 +280,6 @@ extension MyPageViewController {
         categorySettingBt.rx.tap
             .subscribe(onNext: {
                 let vm = AddPostCategoryViewModel(isModify: true)
-                vm.user = self.vm.user
                 let vc = AddPostCategoryViewController(vm)
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
@@ -310,6 +310,38 @@ extension MyPageViewController {
                 vc.modalTransitionStyle = .crossDissolve
                 self.present(vc, animated: true)
             }).disposed(by: disposeBag)
+        
+        logoutBt.rx.tap.subscribe(onNext: {
+            
+            let alertController = UIAlertController(title: "로그아웃", message: "로그아웃 하시겠습니까?", preferredStyle: .alert)
+            
+            alertController.addAction(UIAlertAction(title:"로그아웃", style: .default, handler: { _ in
+                do {
+                    try Auth.auth().signOut()
+                    UserDefaults.standard.setValue(nil, forKey: "provider")
+                    UserDefaults.standard.setValue(nil, forKey: "email")
+                    UserDefaults.standard.setValue(nil, forKey: "pwd")
+                    UserDefaults.standard.setValue(nil, forKey: "uid")
+                    let viewController = LoginViewController()
+                    viewController.modalTransitionStyle = .crossDissolve
+                    viewController.modalPresentationStyle = .fullScreen
+                    self.present(viewController, animated: true)
+                } catch {
+                    UserDefaults.standard.setValue(nil, forKey: "provider")
+                    UserDefaults.standard.setValue(nil, forKey: "email")
+                    UserDefaults.standard.setValue(nil, forKey: "pwd")
+                    UserDefaults.standard.setValue(nil, forKey: "uid")
+                    let viewController = LoginViewController()
+                    viewController.modalTransitionStyle = .crossDissolve
+                    viewController.modalPresentationStyle = .fullScreen
+                    self.present(viewController, animated: true)
+                }
+            }))
+            
+            alertController.addAction(UIAlertAction(title: "취소", style: .default, handler: nil))
+            self.present(alertController, animated: true)
+        }).disposed(by: disposeBag)
+        
     }
     
 }

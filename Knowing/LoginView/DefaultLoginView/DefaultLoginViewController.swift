@@ -265,5 +265,22 @@ extension DefaultLoginViewController {
                 self.logInBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
             }
         }).disposed(by: disposeBag)
+        
+        
+        vm.output.doLogin.asSignal()
+            .emit(onNext: {
+            let viewController = LoadingViewController()
+            viewController.modalTransitionStyle = .crossDissolve
+            viewController.modalPresentationStyle = .fullScreen
+            self.present(viewController, animated: true)
+        }).disposed(by: disposeBag)
+        
+        vm.output.doError.asSignal()
+            .emit(onNext: { error in
+            let alertController = UIAlertController(title: "에러", message: error.msg, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+            self.present(alertController, animated: true)
+        }).disposed(by: disposeBag)
+        
     }
 }

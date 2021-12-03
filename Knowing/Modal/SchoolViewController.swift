@@ -32,6 +32,7 @@ class SchoolViewController: UIViewController {
     let searchBar = UISearchBar().then {
         $0.searchBarStyle = .minimal
         $0.layer.cornerRadius = 30
+        $0.searchTextField.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
         $0.placeholder = "검색어를 입력해주세요."
     }
     
@@ -43,6 +44,7 @@ class SchoolViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.backgroundColor = .white
+        
         return collectionView
     }()
     
@@ -159,6 +161,8 @@ extension SchoolViewController: PanModalPresentable {
     var shortFormHeight: PanModalHeight {
         return .contentHeight(self.view.frame.height * 0.64)
         }
+    
+    
     
     //Modal background color
     var panModalBackgroundColor: UIColor {

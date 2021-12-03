@@ -12,18 +12,19 @@ import RxSwift
 import SwipeCellKit
 import Alamofire
 import SwiftyJSON
+import Firebase
 
 class BookMarkViewController: UIViewController {
 
     let disposeBag = DisposeBag()
     
     let searchBar = CustomTextField(image: UIImage(named: "search")!, text: "검색", state: .search)
+    
     var defaultOptions = SwipeOptions()
     var buttonStyle: ButtonStyle = .circular
     let vm = MainTabViewModel.instance
     
     var filteredData:[Post] = []
-    var filtered:Bool = false
     
     let countLb = UILabel().then {
         $0.text = "총 68건"
@@ -35,10 +36,12 @@ class BookMarkViewController: UIViewController {
         $0.text = "높은 금액순"
         $0.textColor = UIColor.rgb(red: 210, green: 132, blue: 81)
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
+        $0.alpha = 0
     }
     
     let sortBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "filterImg")!, for: .normal)
+        $0.alpha = 0
     }
     
     let bookmarkCV: UICollectionView = {
@@ -71,6 +74,7 @@ class BookMarkViewController: UIViewController {
         setData()
         setUI()
         setCV()
+        bind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,6 +97,7 @@ class BookMarkViewController: UIViewController {
 extension BookMarkViewController {
     
     func setData() {
+        filteredData = vm.bookmarks
         countLb.text = "총 \(vm.bookmarks.count)건"
         if vm.bookmarks.count == 0 {
             noDataImg.alpha = 1.0
@@ -110,7 +115,6 @@ extension BookMarkViewController {
     
     func setUI() {
         view.backgroundColor = .white
-        searchBar.delegate = self
         safeArea.addSubview(searchBar)
         searchBar.snp.makeConstraints {
             $0.top.equalToSuperview().offset(13)
@@ -175,7 +179,7 @@ extension BookMarkViewController {
     
     @objc func fetchData() {
         
-        let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
+        let uid = Auth.auth().currentUser!.uid
         let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
@@ -191,37 +195,33 @@ extension BookMarkViewController {
                         MainTabViewModel.instance.bookmarks.append(postModel)
                     }
                     DispatchQueue.main.async {
+                        self.setData()
                         self.bookmarkCV.reloadData()
                         self.refreshControl.endRefreshing()
-                        self.setData()
                     }
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        let alertController = UIAlertController(title: "에러", message: "네트워크 연결상태를 확인해주세요.", preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "확인", style: .cancel))
+                        self.present(alertController, animated: true)
+                    }
                 }
             }
     }
     
-    func filteredPost(_ query: String) {
-        filteredData.removeAll()
-        for post in vm.bookmarks {
-            if post.name.contains(query) {
-                filteredData.append(post)
-            }
-        }
-        bookmarkCV.reloadData()
-        filtered = true
+    func bind() {
+        searchBar.rx.text.orEmpty
+            .debounce(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance) //0.5초 기다림
+            .distinctUntilChanged() // 같은 아이템을 받지 않는기능
+            .subscribe(onNext: { t in self.filteredData = self.vm.bookmarks.filter{ $0.name.hasPrefix(t) }
+                        self.bookmarkCV.reloadData()
+            })
+            .disposed(by: disposeBag)
+
     }
     
 }
 
-extension BookMarkViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let text = textField.text {
-            filteredPost(text + string)
-        }
-        return true
-    }
-}
 
 extension BookMarkViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
@@ -230,18 +230,15 @@ extension BookMarkViewController: UICollectionViewDelegate, UICollectionViewDele
         cell.delegate = self
         cell.contentView.backgroundColor = UIColor.rgb(red: 255, green: 246, blue: 232)
         cell.contentView.layer.cornerRadius = 30
-        if !filteredData.isEmpty {
-            cell.configure(vm.bookmarks[indexPath.row])
-        } else {
-            cell.configure(vm.bookmarks[indexPath.row])
-        }
+        cell.configure(filteredData[indexPath.row])
+        
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let post = !filteredData.isEmpty ? filteredData[indexPath.row] : vm.bookmarks[indexPath.row]
+        let post = filteredData[indexPath.row]
         let vm = PostDetailViewModel(post)
         let vc = PostDetailViewController(vm: vm)
         vc.modalTransitionStyle = .crossDissolve
@@ -251,11 +248,8 @@ extension BookMarkViewController: UICollectionViewDelegate, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if !filteredData.isEmpty {
-            return filteredData.count
-        }
-        
-        return filtered ? 0 : vm.bookmarks.count
+    
+        return filteredData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -277,8 +271,6 @@ extension BookMarkViewController: UICollectionViewDelegate, UICollectionViewDele
     
 }
 
-
-
 extension BookMarkViewController: SwipeCollectionViewCellDelegate {
     
     func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
@@ -286,13 +278,13 @@ extension BookMarkViewController: SwipeCollectionViewCellDelegate {
         guard orientation == .right else { return nil }
         
         let delete = SwipeAction(style: .default, title: "삭제") { action, indexPath in
-            let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
+            let uid = Auth.auth().currentUser!.uid
             let url = "https://www.makeus-hyun.shop/app/users/bookmark"
-            let welfareUid = !self.filteredData.isEmpty ? self.filteredData[indexPath.row].uid : self.vm.bookmarks[indexPath.row].uid
+            let welfareUid = self.filteredData[indexPath.row].uid
             let header:HTTPHeaders = [ "userUid": uid,
                                        "welfareUid": welfareUid,
                                        "Content-Type":"application/json"]
-            self.vm.bookmarks = []
+            
             AF.request(url, method: .post, headers: header)
                 .responseJSON { response in
                     switch response.result {
@@ -300,10 +292,15 @@ extension BookMarkViewController: SwipeCollectionViewCellDelegate {
                         let json = JSON(value)
                         let result = json["isSuccess"].boolValue
                         if result {
+                            self.vm.bookmarks = []
                             self.fetchData()
                         }
-                    case .failure(let error):
-                        print(error)
+                    case .failure(_):
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "에러", message: "네트워크 연결상태를 확인해주세요.", preferredStyle: .alert)
+                            alertController.addAction(UIAlertAction(title: "확인", style: .cancel))
+                            self.present(alertController, animated: true)
+                        }
                     }
                 }
         }

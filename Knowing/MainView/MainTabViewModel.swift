@@ -31,4 +31,10 @@ class MainTabViewModel {
         
     }
     
+    func clear() {
+        user = User()
+        posts = [:]
+        bookmarks = []
+    }
+    
 }

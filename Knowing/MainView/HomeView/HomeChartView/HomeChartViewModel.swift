@@ -23,11 +23,13 @@ class HomeChartViewModel {
     struct Input {
         let categoryObserver = PublishRelay<String>()
         let postObserver = PublishRelay<Post>()
+        let errorObserver = PublishRelay<Void>()
     }
     
     struct Output {
         var postChanged = PublishRelay<[Post]>().asDriver(onErrorJustReturn: [])
         var getPost = PublishRelay<Post>().asDriver(onErrorJustReturn: Post())
+        var goError = PublishRelay<Void>().asDriver(onErrorJustReturn: ())
     }
     
     init() {
@@ -50,10 +52,11 @@ class HomeChartViewModel {
             default:
                 self.posts = self.main.posts["covidCategory"]!
             }
-            print(self.posts)
         }).disposed(by: disposeBag)
         
         output.getPost = input.postObserver.asDriver(onErrorJustReturn: Post())
+        
+        output.goError = input.errorObserver.asDriver(onErrorJustReturn: ())
         
         output.postChanged = input.categoryObserver.map { _ in
             return self.posts}.asDriver(onErrorJustReturn: [])

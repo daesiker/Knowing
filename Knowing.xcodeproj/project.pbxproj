@@ -20,13 +20,12 @@
 		BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */; };
 		BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058827229C30008CA167 /* LoadingViewController.swift */; };
 		BF368C46274E14110035DA50 /* AppleSDGothicNeoEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF368C45274E14110035DA50 /* AppleSDGothicNeoEB.ttf */; };
-		BF368C48274E298F0035DA50 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF368C47274E298F0035DA50 /* HomeViewModel.swift */; };
 		BF3CF93E274FD6850018260B /* PostDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3CF93D274FD6850018260B /* PostDetailViewModel.swift */; };
+		BF4F267F27584BD8004A153D /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F267E27584BD7004A153D /* Alarm.swift */; };
 		BF5351CB2733C2230040ECFE /* ExtraSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5351CA2733C2230040ECFE /* ExtraSignUpViewModel.swift */; };
 		BF5A2B8A272A67E200234429 /* GodoM.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B88272A5D4F00234429 /* GodoM.ttf */; };
 		BF5A2B8B272A67E500234429 /* GodoB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF5A2B89272A62D500234429 /* GodoB.ttf */; };
 		BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */; };
-		BF5AD0AB2747F4AD003E03A1 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5AD0AA2747F4AD003E03A1 /* ChartView.swift */; };
 		BF5C9BBE2742939E00005AC7 /* ApiSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C9BBD2742939E00005AC7 /* ApiSignUpViewController.swift */; };
 		BF5C9BC02742A53C00005AC7 /* ApiSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C9BBF2742A53C00005AC7 /* ApiSignUpViewModel.swift */; };
 		BF6086A32740ABB900D63BF6 /* AgreeTermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */; };
@@ -67,7 +66,7 @@
 		BF8D62732718FF53006D7227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF8D62722718FF53006D7227 /* Assets.xcassets */; };
 		BF8D62762718FF53006D7227 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF8D62742718FF53006D7227 /* LaunchScreen.storyboard */; };
 		BF8D627E2719012A006D7227 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF8D627D2719012A006D7227 /* GoogleService-Info.plist */; };
-		BF8D8F6D2756FF98009E6696 /* TmpChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D8F6C2756FF98009E6696 /* TmpChartViewController.swift */; };
+		BF8D8F6D2756FF98009E6696 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D8F6C2756FF98009E6696 /* ChartView.swift */; };
 		BF9A5D33274F1F0C005CC646 /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9A5D32274F1F0C005CC646 /* PostDetailViewController.swift */; };
 		BFA07970271FD2F800912C18 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA0796F271FD2F800912C18 /* MainTabViewController.swift */; };
 		BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA07975271FD47F00912C18 /* HomeViewController.swift */; };
@@ -82,7 +81,6 @@
 		BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF1299B2737C1B500BD89EA /* DefaultLoginViewModel.swift */; };
 		BFF506F8271908D4003127CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506F7271908D4003127CF /* LoginViewController.swift */; };
 		BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506FA27190D80003127CF /* UIKitExtension.swift */; };
-		BFF506FD27190EBB003127CF /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF506FC27190EBB003127CF /* LoginViewModel.swift */; };
 		BFFB7E97274A7EC7008FDF6A /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFB7E96274A7EC7008FDF6A /* PostCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -102,13 +100,12 @@
 		BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_ng9j9lpx_1.json; sourceTree = "<group>"; };
 		BF2E058827229C30008CA167 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		BF368C45274E14110035DA50 /* AppleSDGothicNeoEB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleSDGothicNeoEB.ttf; sourceTree = "<group>"; };
-		BF368C47274E298F0035DA50 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		BF3CF93D274FD6850018260B /* PostDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewModel.swift; sourceTree = "<group>"; };
+		BF4F267E27584BD7004A153D /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
 		BF5351CA2733C2230040ECFE /* ExtraSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraSignUpViewModel.swift; sourceTree = "<group>"; };
 		BF5A2B88272A5D4F00234429 /* GodoM.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoM.ttf; sourceTree = "<group>"; };
 		BF5A2B89272A62D500234429 /* GodoB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GodoB.ttf; sourceTree = "<group>"; };
 		BF5A2B8D272A7B8F00234429 /* DefaultLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginViewController.swift; sourceTree = "<group>"; };
-		BF5AD0AA2747F4AD003E03A1 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		BF5C9BBD2742939E00005AC7 /* ApiSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiSignUpViewController.swift; sourceTree = "<group>"; };
 		BF5C9BBF2742A53C00005AC7 /* ApiSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiSignUpViewModel.swift; sourceTree = "<group>"; };
 		BF6086A22740ABB900D63BF6 /* AgreeTermsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreeTermsViewController.swift; sourceTree = "<group>"; };
@@ -151,7 +148,7 @@
 		BF8D62752718FF53006D7227 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF8D62772718FF53006D7227 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BF8D627D2719012A006D7227 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		BF8D8F6C2756FF98009E6696 /* TmpChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmpChartViewController.swift; sourceTree = "<group>"; };
+		BF8D8F6C2756FF98009E6696 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		BF9A5D32274F1F0C005CC646 /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
 		BFA0796F271FD2F800912C18 /* MainTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabViewController.swift; sourceTree = "<group>"; };
 		BFA07975271FD47F00912C18 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -166,7 +163,6 @@
 		BFF1299B2737C1B500BD89EA /* DefaultLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLoginViewModel.swift; sourceTree = "<group>"; };
 		BFF506F7271908D4003127CF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		BFF506FA27190D80003127CF /* UIKitExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtension.swift; sourceTree = "<group>"; };
-		BFF506FC27190EBB003127CF /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		BFFA1D3B271E4ED500DD7E1A /* Knowing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Knowing.entitlements; sourceTree = "<group>"; };
 		BFFB7E96274A7EC7008FDF6A /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -215,7 +211,7 @@
 				BF151BAE2732760F0065E766 /* AddressViewController.swift */,
 				BF273BAA273CB5200028EF07 /* SpecialViewController.swift */,
 				BFA4689B2746341A0056224A /* SchoolViewController.swift */,
-				BF5AD0AA2747F4AD003E03A1 /* ChartView.swift */,
+				BF8D8F6C2756FF98009E6696 /* ChartView.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -243,7 +239,6 @@
 			isa = PBXGroup;
 			children = (
 				BFF506F7271908D4003127CF /* LoginViewController.swift */,
-				BFF506FC27190EBB003127CF /* LoginViewModel.swift */,
 			);
 			path = MainLogin;
 			sourceTree = "<group>";
@@ -442,7 +437,6 @@
 				BF837938272921D400584E33 /* HomeCalendarVIew */,
 				BF8379352729206C00584E33 /* HomeChartView */,
 				BFA07975271FD47F00912C18 /* HomeViewController.swift */,
-				BF368C47274E298F0035DA50 /* HomeViewModel.swift */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -454,6 +448,7 @@
 				BFA4689D27463BA50056224A /* School.swift */,
 				BF768BCB274CD4390050C0EF /* Post.swift */,
 				BF8772192756412300EC9C9A /* Category.swift */,
+				BF4F267E27584BD7004A153D /* Alarm.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -498,7 +493,6 @@
 				BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */,
 				BF85C62A27310883005D9EF1 /* FoundationExtension.swift */,
 				BFECE1CB2738DCAF0055FA9D /* Enum.swift */,
-				BF8D8F6C2756FF98009E6696 /* TmpChartViewController.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -634,7 +628,6 @@
 				BF85C63427311203005D9EF1 /* ExtraSignUpViewController.swift in Sources */,
 				BF85C62927310147005D9EF1 /* SignUpViewModel.swift in Sources */,
 				BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */,
-				BF5AD0AB2747F4AD003E03A1 /* ChartView.swift in Sources */,
 				BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */,
 				BFC38CF327365AE400F94876 /* User.swift in Sources */,
 				BF8A9A06273B83A600DA4DE4 /* FindEmailViewController.swift in Sources */,
@@ -665,14 +658,13 @@
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
 				BF7749872754F3550062180A /* HomeAllPostViewModel.swift in Sources */,
 				BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */,
-				BF8D8F6D2756FF98009E6696 /* TmpChartViewController.swift in Sources */,
+				BF8D8F6D2756FF98009E6696 /* ChartView.swift in Sources */,
 				BF87721A2756412300EC9C9A /* Category.swift in Sources */,
 				BFA4689E27463BA50056224A /* School.swift in Sources */,
 				BF87721C27565D4D00EC9C9A /* DefaultModifyUserViewController.swift in Sources */,
 				BF85C62B27310883005D9EF1 /* FoundationExtension.swift in Sources */,
 				BF8A9A08273B879E00DA4DE4 /* FindEmailViewModel.swift in Sources */,
 				BF151BAF2732760F0065E766 /* AddressViewController.swift in Sources */,
-				BFF506FD27190EBB003127CF /* LoginViewModel.swift in Sources */,
 				BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */,
 				BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */,
 				BF877218275640DD00EC9C9A /* APIModifyUserViewController.swift in Sources */,
@@ -683,9 +675,9 @@
 				BFECE1CC2738DCAF0055FA9D /* Enum.swift in Sources */,
 				BF8A9A11273B929F00DA4DE4 /* FindPasswordViewController.swift in Sources */,
 				BFA07976271FD47F00912C18 /* HomeViewController.swift in Sources */,
+				BF4F267F27584BD8004A153D /* Alarm.swift in Sources */,
 				BF7749852754E0290062180A /* HomeChartViewModel.swift in Sources */,
 				BF87721E275679E200EC9C9A /* NoticeViewController.swift in Sources */,
-				BF368C48274E298F0035DA50 /* HomeViewModel.swift in Sources */,
 				BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */,
 				BFF506FB27190D80003127CF /* UIKitExtension.swift in Sources */,
 				BF2E058327225D7E008CA167 /* GuideViewController.swift in Sources */,
@@ -839,6 +831,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Knowing/Knowing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.0.1;
 				DEVELOPMENT_TEAM = GX47BK9CV6;
 				INFOPLIST_FILE = Knowing/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -846,10 +839,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cmcTeamTeam.Knowing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -861,6 +855,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Knowing/Knowing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.0.1;
 				DEVELOPMENT_TEAM = GX47BK9CV6;
 				INFOPLIST_FILE = Knowing/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -868,10 +863,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cmcTeamTeam.Knowing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

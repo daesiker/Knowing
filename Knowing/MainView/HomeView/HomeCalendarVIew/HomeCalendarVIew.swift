@@ -11,9 +11,9 @@ import FSCalendar
 import RxCocoa
 import RxSwift
 import SwipeCellKit
-import RxDataSources
 import Alamofire
 import SwiftyJSON
+import Firebase
 
 class HomeCalendarView: UIView {
     
@@ -203,7 +203,7 @@ extension HomeCalendarView {
     }
     
     @objc func fetchData() {
-        let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
+        let uid = Auth.auth().currentUser!.uid
         let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
@@ -219,8 +219,8 @@ extension HomeCalendarView {
                         MainTabViewModel.instance.bookmarks.append(postModel)
                     }
                     self.getData(posts: self.vm.bookmarks)
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
+                    HomeChartViewModel.instance.input.errorObserver.accept(())
                 }
             }
     }
@@ -381,7 +381,7 @@ extension HomeCalendarView: SwipeCollectionViewCellDelegate {
         guard orientation == .right else { return nil }
         
         let delete = SwipeAction(style: .default, title: "삭제") { action, indexPath in
-            let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
+            let uid = Auth.auth().currentUser!.uid
             let url = "https://www.makeus-hyun.shop/app/users/bookmark"
             let header:HTTPHeaders = [ "userUid": uid,
                                        "welfareUid": self.bookmarkData[indexPath.row].uid,
@@ -396,8 +396,8 @@ extension HomeCalendarView: SwipeCollectionViewCellDelegate {
                         if result {
                             self.fetchData()
                         }
-                    case .failure(let error):
-                        print(error)
+                    case .failure(_):
+                        HomeChartViewModel.instance.input.errorObserver.accept(())
                     }
                 }
         }

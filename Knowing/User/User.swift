@@ -50,7 +50,8 @@ struct User: Codable {
    
     var bookmark:[String] = []
     var provider:String = ""
-    var fcmToken:String = ""
+    var FCMTOKEN:String = ""
+    var Alarm:[GetAlarm] = []
     
     init() {
         
@@ -98,7 +99,7 @@ struct User: Codable {
        
         self.bookmark = json["bookmark"]!.arrayValue.map { $0.stringValue }
         self.provider = json["provider"]!.stringValue
-        //self.FCMTOKEN = json["FCMTOKEN"]!.stringValue
+        self.FCMTOKEN = json["fcmtoken"]!.stringValue
         
         
     }

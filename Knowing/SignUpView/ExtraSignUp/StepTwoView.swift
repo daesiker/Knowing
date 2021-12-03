@@ -26,6 +26,7 @@ class StepTwoView: UIView {
        let tf = UITextField()
         tf.placeholder = "EX)) 1,950,000"
         tf.borderStyle = .none
+        tf.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
         let border = CALayer()
         border.frame = CGRect(x: 0, y: tf.frame.size.height - 1, width: tf.frame.width, height: 1)
         border.backgroundColor = CGColor.init(red: 151 / 255, green: 151 / 255, blue: 151 / 255, alpha: 1.0)

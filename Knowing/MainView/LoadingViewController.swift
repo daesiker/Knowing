@@ -34,6 +34,7 @@ class LoadingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         animationView.play()
         animationView.loopMode = .loop
         setUI()
@@ -55,12 +56,40 @@ class LoadingViewController: UIViewController {
                     let json = JSON(value)
                     let result = json["result"].dictionaryValue
                     let user = User(json: result)
+                    self.largeTitleLabel.attributedText = NSAttributedString(string: "\(user.name)님의 복지 수혜 예상\n금액을 계산중이에요!").withLineSpacing(6)
                     MainTabViewModel.instance.user = user
+                    UserDefaults.standard.setValue(user.provider, forKey: "provider")
+                    UserDefaults.standard.setValue(user.email, forKey: "email")
+                    UserDefaults.standard.setValue(user.pwd, forKey: "pwd")
+                    UserDefaults.standard.setValue(uid, forKey: "uid")
                     self.getBookmarkData()
-                    
-                    
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        let alertController = UIAlertController(title: "에러", message: "네트워크 연결상태를 확인해주세요.", preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "확인", style: .cancel) { action in
+                            do {
+                                try Auth.auth().signOut()
+                                UserDefaults.standard.setValue(nil, forKey: "provider")
+                                UserDefaults.standard.setValue(nil, forKey: "email")
+                                UserDefaults.standard.setValue(nil, forKey: "pwd")
+                                UserDefaults.standard.setValue(nil, forKey: "uid")
+                                let viewController = LoginViewController()
+                                viewController.modalTransitionStyle = .crossDissolve
+                                viewController.modalPresentationStyle = .fullScreen
+                                self.present(viewController, animated: true)
+                            } catch {
+                                UserDefaults.standard.setValue(nil, forKey: "provider")
+                                UserDefaults.standard.setValue(nil, forKey: "email")
+                                UserDefaults.standard.setValue(nil, forKey: "pwd")
+                                UserDefaults.standard.setValue(nil, forKey: "uid")
+                                let viewController = LoginViewController()
+                                viewController.modalTransitionStyle = .crossDissolve
+                                viewController.modalPresentationStyle = .fullScreen
+                                self.present(viewController, animated: true)
+                            }
+                        })
+                        self.present(alertController, animated: true)
+                    }
                 }
             }
         
@@ -102,6 +131,7 @@ class LoadingViewController: UIViewController {
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
+                  
                     let result = json["result"].dictionaryValue
                     var myPost:[Post] = []
                     for (key, value) in result {
@@ -140,8 +170,33 @@ class LoadingViewController: UIViewController {
                         self.present(nav, animated: true)
                     }
                     
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        let alertController = UIAlertController(title: "에러", message: "네트워크 연결상태를 확인해주세요.", preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "확인", style: .cancel) { action in
+                            do {
+                                try Auth.auth().signOut()
+                                UserDefaults.standard.setValue(nil, forKey: "provider")
+                                UserDefaults.standard.setValue(nil, forKey: "email")
+                                UserDefaults.standard.setValue(nil, forKey: "pwd")
+                                UserDefaults.standard.setValue(nil, forKey: "uid")
+                                let viewController = LoginViewController()
+                                viewController.modalTransitionStyle = .crossDissolve
+                                viewController.modalPresentationStyle = .fullScreen
+                                self.present(viewController, animated: true)
+                            } catch {
+                                UserDefaults.standard.setValue(nil, forKey: "provider")
+                                UserDefaults.standard.setValue(nil, forKey: "email")
+                                UserDefaults.standard.setValue(nil, forKey: "pwd")
+                                UserDefaults.standard.setValue(nil, forKey: "uid")
+                                let viewController = LoginViewController()
+                                viewController.modalTransitionStyle = .crossDissolve
+                                viewController.modalPresentationStyle = .fullScreen
+                                self.present(viewController, animated: true)
+                            }
+                        })
+                        self.present(alertController, animated: true)
+                    }
                 }
                 
             }
@@ -164,8 +219,33 @@ class LoadingViewController: UIViewController {
                         MainTabViewModel.instance.bookmarks.append(postModel)
                     }
                     self.getPostData()
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        let alertController = UIAlertController(title: "에러", message: "네트워크 연결상태를 확인해주세요.", preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "확인", style: .cancel) { action in
+                            do {
+                                try Auth.auth().signOut()
+                                UserDefaults.standard.setValue(nil, forKey: "provider")
+                                UserDefaults.standard.setValue(nil, forKey: "email")
+                                UserDefaults.standard.setValue(nil, forKey: "pwd")
+                                UserDefaults.standard.setValue(nil, forKey: "uid")
+                                let viewController = LoginViewController()
+                                viewController.modalTransitionStyle = .crossDissolve
+                                viewController.modalPresentationStyle = .fullScreen
+                                self.present(viewController, animated: true)
+                            } catch {
+                                UserDefaults.standard.setValue(nil, forKey: "provider")
+                                UserDefaults.standard.setValue(nil, forKey: "email")
+                                UserDefaults.standard.setValue(nil, forKey: "pwd")
+                                UserDefaults.standard.setValue(nil, forKey: "uid")
+                                let viewController = LoginViewController()
+                                viewController.modalTransitionStyle = .crossDissolve
+                                viewController.modalPresentationStyle = .fullScreen
+                                self.present(viewController, animated: true)
+                            }
+                        })
+                        self.present(alertController, animated: true)
+                    }
                 }
             }
     }

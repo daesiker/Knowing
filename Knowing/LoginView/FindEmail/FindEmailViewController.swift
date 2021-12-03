@@ -158,17 +158,27 @@ extension FindEmailViewController {
             }
         }).disposed(by: disposeBag)
         
-        vm.output.findEmail.emit(onNext: {value in
-            let vc = ConfirmEmailViewController()
-            vc.email = value
-            vc.name = self.nameTextField.text ?? ""
-            vc.modalTransitionStyle = .crossDissolve
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true)
+        vm.output.findEmail.asSignal()
+            .emit(onNext: {value in
+            if value == "none" {
+                let alertController = UIAlertController(title: "에러", message: "가입한 이력이 없습니다.", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+                self.present(alertController, animated: true)
+            } else {
+                let vc = ConfirmEmailViewController()
+                vc.email = value
+                vc.name = self.nameTextField.text ?? ""
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            }
         }).disposed(by: disposeBag)
         
-        vm.output.error.emit(onNext: { error in
-            print(error)
+        vm.output.goError.asSignal()
+            .emit(onNext: { _ in
+            let alertController = UIAlertController(title: "에러", message: "네트워크 상태를 확인해 주세요.", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+            self.present(alertController, animated: true)
         }).disposed(by: disposeBag)
         
     }

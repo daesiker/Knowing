@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 import Alamofire
 import SwiftyJSON
+import Firebase
 
 class PostDetailViewModel {
     
@@ -36,16 +37,14 @@ class PostDetailViewModel {
         var methodValue = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [true, false, false, false])
         var etcValue = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [true, false, false, false])
         
-        var bookmarkEnable = PublishRelay<Bool>().asSignal()
-        var errorValid = PublishRelay<Error>().asSignal()
+        var bookmarkEnable = PublishRelay<Bool>()
+        var errorValid = PublishRelay<Error>()
         
         
     }
     
     init(_ post: Post) {
         self.post = post
-        let bookmarkRelay = PublishRelay<Bool>()
-        let errorRelay = PublishRelay<Error>()
         
         output.contentsValue = input.contentsObserver
             .map { [true, false, false, false] }.asDriver(onErrorJustReturn: [true, false, false, false])
@@ -57,7 +56,7 @@ class PostDetailViewModel {
         output.etcValue = input.etcObserver.map {[false, false, false, true]}.asDriver(onErrorJustReturn: [false, false, false, true])
         
         input.bookmarkObserver.subscribe(onNext: {value in
-            let uid = "39bfAcPARjQY05wTF1yjBYqg0tx2"
+            let uid = Auth.auth().currentUser!.uid
             let url = "https://www.makeus-hyun.shop/app/users/bookmark"
             let header:HTTPHeaders = ["userUid": uid,
                                       "welfareUid": self.post.uid]
@@ -66,25 +65,21 @@ class PostDetailViewModel {
                 .responseJSON { response in
                     switch response.result {
                     case .success(let data):
-                        
-                        print(JSON(data))
                         if self.main.user.bookmark.contains(value) {
                             let index = self.main.user.bookmark.firstIndex(of: value)
                             self.main.user.bookmark.remove(at: index!)
-                            bookmarkRelay.accept(false)
+                            self.output.bookmarkEnable.accept(false)
                         } else {
                             self.main.user.bookmark.append(value)
-                            bookmarkRelay.accept(true)
+                            self.output.bookmarkEnable.accept(true)
                         }
                     case .failure(let error):
-                        errorRelay.accept(error)
+                        self.output.errorValid.accept(error)
                     }
                 }
         }).disposed(by: disposeBag)
         
-        output.bookmarkEnable = bookmarkRelay.asSignal()
-        output.errorValid = errorRelay.asSignal()
-        
+       
     }
     
 }

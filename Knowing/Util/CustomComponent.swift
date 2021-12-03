@@ -49,6 +49,7 @@ class CustomTextField: UITextField {
         self.layer.masksToBounds = true
         self.isUserInteractionEnabled = true
         self.delegate = self
+        self.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
         self.setLeft(image: image)
         self.setRight()
         

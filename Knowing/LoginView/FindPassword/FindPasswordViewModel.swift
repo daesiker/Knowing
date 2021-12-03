@@ -24,14 +24,11 @@ class FindPasswordViewModel {
     
     struct Output {
         var btValid = BehaviorRelay<Bool>(value: false).asDriver(onErrorJustReturn: false)
-        var findPassword:Signal<Void> = PublishRelay<Void>().asSignal()
-        var errorRelay:Signal<Error> = PublishRelay<Error>().asSignal()
+        var findPassword = PublishRelay<Void>()
+        var errorRelay = PublishRelay<KnowingError>()
     }
     
     init() {
-        
-        let findPassword = PublishRelay<Void>()
-        let errorRelay = PublishRelay<Error>()
         
         output.btValid = Driver.combineLatest(input.nameObserver.asDriver(onErrorJustReturn: ""), input.emailObserver.asDriver(onErrorJustReturn: ""))
             .map { $0 != "" && $1 != "" }
@@ -43,16 +40,23 @@ class FindPasswordViewModel {
             .subscribe({ event in
                 switch event {
                 case .error(let error):
-                    errorRelay.accept(error)
+                    let errCode = AuthErrorCode(rawValue: error._code)
+                    var errMsg = ""
+                    switch errCode {
+                    case .userNotFound:
+                        errMsg = "가입되어 있지 않은 이메일입니다."
+                    default:
+                        errMsg = "네트워크 연결 상태를 확인해주세요."
+                    }
+                    let knowingError = KnowingError(code: 103, msg: errMsg)
+                    self.output.errorRelay.accept(knowingError)
+                    
                 case .next(_):
-                    findPassword.accept(())
+                    self.output.findPassword.accept(())
                 default:
                     break
                 }
             }).disposed(by: disposeBag)
-        
-        output.errorRelay = errorRelay.asSignal()
-        output.findPassword = findPassword.asSignal()
         
         
     }
@@ -62,10 +66,8 @@ class FindPasswordViewModel {
         return Observable.create { observer in
             Auth.auth().sendPasswordReset(withEmail: string) { error in
                 if let error = error {
-                    print("에러")
                     observer.onError(error)
                 } else {
-                    print("호출")
                     observer.onNext(())
                 }
             }

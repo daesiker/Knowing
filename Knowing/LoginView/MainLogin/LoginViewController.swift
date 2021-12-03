@@ -44,13 +44,26 @@ class LoginViewController: UIViewController {
     @objc private func kakaoLogin(_ sender: UIButton) {
         if (UserApi.isKakaoTalkLoginAvailable()) {
             UserApi.shared.loginWithKakaoTalk { oauthToken, error in
-                if let error = error {
-                    print(error)
+                if let _ = error {
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title:"에러", message: "네트워크 상태를 확인해주세요.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
                     return
                 }
-                if let token = oauthToken?.accessToken {
-                    self.getJWT(token, provider: "kakao")
+                
+                let alert = UIAlertController(title:"카카오 로그인", message: "카카오로 로그인합니다.", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default) { _ in
+                    if let token = oauthToken?.accessToken {
+                        self.getJWT(token, provider: "kakao")
+                    }
                 }
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                
+                
             }
         }
     }
@@ -75,19 +88,28 @@ class LoginViewController: UIViewController {
         let signInConfig = GIDConfiguration.init(clientID: clientID)
         
         GIDSignIn.sharedInstance.signIn(with: signInConfig, presenting: self) { user, error in
-            if let error = error {
-                print(error)
+            if let _ = error {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title:"에러", message: "네트워크 상태를 확인해주세요.", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
             }
-            
             guard let authentication = user?.authentication,
                   let idToken = authentication.idToken
             else { return }
             
             let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
-            
+            UserDefaults.standard.setValue(credential, forKey: "token")
             Auth.auth().signIn(with: credential) { result, error in
-                if let error = error {
-                    print(error)
+                if let _ = error {
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title:"에러", message: "네트워크 상태를 확인해주세요.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
                 if result != nil {
                     guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -247,12 +269,18 @@ extension LoginViewController: NaverThirdPartyLoginConnectionDelegate {
     }
     
     func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-        print("[Success] : Success Naver Login")
-        getNaverInfo()
+
+        let alert = UIAlertController(title:"네이버 로그인", message: "네이버로 로그인합니다.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default) { _ in
+            self.getNaverInfo()
+        }
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
     func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
-        
+        print("tap")
     }
     
     func oauth20ConnectionDidFinishDeleteToken() {
@@ -287,20 +315,21 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             }
             
             let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
-            
+            UserDefaults.standard.setValue(credential, forKey: "token")
             Auth.auth().signIn(with: credential) { authResult, error in
-                if let error = error {
-                    //MARK:- 에러처리
-                    print(error)
+                if let _ = error {
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title:"에러", message: "네트워크 상태를 확인해주세요.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
                     return
                 }
                 if let uid = Auth.auth().currentUser?.uid {
                     self.googleAppleLogin(uid, provider: "apple")
                 }
-                
             }
-            
-            
         }
     }
     
@@ -377,6 +406,7 @@ extension LoginViewController {
                     let result = json["result"].dictionaryObject
                     if let status = result?["status"] as? String,
                        let jwt = result?["jwt"] as? String {
+                        UserDefaults.standard.setValue(jwt, forKey: "uid")
                         if status == "신규회원" {
                             Auth.auth().signIn(withCustomToken: jwt) { user, error in
                                 if let error = error {
@@ -397,11 +427,22 @@ extension LoginViewController {
                                     print(error)
                                     return
                                 }
+                                DispatchQueue.main.async {
+                                    let vc = LoadingViewController()
+                                    vc.modalPresentationStyle = .fullScreen
+                                    vc.modalTransitionStyle = .crossDissolve
+                                    self.present(vc, animated: true)
+                                }
                             }
                         }
                     }
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title:"에러", message: "네트워크 상태를 확인해주세요.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
             }
     }
@@ -426,11 +467,22 @@ extension LoginViewController {
                                 self.present(vc, animated: true)
                             }
                         } else {
-                            //MARK: - 메인으로 가기
+                            DispatchQueue.main.async {
+                                let vc = LoadingViewController()
+                                vc.modalPresentationStyle = .fullScreen
+                                vc.modalTransitionStyle = .crossDissolve
+                                self.present(vc, animated: true)
+                            }
                         }
                     }
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title:"에러", message: "네트워크 상태를 확인해주세요.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    
                 }
             }
     }

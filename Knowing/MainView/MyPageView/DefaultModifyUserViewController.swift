@@ -10,9 +10,10 @@ import RxCocoa
 import RxSwift
 import Alamofire
 import SwiftyJSON
+import Firebase
 
 class DefaultModifyUserViewController: UIViewController {
-
+    
     let disposeBag = DisposeBag()
     let vm:DefaultModifyUserViewModel
     
@@ -84,7 +85,7 @@ class DefaultModifyUserViewController: UIViewController {
         $0.layer.cornerRadius = 20.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 16, left: 61, bottom: 15, right: 61)
     }
-
+    
     let femaleBt = UIButton(type: .custom).then {
         $0.setTitle("여성", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
@@ -111,10 +112,10 @@ class DefaultModifyUserViewController: UIViewController {
         $0.setTitle("수정하기", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
         $0.titleLabel?.textColor = .white
-        $0.backgroundColor = UIColor.rgb(red: 195, green: 195, blue: 195)
+        $0.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
         $0.layer.cornerRadius = 27.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 134, bottom: 13, right: 131)
-        $0.isEnabled = false
+        $0.isEnabled = true
     }
     
     init(vm: DefaultModifyUserViewModel) {
@@ -128,12 +129,34 @@ class DefaultModifyUserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setValue()
         setUI()
         bind()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    
+    func setValue() {
+        nameTextField.text = vm.user.name
+        emailTextField.text = vm.user.email
+        phoneTextField.text = vm.user.phNum
+        
+        if vm.user.gender == "남성" {
+            maleBt.setTitleColor(.white, for: .normal)
+            maleBt.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+        } else {
+            self.femaleBt.setTitleColor(.white, for: .normal)
+            self.femaleBt.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+        }
+        
+        var age = String(vm.user.birth)
+        
+        age.insert(contentsOf: " / ", at: age.index(age.startIndex, offsetBy: 4))
+        age.insert(contentsOf: " / ", at: age.index(age.endIndex, offsetBy: -2))
+        
+        birthTextField.text = age
     }
     
     func setUI() {
@@ -292,9 +315,16 @@ class DefaultModifyUserViewController: UIViewController {
             .bind(to: vm.input.birthObserver)
             .disposed(by: disposeBag)
         
-        withDrawBt.rx.tap
-            .bind(to: vm.input.withDrawObserver)
-            .disposed(by: disposeBag)
+        withDrawBt.rx.tap.subscribe(onNext: {
+            let alertController = UIAlertController(title: "회원탈퇴", message: "정말로 탈퇴하시겠습니까?", preferredStyle: .alert)
+            
+            alertController.addAction(UIAlertAction(title:"회원탈퇴", style: .default, handler: { _ in
+                self.vm.input.withDrawObserver.accept(())
+            }))
+            
+            alertController.addAction(UIAlertAction(title: "취소", style: .default, handler: nil))
+            self.present(alertController, animated: true)
+        }).disposed(by: disposeBag)
         
         modifyBt.rx.tap
             .bind(to: vm.input.modifyObserver)
@@ -346,6 +376,37 @@ class DefaultModifyUserViewController: UIViewController {
                 self.modifyBt.backgroundColor = UIColor.rgb(red: 195, green: 195, blue: 195)
             }
         }).disposed(by: disposeBag)
+        
+        vm.output.doModify.asDriver(onErrorJustReturn: false)
+            .drive(onNext: { value in
+                let vc = LoadingViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            }).disposed(by: disposeBag)
+        
+        vm.output.doWithdraw.asDriver(onErrorJustReturn: false)
+            .drive(onNext: { value in
+                UserDefaults.standard.setValue(nil, forKey: "provider")
+                UserDefaults.standard.setValue(nil, forKey: "email")
+                UserDefaults.standard.setValue(nil, forKey: "pwd")
+                UserDefaults.standard.setValue(nil, forKey: "uid")
+                let viewController = LoginViewController()
+                viewController.modalTransitionStyle = .crossDissolve
+                viewController.modalPresentationStyle = .fullScreen
+                self.present(viewController, animated: true)
+                
+            }).disposed(by: disposeBag)
+        
+        vm.output.doError.asDriver(onErrorJustReturn: NSError.init(domain: "", code: 0, userInfo: nil))
+            .drive(onNext: { value in
+                
+                let alertController = UIAlertController(title: "에러", message: "네트워크 상태를 확인해주세요.", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+                self.present(alertController, animated: true)
+                
+            }).disposed(by: disposeBag)
+        
     }
     
 }
@@ -373,7 +434,9 @@ class DefaultModifyUserViewModel {
         var emailValid:Driver<EmailValid> = PublishRelay<EmailValid>().asDriver(onErrorJustReturn: .notAvailable)
         var genderValid:Driver<Gender> = PublishRelay<Gender>().asDriver(onErrorJustReturn: .notSelected)
         var buttonValid:Driver<Bool> = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
-        
+        var doWithdraw:PublishRelay = PublishRelay<Bool>()
+        var doModify:PublishRelay = PublishRelay<Bool>()
+        var doError:PublishRelay = PublishRelay<Error>()
         
     }
     
@@ -411,18 +474,34 @@ class DefaultModifyUserViewModel {
         
         input.withDrawObserver.flatMap(withDraw)
             .subscribe({ result in
-                
+                switch result {
+                case .completed:
+                    break
+                case .error(let error):
+                    self.output.doError.accept(error)
+                case .next(let value):
+                    MainTabViewModel.instance.clear()
+                    self.output.doWithdraw.accept(value)
+                }
             }).disposed(by: disposeBag)
-    
         
+        input.modifyObserver.flatMap(modifyUser).subscribe({ event in
+            switch event {
+            case .completed:
+                break
+            case .error(let error):
+                self.output.doError.accept(error)
+            case .next(let value):
+                MainTabViewModel.instance.clear()
+                self.output.doModify.accept(value)
+            }
+        }).disposed(by: disposeBag)
         
         output.emailValid = input.emailObserver
             .flatMap(self.emailCheck)
             .asDriver(onErrorJustReturn: .notAvailable)
         
         output.genderValid = input.genderObserver.asDriver(onErrorJustReturn: .notSelected)
-        
-        
         
     }
     
@@ -465,7 +544,7 @@ class DefaultModifyUserViewModel {
         return Observable<Bool>.create { observer in
             
             let url = "https://www.makeus-hyun.shop/app/users/userdelete"
-            let uid = "MHQ72TN4d8dFFL2b74Ldy4s3EHa2"//Auth.auth().currentUser!.uid
+            let uid = Auth.auth().currentUser!.uid
             let header:HTTPHeaders = ["uid": uid,
                                       "Content-Type":"application/json"]
             
@@ -484,21 +563,21 @@ class DefaultModifyUserViewModel {
         }
     }
     
-    func modifyUser() -> Observable<User> {
+    func modifyUser() -> Observable<Bool> {
         
-        return Observable<User>.create { observer in
+        return Observable<Bool>.create { observer in
             
-            let uid = "MHQ72TN4d8dFFL2b74Ldy4s3EHa2"//Auth.auth().currentUser!.uid
+            let uid = Auth.auth().currentUser!.uid
             let url = "https://www.makeus-hyun.shop/app/users/usermodify/privacy"
             let header:HTTPHeaders = ["uid": uid,
                                       "Content-Type":"application/json"]
             
             let body:[String: Any] = ["email": self.user.email,
-                                           "name": self.user.name,
-                                           "pwd": self.user.pwd,
-                                           "phNum": self.user.phNum,
-                                           "gender": self.user.gender,
-                                           "birth": self.user.birth]
+                                      "name": self.user.name,
+                                      "pwd": self.user.pwd,
+                                      "phNum": self.user.phNum,
+                                      "gender": self.user.gender,
+                                      "birth": self.user.birth]
             
             let jsonData = try? JSONSerialization.data(withJSONObject: body, options: [])
             
@@ -507,7 +586,7 @@ class DefaultModifyUserViewModel {
                 .responseJSON { response in
                     switch response.result {
                     case .success(_):
-                        observer.onNext(self.user)
+                        observer.onNext(true)
                     case .failure(let error):
                         observer.onError(error)
                     }

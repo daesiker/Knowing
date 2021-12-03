@@ -51,7 +51,6 @@ class ConfirmPasswordViewController: UIViewController {
         animationView.loopMode = .loop
         setUI()
         bind()
-        
     }
 
 }

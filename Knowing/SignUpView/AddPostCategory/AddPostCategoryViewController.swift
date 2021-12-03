@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Firebase
 
 class AddPostCategoryViewController: UIViewController {
     
@@ -49,7 +50,8 @@ class AddPostCategoryViewController: UIViewController {
     }()
     
     let studentData = Observable<[String]>.of(["전체", "교내 장학금", "교외 장학금"])
-    let studentDomy = ["전체", "교내 장학금", "교외 장학금"]
+    let studentLayout = ["전체", "교내 장학금", "교외 장학금"]
+    let studentDomy = ["전체", "교내장학금", "교외장학금"]
     
     let employLb = UILabel().then {
         $0.text = "취업 지원"
@@ -65,8 +67,10 @@ class AddPostCategoryViewController: UIViewController {
         return collectionView
     }()
     
+    
     let employData = Observable<[String]>.of(["전체", "구직 활동 지원 · 인턴", "중소 · 중견기업 취업 지원", "특수 분야 취업 지원", "해외 취업 및 진출 지원"])
-    let employDomy = ["전체", "구직 활동 지원 · 인턴", "중소 · 중견기업 취업 지원", "특수 분야 취업 지원", "해외 취업 및 진출 지원"]
+    let employLayout = ["전체", "구직 활동 지원 · 인턴", "중소 · 중견기업 취업 지원", "특수 분야 취업 지원", "해외 취업 및 진출 지원"]
+    let employDomy = ["전체", "구직활동지원인턴", "중소중견기업취업지원", "특수분야취업지원", "해외취업및진출지원"]
     
     let startUpLb = UILabel().then {
         $0.text = "창업 지원"
@@ -83,7 +87,8 @@ class AddPostCategoryViewController: UIViewController {
     }()
     
     let startUpData = Observable<[String]>.of(["전체", "창업운영 지원", "경영 지원", "자본금 지원"])
-    let startUpDomy = ["전체", "창업운영 지원", "경영 지원", "자본금 지원"]
+    let startUpLayout = ["전체", "창업운영 지원", "경영 지원", "자본금 지원"]
+    let startUpDomy = ["전체", "창업운영지원", "경영지원", "자본금지원"]
     
     let residentLb = UILabel().then {
         $0.text = "주거 · 금융 지원"
@@ -99,8 +104,11 @@ class AddPostCategoryViewController: UIViewController {
         return collectionView
     }()
     
+    
+    
     let residentData = Observable<[String]>.of(["전체", "생활비 지원 · 금융 혜택", "주거 지원", "학자금 지원"])
-    let residentDomy = ["전체", "생활비 지원 · 금융 혜택", "주거 지원", "학자금 지원"]
+    let residentLayout = ["전체", "생활비 지원 · 금융 혜택", "주거 지원", "학자금 지원"]
+    let residentDomy = ["전체", "생활비지원금융혜택", "주거지원", "학자금지원"]
     
     let lifeLb = UILabel().then {
         $0.text = "생활 · 복지 지원"
@@ -134,7 +142,8 @@ class AddPostCategoryViewController: UIViewController {
     }()
     
     let covidData = Observable<[String]>.of(["전체", "기본소득 지원", "저소득층 지원", "재난피해 지원", "소득 · 일자리 보전", "기타 인센티브", "심리지원"])
-    let covidDomy = ["전체", "기본소득 지원", "저소득층 지원", "재난피해 지원", "소득 · 일자리 보전", "기타 인센티브", "심리지원"]
+    let covidLayout = ["전체", "기본소득 지원", "저소득층 지원", "재난피해 지원", "소득 · 일자리 보전", "기타 인센티브", "심리지원"]
+    let covidDomy = ["전체", "기본소득지원", "저소득층지원", "재난피해지원", "소득일자리보전", "기타인센티브", "심리지원"]
     
     let signUpBt = UIButton(type: .custom).then {
         $0.setTitle("적용하기", for: .normal)
@@ -299,7 +308,10 @@ extension AddPostCategoryViewController {
         studentCV.rx.itemSelected
             .map { index in
                 let cell = self.studentCV.cellForItem(at: index) as? AddCategoryCell
-                return cell?.titleLabel.text ?? ""
+                let text = cell?.titleLabel.text! ?? ""
+                var newText = text.replacingOccurrences(of: " ", with: "")
+                newText = newText.replacingOccurrences(of: "·", with: "")
+                return newText
             }
             .bind(to: self.vm.input.studentObserver)
             .disposed(by: disposeBag)
@@ -308,14 +320,26 @@ extension AddPostCategoryViewController {
             .subscribe(onNext: { value in
                 for i in 0..<self.studentDomy.count {
                     let cell = self.studentCV.cellForItem(at: [0, i]) as? AddCategoryCell
-                    if self.vm.user.studentCategory.contains(self.studentDomy[i]) {
-                        cell?.titleLabel.textColor = .white
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    if self.vm.user.studentCategory.count == 2 {
+                        if i == 0 {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     } else {
-                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        if self.vm.user.studentCategory.contains(self.studentDomy[i]) {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     }
                 }
             }).disposed(by: disposeBag)
@@ -332,7 +356,10 @@ extension AddPostCategoryViewController {
         employCV.rx.itemSelected
             .map { index in
                 let cell = self.employCV.cellForItem(at: index) as? AddCategoryCell
-                return cell?.titleLabel.text ?? ""
+                let text = cell?.titleLabel.text! ?? ""
+                var newText = text.replacingOccurrences(of: " ", with: "")
+                newText = newText.replacingOccurrences(of: "·", with: "")
+                return newText
             }
             .bind(to: self.vm.input.empolyObserver)
             .disposed(by: disposeBag)
@@ -341,14 +368,26 @@ extension AddPostCategoryViewController {
             .subscribe(onNext: { value in
                 for i in 0..<self.employDomy.count {
                     let cell = self.employCV.cellForItem(at: [0, i]) as? AddCategoryCell
-                    if self.vm.user.empolyCategory.contains(self.employDomy[i]) {
-                        cell?.titleLabel.textColor = .white
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    if self.vm.user.empolyCategory.count == 4 {
+                        if i == 0 {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     } else {
-                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        if self.vm.user.empolyCategory.contains(self.employDomy[i]) {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     }
                 }
             }).disposed(by: disposeBag)
@@ -364,24 +403,42 @@ extension AddPostCategoryViewController {
         startUpCV.rx.itemSelected
             .map { index in
                 let cell = self.startUpCV.cellForItem(at: index) as? AddCategoryCell
-                return cell?.titleLabel.text ?? ""
+                let text = cell?.titleLabel.text! ?? ""
+                var newText = text.replacingOccurrences(of: " ", with: "")
+                newText = newText.replacingOccurrences(of: "·", with: "")
+                return newText
             }
             .bind(to: self.vm.input.foundationObserver)
             .disposed(by: disposeBag)
+        
+        
         
         startUpCV.rx.itemSelected
             .subscribe(onNext: { value in
                 for i in 0..<self.startUpDomy.count {
                     let cell = self.startUpCV.cellForItem(at: [0, i]) as? AddCategoryCell
-                    if self.vm.user.foundationCategory.contains(self.startUpDomy[i]) {
-                        cell?.titleLabel.textColor = .white
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    if self.vm.user.foundationCategory.count == 3 {
+                        if i == 0 {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     } else {
-                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        if self.vm.user.foundationCategory.contains(self.startUpDomy[i]) {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     }
+                    
                 }
             }).disposed(by: disposeBag)
         
@@ -396,23 +453,40 @@ extension AddPostCategoryViewController {
         residentCV.rx.itemSelected
             .map { index in
                 let cell = self.residentCV.cellForItem(at: index) as? AddCategoryCell
-                return cell?.titleLabel.text ?? ""
+                let text = cell?.titleLabel.text! ?? ""
+                var newText = text.replacingOccurrences(of: " ", with: "")
+                newText = newText.replacingOccurrences(of: "·", with: "")
+                return newText
             }
             .bind(to: self.vm.input.residentObserver)
             .disposed(by: disposeBag)
+        
+        
         
         residentCV.rx.itemSelected
             .subscribe(onNext: { value in
                 for i in 0..<self.residentDomy.count {
                     let cell = self.residentCV.cellForItem(at: [0, i]) as? AddCategoryCell
-                    if self.vm.user.residentCategory.contains(self.residentDomy[i]) {
-                        cell?.titleLabel.textColor = .white
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    if self.vm.user.residentCategory.count == 3 {
+                        if i == 0 {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     } else {
-                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        if self.vm.user.residentCategory.contains(self.residentDomy[i]) {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     }
                 }
             }).disposed(by: disposeBag)
@@ -428,24 +502,42 @@ extension AddPostCategoryViewController {
         lifeCV.rx.itemSelected
             .map { index in
                 let cell = self.lifeCV.cellForItem(at: index) as? AddCategoryCell
-                return cell?.titleLabel.text ?? ""
+                let text = cell?.titleLabel.text! ?? ""
+                var newText = text.replacingOccurrences(of: " ", with: "")
+                newText = newText.replacingOccurrences(of: "·", with: "")
+                return newText
             }
             .bind(to: self.vm.input.lifeObserver)
             .disposed(by: disposeBag)
+        
+        
         
         lifeCV.rx.itemSelected
             .subscribe(onNext: { value in
                 for i in 0..<self.lifeDomy.count {
                     let cell = self.lifeCV.cellForItem(at: [0, i]) as? AddCategoryCell
-                    if self.vm.user.lifeCategory.contains(self.lifeDomy[i]) {
-                        cell?.titleLabel.textColor = .white
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    if self.vm.user.lifeCategory.count == 2 {
+                        if i == 0 {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     } else {
-                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        if self.vm.user.lifeCategory.contains(self.lifeDomy[i]) {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     }
+                    
                 }
             }).disposed(by: disposeBag)
         
@@ -460,7 +552,10 @@ extension AddPostCategoryViewController {
         covidCV.rx.itemSelected
             .map { index in
                 let cell = self.covidCV.cellForItem(at: index) as? AddCategoryCell
-                return cell?.titleLabel.text ?? ""
+                let text = cell?.titleLabel.text! ?? ""
+                var newText = text.replacingOccurrences(of: " ", with: "")
+                newText = newText.replacingOccurrences(of: "·", with: "")
+                return newText
             }
             .bind(to: self.vm.input.covidObserver)
             .disposed(by: disposeBag)
@@ -469,21 +564,33 @@ extension AddPostCategoryViewController {
             .subscribe(onNext: { value in
                 for i in 0..<self.covidDomy.count {
                     let cell = self.covidCV.cellForItem(at: [0, i]) as? AddCategoryCell
-                    if self.vm.user.covidCategory.contains(self.covidDomy[i]) {
-                        cell?.titleLabel.textColor = .white
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    if self.vm.user.covidCategory.count == 6 {
+                        if i == 0 {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     } else {
-                        cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-                        cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
-                        cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        if self.vm.user.covidCategory.contains(self.covidDomy[i]) {
+                            cell?.titleLabel.textColor = .white
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        } else {
+                            cell?.titleLabel.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                            cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                            cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        }
                     }
+                    
                 }
             }).disposed(by: disposeBag)
         
         vm.output.buttonValid.drive(onNext: {value in
             if value {
-                print(self.vm.user)
                 self.signUpBt.isEnabled = true
                 self.signUpBt.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
             } else {
@@ -496,18 +603,33 @@ extension AddPostCategoryViewController {
             .bind(to: vm.input.btObserver)
             .disposed(by: disposeBag)
         
-        vm.output.goSignUp
+        vm.output.goSignUp.asSignal()
             .emit { user in
+                UserDefaults.standard.setValue(user.provider, forKey: "provider")
+                if user.provider == "default" {
+                    UserDefaults.standard.setValue(user.email, forKey: "email")
+                    UserDefaults.standard.setValue(user.pwd, forKey: "pwd")
+                }
                 let vc = LoadingViewController()
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true)
             }.disposed(by: disposeBag)
         
-        vm.output.error
+        vm.output.goError.asSignal()
             .emit { error in
                 let knowingError = error as? KnowingError
                 let vc = UIAlertController(title: "에러", message: knowingError?.msg, preferredStyle: .alert)
+                let action = UIAlertAction(title: "확인", style: .cancel)
+                vc.addAction(action)
+                self.present(vc, animated: true)
+            }.disposed(by: disposeBag)
+        
+        vm.output.goModify.asSignal()
+            .emit { user in
+                let vc = LoadingViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true)
             }.disposed(by: disposeBag)
     }
@@ -518,17 +640,17 @@ extension AddPostCategoryViewController: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == studentCV {
-            return AddCategoryCell.fittingSize(availableHeight: 45, name: studentDomy[indexPath.item])
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: studentLayout[indexPath.item])
         } else if collectionView == employCV {
-            return AddCategoryCell.fittingSize(availableHeight: 45, name: employDomy[indexPath.item])
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: employLayout[indexPath.item])
         } else if collectionView == startUpCV {
-            return AddCategoryCell.fittingSize(availableHeight: 45, name: startUpDomy[indexPath.item])
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: startUpLayout[indexPath.item])
         } else if collectionView == residentCV {
-            return AddCategoryCell.fittingSize(availableHeight: 45, name: residentDomy[indexPath.item])
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: residentLayout[indexPath.item])
         } else if collectionView == lifeCV {
             return AddCategoryCell.fittingSize(availableHeight: 45, name: lifeDomy[indexPath.item])
         } else {
-            return AddCategoryCell.fittingSize(availableHeight: 45, name: covidDomy[indexPath.item])
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: covidLayout[indexPath.item])
         }
     }
     
@@ -577,12 +699,7 @@ final class AddCategoryCell: UICollectionViewCell {
         }
     }
     
-    func configure(name: String, category:[String]) {
-        if category.contains(name) {
-            titleLabel.textColor = .white
-            titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-            backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
-        }
+    func configure(name: String, category:[String], isAll:Bool = false) {
         
         titleLabel.text = name
     }

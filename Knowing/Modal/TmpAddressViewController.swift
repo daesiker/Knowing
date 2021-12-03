@@ -31,6 +31,7 @@ class TmpAddressViewController: UIViewController {
     
     let searchBar = UISearchBar().then {
         $0.searchBarStyle = .minimal
+        $0.searchTextField.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
         $0.layer.cornerRadius = 30
         $0.placeholder = "검색어를 입력해주세요."
     }

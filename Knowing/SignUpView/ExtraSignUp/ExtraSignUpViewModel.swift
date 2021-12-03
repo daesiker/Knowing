@@ -304,7 +304,7 @@ extension ExtraSignUpViewModel {
         
         stepTwo.input.incomeObserver.subscribe(onNext: {value in
             let income = Int(value.replacingOccurrences(of: ",", with: "")) ?? 0
-            print(income)
+           
             incomeQuintile(income)
         }).disposed(by: disposeBag)
         
@@ -335,35 +335,35 @@ extension ExtraSignUpViewModel {
         
         func incomeQuintile(_ value: Int) {
             if value <= 1462887 {
-                self.user.incomeLevel = "1분위"
-                self.user.incomeAvg = "30%"
+                self.user.incomeLevel = "1"
+                self.user.incomeAvg = "30"
             } else if value <= 2438145 {
-                self.user.incomeLevel = "2분위"
-                self.user.incomeAvg = "50%"
+                self.user.incomeLevel = "2"
+                self.user.incomeAvg = "50"
             } else if value <= 3413403 {
-                self.user.incomeLevel = "3분위"
-                self.user.incomeAvg = "70%"
+                self.user.incomeLevel = "3"
+                self.user.incomeAvg = "70"
             } else if value <= 4388661 {
-                self.user.incomeLevel = "4분위"
-                self.user.incomeAvg = "90%"
+                self.user.incomeLevel = "4"
+                self.user.incomeAvg = "90"
             } else if value <= 4876290 {
-                self.user.incomeLevel = "5분위"
-                self.user.incomeAvg = "100%"
+                self.user.incomeLevel = "5"
+                self.user.incomeAvg = "100"
             } else if value <= 6339177 {
-                self.user.incomeLevel = "6분위"
-                self.user.incomeAvg = "130%"
+                self.user.incomeLevel = "6"
+                self.user.incomeAvg = "130"
             } else if value <= 7314435 {
-                self.user.incomeLevel = "7분위"
-                self.user.incomeAvg = "150%"
+                self.user.incomeLevel = "7"
+                self.user.incomeAvg = "150"
             } else if value <= 9752580 {
-                self.user.incomeLevel = "8분위"
-                self.user.incomeAvg = "200%"
+                self.user.incomeLevel = "8"
+                self.user.incomeAvg = "200"
             } else if value <= 14628870 {
-                self.user.incomeLevel = "9분위"
-                self.user.incomeAvg = "300%"
+                self.user.incomeLevel = "9"
+                self.user.incomeAvg = "300"
             } else {
-                self.user.incomeLevel = "10분위"
-                self.user.incomeAvg = "-"
+                self.user.incomeLevel = "9"
+                self.user.incomeAvg = "300"
             }
         }
     }
@@ -428,7 +428,6 @@ extension ExtraSignUpViewModel {
                                     observer.onNext([])
                                 }
                             }
-                            print(result)
                             observer.onNext(result)
                         case .failure(_):
                             observer.onNext([])

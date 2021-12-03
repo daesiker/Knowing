@@ -15,13 +15,11 @@ pod 'Then'
 pod 'lottie-ios'
 pod 'PanModal'
 pod 'BetterSegmentedControl', '~> 2.0'
-pod 'Charts'
 pod 'SwipeCellKit'
 pod 'FSCalendar'
 #Design Framework
 pod 'RxSwift'
 pod 'RxCocoa'
-pod 'RxDataSources'
 #LoginAPI
 pod 'GoogleSignIn', '~> 6.0.2'
 pod 'naveridlogin-sdk-ios'

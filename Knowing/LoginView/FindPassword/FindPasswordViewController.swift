@@ -69,12 +69,6 @@ class FindPasswordViewController: UIViewController {
         $0.isEnabled = false
     }
     
-    let confirmErrorLabel = UILabel().then {
-        $0.text = ""
-        $0.textColor = UIColor.rgb(red: 255, green: 108, blue: 0)
-        $0.font = UIFont.init(name: "AppleSDGothicNeo-Regular", size: 11)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
@@ -154,11 +148,6 @@ extension FindPasswordViewController {
             $0.trailing.equalToSuperview().offset(-25)
         }
         
-        safeArea.addSubview(confirmErrorLabel)
-        confirmErrorLabel.snp.makeConstraints {
-            $0.top.equalTo(confirmBt.snp.bottom).offset(5)
-            $0.leading.equalToSuperview().offset(25)
-        }
     }
     
     func bind() {
@@ -200,16 +189,21 @@ extension FindPasswordViewController {
             }
         }).disposed(by: disposeBag)
         
-        vm.output.findPassword.emit(onNext: {
-            self.confirmErrorLabel.text = ""
+        vm.output.findPassword.asSignal()
+            .emit(onNext: {
             let vc = ConfirmPasswordViewController()
             vc.modalPresentationStyle = .fullScreen
             vc.modalTransitionStyle = .crossDissolve
             self.present(vc, animated: true)
         }).disposed(by: disposeBag)
         
-        vm.output.errorRelay.emit(onNext: { value in
-            self.confirmErrorLabel.text = "존재하지 않은 이메일입니다."
+        vm.output.errorRelay.asSignal()
+            .emit(onNext: { value in
+            
+            let alertController = UIAlertController(title: "에러", message: value.msg, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+            self.present(alertController, animated: true)
+            
         }).disposed(by: disposeBag)
         
     }

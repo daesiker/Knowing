@@ -87,15 +87,14 @@ class PostCell: SwipeCollectionViewCell {
         contentView.addSubview(mainLb)
         mainLb.snp.makeConstraints {
             $0.top.equalTo(subjectiveLb.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(22)
             $0.trailing.equalToSuperview().offset(-20)
         }
-        
         
         contentView.addSubview(maxLb)
         maxLb.snp.makeConstraints {
             $0.top.equalTo(mainLb.snp.bottom).offset(5)
-            $0.leading.equalToSuperview().offset(19)
+            $0.leading.equalToSuperview().offset(22)
         }
         
         contentView.addSubview(minLb)
@@ -106,13 +105,13 @@ class PostCell: SwipeCollectionViewCell {
         
         contentView.addSubview(dayLb)
         dayLb.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(20)
-            $0.top.equalTo(maxLb.snp.bottom).offset(8)
+            $0.leading.equalToSuperview().offset(22)
+            $0.top.equalTo(maxLb.snp.bottom).offset(5)
         }
         
         contentView.addSubview(separator)
         separator.snp.makeConstraints {
-            $0.top.equalTo(maxLb.snp.bottom).offset(8)
+            $0.top.equalTo(maxLb.snp.bottom).offset(7)
             $0.leading.equalTo(dayLb.snp.trailing).offset(8)
             $0.width.equalTo(1)
             $0.height.equalTo(9)
@@ -122,7 +121,7 @@ class PostCell: SwipeCollectionViewCell {
         contentView.addSubview(dDayLb)
         dDayLb.snp.makeConstraints {
             $0.leading.equalTo(separator.snp.trailing).offset(8)
-            $0.top.equalTo(maxLb.snp.bottom).offset(6)
+            $0.top.equalTo(maxLb.snp.bottom).offset(5)
         }
         
     }

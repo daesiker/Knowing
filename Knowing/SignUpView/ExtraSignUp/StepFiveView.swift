@@ -49,6 +49,7 @@ class StepFiveView: UIView {
         border.frame = CGRect(x: 0, y: tf.frame.size.height - 1, width: tf.frame.width, height: 1)
         border.backgroundColor = CGColor.init(red: 151 / 255, green: 151 / 255, blue: 151 / 255, alpha: 1.0)
         tf.layer.addSublayer(border)
+        tf.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
         tf.bounds.inset(by: UIEdgeInsets(top: 4, left: 0, bottom: 11, right: 31))
         tf.rightView = UIImageView(image: UIImage(named: "triangle")!)
         tf.rightViewMode = .always

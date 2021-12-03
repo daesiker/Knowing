@@ -82,6 +82,11 @@ extension HomeViewController {
             self.present(vc, animated: true, completion: nil)
         }).disposed(by: disposedBag)
         
+        chartVM.output.goError.drive(onNext: {
+            let alertController = UIAlertController(title: "에러", message: "네트워크 연결상태를 확인해주세요.", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "확인", style: .cancel))
+            self.present(alertController, animated: true)
+        }).disposed(by: disposedBag)
     }
     
     private func setScrollView() {

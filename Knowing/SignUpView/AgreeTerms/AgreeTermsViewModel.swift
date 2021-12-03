@@ -34,16 +34,12 @@ class AgreeTermsViewModel {
         var secondValid = BehaviorRelay<[Bool]>(value: [false, false, false, false]).asDriver(onErrorJustReturn: [])
         var thirdValid = BehaviorRelay<[Bool]>(value: [false, false, false, false]).asDriver(onErrorJustReturn: [])
         var nextBtValid = BehaviorRelay<Bool>(value: false).asDriver(onErrorJustReturn: false)
-        var goToSignUp = PublishRelay<User>().asSignal()
-        var errorRelay = PublishRelay<Error>().asSignal()
+        var goToSignUp = PublishRelay<User>()
+        var errorRelay = PublishRelay<Error>()
     }
     
     
     init() {
-        
-        let goToSignUp = PublishRelay<User>()
-        let errorRelay = PublishRelay<Error>()
-        
         input.nextBtObserver
             .map { self.checkBox[3] }
             .flatMap(getUserToken).subscribe({ event in
@@ -51,14 +47,12 @@ class AgreeTermsViewModel {
                 case .completed:
                     break
                 case .next(let user):
-                    goToSignUp.accept(user)
+                    self.output.goToSignUp.accept(user)
                 case .error(let error):
-                    errorRelay.accept(error)
+                    self.output.errorRelay.accept(error)
                 }
             }).disposed(by: disposeBag)
         
-        output.goToSignUp = goToSignUp.asSignal()
-        output.errorRelay = errorRelay.asSignal()
         
         output.firstValid = input.firstObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
         output.secondValid = input.secondObserver.map { self.checkBox }.asDriver(onErrorJustReturn: [])
