@@ -24,12 +24,13 @@ class ChartView: UIView {
     let chartProgress1 = VerticalProgressView().then {
         $0.backgroundColor = .clear
         $0.color = CGColor(red: 255/255, green: 228/255, blue: 182/255, alpha: 1.0)
-        $0.progress = 1.0
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
     }
     
-    let chartImg1 = UIImageView(image: UIImage(named: "chartIndicator1"))
+    let chartImg1 = UIImageView(image: UIImage(named: "chartIndicator1")).then {
+        $0.alpha = 0
+    }
     
     let chartCountLb1 = UILabel().then {
         $0.text = "20"
@@ -48,12 +49,13 @@ class ChartView: UIView {
     let chartProgress2 = VerticalProgressView().then {
         $0.backgroundColor = .clear
         $0.color = CGColor(red: 255/255, green: 176/255, blue: 128/255, alpha: 1.0)
-        $0.progress = 0.75
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
     }
     
-    let chartImg2 = UIImageView(image: UIImage(named: "chartIndicator2"))
+    let chartImg2 = UIImageView(image: UIImage(named: "chartIndicator2")).then {
+        $0.alpha = 0
+    }
     
     let chartCountLb2 = UILabel().then {
         $0.text = "15"
@@ -72,12 +74,13 @@ class ChartView: UIView {
     let chartProgress3 = VerticalProgressView().then {
         $0.backgroundColor = .clear
         $0.color = CGColor(red: 255/255, green: 176/255, blue: 97/255, alpha: 1.0)
-        $0.progress = 0.5
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
     }
     
-    let chartImg3 = UIImageView(image: UIImage(named: "chartIndicator3"))
+    let chartImg3 = UIImageView(image: UIImage(named: "chartIndicator3")).then {
+        $0.alpha = 0
+    }
     
     let chartCountLb3 = UILabel().then {
         $0.text = "10"
@@ -96,12 +99,13 @@ class ChartView: UIView {
     let chartProgress4 = VerticalProgressView().then {
         $0.backgroundColor = .clear
         $0.color = CGColor(red: 255/255, green: 142/255, blue: 59/255, alpha: 1.0)
-        $0.progress = 0.25
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
     }
     
-    let chartImg4 = UIImageView(image: UIImage(named: "chartIndicator4"))
+    let chartImg4 = UIImageView(image: UIImage(named: "chartIndicator4")).then {
+        $0.alpha = 0
+    }
     
     let chartCountLb4 = UILabel().then {
         $0.text = "5"
@@ -120,12 +124,13 @@ class ChartView: UIView {
     let chartProgress5 = VerticalProgressView().then {
         $0.backgroundColor = .clear
         $0.color = CGColor(red: 255/255, green: 136/255, blue: 84/255, alpha: 1.0)
-        $0.progress = 0.01
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
     }
     
-    let chartImg5 = UIImageView(image: UIImage(named: "chartIndicator5"))
+    let chartImg5 = UIImageView(image: UIImage(named: "chartIndicator5")).then {
+        $0.alpha = 0
+    }
     
     let chartCountLb5 = UILabel().then {
         $0.text = "0"
@@ -144,12 +149,13 @@ class ChartView: UIView {
     let chartProgress6 = VerticalProgressView().then {
         $0.backgroundColor = .clear
         $0.color = CGColor(red: 210/255, green: 132/255, blue: 81/255, alpha: 1.0)
-        $0.progress = 0.01
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
     }
     
-    let chartImg6 = UIImageView(image: UIImage(named: "chartIndicator6"))
+    let chartImg6 = UIImageView(image: UIImage(named: "chartIndicator6")).then {
+        $0.alpha = 0
+    }
     
     let chartCountLb6 = UILabel().then {
         $0.text = "0"
@@ -165,6 +171,36 @@ class ChartView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func chartAnimation() {
+        
+        UIView.animate(withDuration: 2.0) {
+            
+            self.chartImg1.alpha = 1.0
+            let chart1Val = self.unit[0] >= 20 ? 1 : self.unit[0] == 0 ? 0.01 : self.unit[0] / 20
+            self.chartProgress1.setProgress(progress: chart1Val, animated: true)
+            
+            let chart2Val = self.unit[1] >= 20 ? 1 : self.unit[1] == 0 ? 0.01 : self.unit[1] / 20
+            self.chartProgress2.setProgress(progress: chart2Val, animated: true)
+            self.chartImg2.alpha = 1.0
+            
+            let chart3Val = self.unit[2] >= 20 ? 1 : self.unit[2] == 0 ? 0.01 : self.unit[2] / 20
+            self.chartProgress3.setProgress(progress: chart3Val, animated: true)
+            self.chartImg3.alpha = 1.0
+            
+            let chart4Val = self.unit[3] >= 20 ? 1 : self.unit[3] == 0 ? 0.01 : self.unit[3] / 20
+            self.chartProgress4.setProgress(progress: chart4Val, animated: true)
+            self.chartImg4.alpha = 1.0
+            
+            let chart5Val = self.unit[4] >= 20 ? 1 : self.unit[4] == 0 ? 0.01 : self.unit[4] / 20
+            self.chartProgress5.setProgress(progress: chart5Val, animated: true)
+            self.chartImg5.alpha = 1.0
+            
+            let chart6Val = self.unit[5] >= 20 ? 1 : self.unit[5] == 0 ? 0.01 : self.unit[5] / 20
+            self.chartProgress6.setProgress(progress: chart6Val, animated: true)
+            self.chartImg6.alpha = 1.0
+        }
     }
     
     func sortCategory() {
@@ -210,27 +246,27 @@ class ChartView: UIView {
         }
         
         chartTitle1.text = category[0]
-        chartProgress1.progress = unit[0] >= 20 ? 1 : unit[0] == 0 ? 0.01 : unit[0] / 20
+        //chartProgress1.progress = unit[0] >= 20 ? 1 : unit[0] == 0 ? 0.01 : unit[0] / 20
         chartCountLb1.text = String(Int(unit[0]))
         
         chartTitle2.text = category[1]
-        chartProgress2.progress = unit[1] >= 20 ? 1 : unit[1] == 0 ? 0.01 : unit[1] / 20
+        //chartProgress2.progress = unit[1] >= 20 ? 1 : unit[1] == 0 ? 0.01 : unit[1] / 20
         chartCountLb2.text = String(Int(unit[1]))
         
         chartTitle3.text = category[2]
-        chartProgress3.progress = unit[2] >= 20 ? 1 : unit[2] == 0 ? 0.01 : unit[2] / 20
+        //chartProgress3.progress = unit[2] >= 20 ? 1 : unit[2] == 0 ? 0.01 : unit[2] / 20
         chartCountLb3.text = String(Int(unit[2]))
         
         chartTitle4.text = category[3]
-        chartProgress4.progress = unit[3] >= 20 ? 1 : unit[3] == 0 ? 0.01 : unit[3] / 20
+        //chartProgress4.progress = unit[3] >= 20 ? 1 : unit[3] == 0 ? 0.01 : unit[3] / 20
         chartCountLb4.text = String(Int(unit[3]))
         
         chartTitle5.text = category[4]
-        chartProgress5.progress = unit[4] >= 20 ? 1 : unit[4] == 0 ? 0.01 : unit[4] / 20
+        //chartProgress5.progress = unit[4] >= 20 ? 1 : unit[4] == 0 ? 0.01 : unit[4] / 20
         chartCountLb5.text = String(Int(unit[4]))
         
         chartTitle6.text = category[5]
-        chartProgress6.progress = unit[5] >= 20 ? 1 : unit[5] == 0 ? 0.01 : unit[5] / 20
+        //chartProgress6.progress = unit[5] >= 20 ? 1 : unit[5] == 0 ? 0.01 : unit[5] / 20
         chartCountLb6.text = String(Int(unit[5]))
     }
     

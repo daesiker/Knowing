@@ -58,6 +58,10 @@ class HomeAllPostView: UIView {
         return collectionView
     }()
     
+    let scrollButton = UIButton(type: .custom).then {
+        $0.setTitle("버튼", for: .normal)
+    }
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -108,6 +112,7 @@ class HomeAllPostView: UIView {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-91)
         }
+        
     }
     
     func setCV() {
@@ -175,11 +180,11 @@ extension HomeAllPostView: UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return collectionView == allPostCV ? 17 : 16
+        return collectionView == allPostCV ? 17 : 14
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return collectionView == allPostCV ? 17 : 16
+        return collectionView == allPostCV ? 17 : 14
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -200,6 +205,14 @@ extension HomeAllPostView: UICollectionViewDelegateFlowLayout, UICollectionViewD
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
         }
         
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollButton.alpha = 0
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        scrollButton.alpha = 1
     }
     
 }

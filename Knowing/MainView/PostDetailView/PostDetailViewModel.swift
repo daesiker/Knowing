@@ -64,7 +64,7 @@ class PostDetailViewModel {
             AF.request(url, method: .post, headers: header)
                 .responseJSON { response in
                     switch response.result {
-                    case .success(let data):
+                    case .success(_):
                         if self.main.user.bookmark.contains(value) {
                             let index = self.main.user.bookmark.firstIndex(of: value)
                             self.main.user.bookmark.remove(at: index!)

@@ -22,7 +22,7 @@ class PostDetailViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = true
-        $0.frame = UIScreen.main.bounds
+        $0.translatesAutoresizingMaskIntoConstraints = false
         $0.backgroundColor = .white
     }
     
@@ -182,7 +182,8 @@ class PostDetailViewController: UIViewController {
     let benefitTitle = DetailTitleLabel("어떤 혜택을 받을 수 있나요?", image: UIImage(named: "docDetail_benefit")!)
     
     var benefitsLabels:[SubTitleLabel] = []
-    var subLabelDic:[Int: [UILabel]] = [:]
+    var benefitsSubLabels:[UIView] = []
+    
     
     let separatorThree = UIView().then {
         $0.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
@@ -199,7 +200,7 @@ class PostDetailViewController: UIViewController {
     let peopleWarningImg = UIImageView(image: UIImage(named: "docDetail_warning")!)
     
     let peopleDetailBt = UIButton(type: .custom).then {
-        $0.setImage(UIImage(named: "docDetail_close")!, for: .normal)
+        $0.setImage(UIImage(named: "docDetail_open")!, for: .normal)
     }
     
     let separatorFour = UIView().then {
@@ -214,7 +215,7 @@ class PostDetailViewController: UIViewController {
     
     let detailTermsTitle = UnderLineLabel("자격 상세 조건")
     var detailTermsLabels:[SubTitleLabel] = []
-    
+    var detailTermsSubTitles:[UIView] = []
     
     let separatorFive = UIView().then {
         $0.backgroundColor = UIColor.rgb(red: 250, green: 239, blue: 221)
@@ -222,15 +223,14 @@ class PostDetailViewController: UIViewController {
     
     let restinctTitle = UnderLineLabel("참여 제한 대상")
     
-    
-    var restinctLabels:[UIView] = []
+    var restinctLabels:[SubTitleLabel] = []
+    var restinctSubLabels:[UIView] = []
     
     let separatorSix = UIView().then {
         $0.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
     }
     
     let howApplyTitle = DetailTitleLabel("어떻게 신청하나요?", image: UIImage(named: "docDetail_pencil")!)
-    
     let applyDateTitle = UnderLineLabel("신청·운영 기간")
     
     let applyStartDateTitle = UILabel().then {
@@ -353,6 +353,7 @@ class PostDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(vm.post)
         inputValue()
         setUI()
         bind()
@@ -375,7 +376,7 @@ class PostDetailViewController: UIViewController {
                         let postModel = Post(json: post)
                         MainTabViewModel.instance.bookmarks.append(postModel)
                     }
-                case .failure(let error):
+                case .failure(_):
                     let vc = UIAlertController(title: "에러", message: "네트워크 연결을 확인하세요.", preferredStyle: .alert)
                     let action = UIAlertAction(title: "확인", style: .cancel)
                     vc.addAction(action)
@@ -463,7 +464,7 @@ extension PostDetailViewController {
         stickyView.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
             $0.trailing.equalTo(safeArea.snp.trailing)
-            $0.height.equalTo(416)
+            $0.height.greaterThanOrEqualTo(416)
         }
         
         stickyView.addSubview(backBt)
@@ -681,7 +682,7 @@ extension PostDetailViewController {
         
         scrollView.addSubview(separatorThree)
         separatorThree.snp.makeConstraints {
-            $0.top.equalTo(benefitsLabels.last!.snp.bottom).offset(26)
+            $0.top.equalTo(benefitsSubLabels.last!.snp.bottom).offset(26)
             $0.leading.equalToSuperview()
             $0.trailing.equalTo(safeArea.snp.trailing)
             $0.height.equalTo(6)
@@ -719,22 +720,23 @@ extension PostDetailViewController {
         separatorFour.snp.makeConstraints {
             $0.height.equalTo(1)
             $0.top.equalTo(peopleDetailTitle.snp.bottom).offset(7)
-            $0.leading.equalToSuperview().offset(21)
-            $0.trailing.equalTo(safeArea.snp.trailing).offset(-19)
+            $0.leading.equalToSuperview().offset(20)
+            $0.width.equalTo(self.view.frame.width - 40)
         }
         
         scrollView.addSubview(peopleDetailView)
         peopleDetailView.snp.makeConstraints {
             $0.top.equalTo(separatorFour.snp.bottom)
             $0.leading.equalToSuperview()
-            $0.trailing.equalTo(safeArea.snp.trailing)
+            $0.width.equalTo(self.view.frame.width)
+            $0.height.equalTo(262)
         }
         
         scrollView.addSubview(separatorDetail)
         separatorDetail.snp.makeConstraints {
-            $0.top.equalTo(separatorFour.snp.bottom).offset(280)
+            $0.top.equalTo(peopleDetailView.snp.bottom)
             $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+            $0.width.equalTo(self.view.frame.width - 40)
             $0.height.equalTo(1)
         }
         
@@ -748,9 +750,9 @@ extension PostDetailViewController {
         
         scrollView.addSubview(separatorFive)
         separatorFive.snp.makeConstraints {
-            $0.top.equalTo(detailTermsLabels.last!.snp.bottom).offset(26)
+            $0.top.equalTo(detailTermsSubTitles.last!.snp.bottom).offset(26)
             $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+            $0.width.equalTo(self.view.frame.width - 40)
             $0.height.equalTo(1)
         }
         
@@ -764,7 +766,7 @@ extension PostDetailViewController {
         
         scrollView.addSubview(separatorSix)
         separatorSix.snp.makeConstraints {
-            $0.top.equalTo(restinctLabels.last!.snp.bottom).offset(26)
+            $0.top.equalTo(restinctSubLabels.last!.snp.bottom).offset(26)
             $0.leading.equalToSuperview()
             $0.trailing.equalTo(safeArea.snp.trailing)
             $0.height.equalTo(6)
@@ -930,26 +932,40 @@ extension PostDetailViewController {
         scrollView.layoutIfNeeded()
         
         scrollView.updateContentSize()
-        
+        scrollView.contentOffset = CGPoint(x: 0, y: -57)
     }
     
     func getbenefitLabel() {
         let component = vm.post.content.components(separatedBy: "@")
+        
         for i in 0..<component.count {
             let textValue = component[i].components(separatedBy: "^")
             if textValue.count >= 2 {
-                var subLabels:[UILabel] = []
-                for j in 0..<textValue.count {
-                    if j == 0 { continue }
+                let view = UIView()
+                for j in 1..<textValue.count {
                     let subLabel = UILabel().then {
                         $0.text = textValue[j]
                         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 13)
                         $0.textColor = UIColor.rgb(red: 124, green: 124, blue: 124)
+                        $0.numberOfLines = 0
+                        $0.sizeToFit()
                     }
-                    subLabels.append(subLabel)
+                    view.addSubview(subLabel)
+                    subLabel.snp.makeConstraints {
+                        $0.top.equalToSuperview().offset(12)
+                        $0.leading.trailing.equalToSuperview()
+                    }
+                    if j == textValue.count - 1 {
+                        subLabel.snp.makeConstraints {
+                            $0.bottom.equalToSuperview()
+                        }
+                    }
                 }
-                subLabelDic.updateValue(subLabels, forKey: i)
+                benefitsSubLabels.append(view)
+            } else {
+                benefitsSubLabels.append(UIView())
             }
+            
             let label = SubTitleLabel(textValue[0])
             benefitsLabels.append(label)
             scrollView.addSubview(benefitsLabels[i])
@@ -957,51 +973,156 @@ extension PostDetailViewController {
                 benefitsLabels[i].snp.makeConstraints {
                     $0.top.equalTo(benefitTitle.snp.bottom).offset(32)
                     $0.leading.equalToSuperview().offset(20)
-                    $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+                    $0.width.equalTo(self.view.frame.width - 40)
                 }
             } else {
                 benefitsLabels[i].snp.makeConstraints {
-                    $0.top.equalTo(benefitsLabels[i-1].snp.bottom)
+                    $0.top.equalTo(benefitsSubLabels[i-1].snp.bottom)
                     $0.leading.equalToSuperview().offset(20)
-                    $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+                    $0.width.equalTo(self.view.frame.width - 40)
                 }
             }
+            
+            scrollView.addSubview(benefitsSubLabels[i])
+            
+            benefitsSubLabels[i].snp.makeConstraints {
+                $0.top.equalTo(benefitsLabels[i].snp.bottom).offset(2)
+                $0.leading.equalToSuperview().offset(20)
+                $0.width.equalTo(self.view.frame.width - 40)
+            }
+            
+            if benefitsLabels[i].label.text!.count < 24 && benefitsSubLabels[i].subviews.count == 0 {
+                benefitsLabels[i].button.alpha = 0.0
+            } else {
+                benefitsLabels[i].button.rx.tap.subscribe(onNext: {
+                    
+                    if self.benefitsLabels[i].isDetail {
+                        
+                        self.benefitsSubLabels[i].alpha = 0
+                        self.benefitsSubLabels[i].snp.remakeConstraints {
+                            $0.bottom.equalTo(self.benefitsLabels[i].snp.bottom).offset(2)
+                            $0.leading.equalToSuperview().offset(20)
+                            $0.width.equalTo(self.view.frame.width - 40)
+                        }
+                        self.benefitsLabels[i].getDetailView()
+                        self.scrollView.layoutIfNeeded()
+                        self.scrollView.updateContentSize()
+                        
+                    } else {
+        
+                        self.benefitsSubLabels[i].alpha = 1
+                        self.benefitsSubLabels[i].snp.remakeConstraints {
+                            $0.top.equalTo(self.benefitsLabels[i].snp.bottom).offset(2)
+                            $0.leading.equalToSuperview().offset(20)
+                            $0.width.equalTo(self.view.frame.width - 40)
+                        }
+                        
+                        self.benefitsLabels[i].getDetailView()
+                        self.scrollView.layoutIfNeeded()
+                        self.scrollView.updateContentSize()
+                        
+                    }
+                }).disposed(by: disposeBag)
+            }
+            
+            
+            
         }
+        
     }
     
     func getdetailTermsLabel() {
         let component = vm.post.detailTerms.components(separatedBy: "@")
+        
         for i in 0..<component.count {
             let textValue = component[i].components(separatedBy: "^")
             if textValue.count >= 2 {
-                var subLabels:[UILabel] = []
-                for j in 0..<textValue.count {
-                    if j == 0 { continue }
+                let view = UIView()
+                for j in 1..<textValue.count {
                     let subLabel = UILabel().then {
                         $0.text = textValue[j]
                         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 13)
                         $0.textColor = UIColor.rgb(red: 124, green: 124, blue: 124)
+                        $0.numberOfLines = 0
+                        $0.sizeToFit()
                     }
-                    subLabels.append(subLabel)
+                    view.addSubview(subLabel)
+                    subLabel.snp.makeConstraints {
+                        $0.top.equalToSuperview().offset(12)
+                        $0.leading.trailing.equalToSuperview()
+                    }
+                    if j == textValue.count - 1 {
+                        subLabel.snp.makeConstraints {
+                            $0.bottom.equalToSuperview()
+                        }
+                    }
                 }
-                subLabelDic.updateValue(subLabels, forKey: i)
+                detailTermsSubTitles.append(view)
+            } else {
+                detailTermsSubTitles.append(UIView())
             }
+            
             let label = SubTitleLabel(textValue[0])
             detailTermsLabels.append(label)
             scrollView.addSubview(detailTermsLabels[i])
+            
             if i == 0 {
                 detailTermsLabels[i].snp.makeConstraints {
                     $0.top.equalTo(detailTermsTitle.snp.bottom).offset(32)
                     $0.leading.equalToSuperview().offset(20)
-                    $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+                    $0.width.equalTo(self.view.frame.width - 40)
+                   
                 }
             } else {
                 detailTermsLabels[i].snp.makeConstraints {
-                    $0.top.equalTo(detailTermsLabels[i-1].snp.bottom)
+                    $0.top.equalTo(detailTermsSubTitles[i-1].snp.bottom).offset(14)
                     $0.leading.equalToSuperview().offset(20)
-                    $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+                    $0.width.equalTo(self.view.frame.width - 40)
+                    
                 }
             }
+            scrollView.addSubview(detailTermsSubTitles[i])
+            
+            detailTermsSubTitles[i].snp.makeConstraints {
+                $0.top.equalTo(detailTermsLabels[i].snp.bottom).offset(2)
+                $0.leading.equalToSuperview().offset(20)
+                $0.width.equalTo(self.view.frame.width - 40)
+            }
+            
+            if detailTermsLabels[i].label.text!.count < 24 && detailTermsSubTitles[i].subviews.count == 0 {
+                detailTermsLabels[i].button.alpha = 0.0
+            } else {
+                detailTermsLabels[i].button.rx.tap.subscribe(onNext: {
+                    
+                    if self.detailTermsLabels[i].isDetail {
+                        
+                        self.detailTermsSubTitles[i].alpha = 0
+                        self.detailTermsSubTitles[i].snp.remakeConstraints {
+                            $0.bottom.equalTo(self.detailTermsLabels[i].snp.bottom).offset(2)
+                            $0.leading.equalToSuperview().offset(20)
+                            $0.width.equalTo(self.view.frame.width - 40)
+                        }
+                        self.detailTermsLabels[i].getDetailView()
+                        self.scrollView.layoutIfNeeded()
+                        self.scrollView.updateContentSize()
+                        
+                    } else {
+        
+                        self.detailTermsSubTitles[i].alpha = 1
+                        self.detailTermsSubTitles[i].snp.remakeConstraints {
+                            $0.top.equalTo(self.detailTermsLabels[i].snp.bottom).offset(2)
+                            $0.leading.equalToSuperview().offset(20)
+                            $0.width.equalTo(self.view.frame.width - 40)
+                        }
+                        
+                        self.detailTermsLabels[i].getDetailView()
+                        self.scrollView.layoutIfNeeded()
+                        self.scrollView.updateContentSize()
+                        
+                    }
+                }).disposed(by: disposeBag)
+            }
+            
         }
     }
     
@@ -1009,24 +1130,97 @@ extension PostDetailViewController {
         let component = vm.post.joinLimit.components(separatedBy: "=")
         
         for i in 0..<component.count {
-            let label = SubTitleLabel(component[i])
+            let textValue = component[i].components(separatedBy: "^")
+            if textValue.count >= 2 {
+                let view = UIView()
+                for j in 1..<textValue.count {
+                    let subLabel = UILabel().then {
+                        $0.text = textValue[j]
+                        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 13)
+                        $0.textColor = UIColor.rgb(red: 124, green: 124, blue: 124)
+                        $0.numberOfLines = 0
+                        $0.sizeToFit()
+                    }
+                    view.addSubview(subLabel)
+                    subLabel.snp.makeConstraints {
+                        $0.top.equalToSuperview().offset(12)
+                        $0.leading.trailing.equalToSuperview()
+                    }
+                    if j == textValue.count - 1 {
+                        subLabel.snp.makeConstraints {
+                            $0.bottom.equalToSuperview()
+                        }
+                    }
+                }
+                restinctSubLabels.append(view)
+            } else {
+                restinctSubLabels.append(UIView())
+            }
+            
+            let label = SubTitleLabel(textValue[0])
             restinctLabels.append(label)
             scrollView.addSubview(restinctLabels[i])
+            
             if i == 0 {
                 restinctLabels[i].snp.makeConstraints {
-                    $0.top.equalTo(restinctTitle.snp.bottom).offset(29)
+                    $0.top.equalTo(restinctTitle.snp.bottom).offset(32)
                     $0.leading.equalToSuperview().offset(20)
-                    $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+                    $0.width.equalTo(self.view.frame.width - 40)
+                   
                 }
             } else {
                 restinctLabels[i].snp.makeConstraints {
-                    $0.top.equalTo(restinctLabels[i-1].snp.bottom)
+                    $0.top.equalTo(restinctSubLabels[i-1].snp.bottom).offset(14)
                     $0.leading.equalToSuperview().offset(20)
-                    $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+                    $0.width.equalTo(self.view.frame.width - 40)
+                    
                 }
+            }
+            scrollView.addSubview(restinctSubLabels[i])
+            
+            restinctSubLabels[i].snp.makeConstraints {
+                $0.top.equalTo(restinctLabels[i].snp.bottom).offset(2)
+                $0.leading.equalToSuperview().offset(20)
+                $0.width.equalTo(self.view.frame.width - 40)
+            }
+            
+            if restinctLabels[i].label.text!.count < 24 && restinctSubLabels[i].subviews.count == 0 {
+                restinctLabels[i].button.alpha = 0.0
+            } else {
+                restinctLabels[i].button.rx.tap.subscribe(onNext: {
+                    
+                    if self.restinctLabels[i].isDetail {
+                        
+                        self.restinctSubLabels[i].alpha = 0
+                        self.restinctSubLabels[i].snp.remakeConstraints {
+                            $0.bottom.equalTo(self.restinctLabels[i].snp.bottom).offset(2)
+                            $0.leading.equalToSuperview().offset(20)
+                            $0.width.equalTo(self.view.frame.width - 40)
+                        }
+                        self.restinctLabels[i].getDetailView()
+                        self.scrollView.layoutIfNeeded()
+                        self.scrollView.updateContentSize()
+                        
+                    } else {
+        
+                        self.restinctSubLabels[i].alpha = 1
+                        self.restinctSubLabels[i].snp.remakeConstraints {
+                            $0.top.equalTo(self.restinctLabels[i].snp.bottom).offset(2)
+                            $0.leading.equalToSuperview().offset(20)
+                            $0.width.equalTo(self.view.frame.width - 40)
+                        }
+                        
+                        self.restinctLabels[i].getDetailView()
+                        self.scrollView.layoutIfNeeded()
+                        self.scrollView.updateContentSize()
+                        
+                    }
+                }).disposed(by: disposeBag)
             }
             
         }
+        
+        
     }
     
     func getApplyHowLabel() {
@@ -1150,6 +1344,35 @@ extension PostDetailViewController {
             }
         }).disposed(by: disposeBag)
         
+        peopleDetailBt.rx.tap.subscribe(onNext: {
+            
+            if self.peopleDetailView.isVisible {
+                self.peopleDetailBt.setImage(UIImage(named: "docDetail_close")!, for: .normal)
+                self.peopleDetailView.alpha = 0
+                self.separatorDetail.alpha = 0
+                self.detailTermsTitle.snp.remakeConstraints {
+                    $0.top.equalTo(self.separatorFour.snp.bottom).offset(26)
+                    $0.leading.equalToSuperview().offset(20)
+                }
+                self.peopleDetailView.isVisible = false
+            } else {
+                self.peopleDetailBt.setImage(UIImage(named: "docDetail_open")!, for: .normal)
+                self.peopleDetailView.alpha = 1
+                self.separatorDetail.alpha = 1
+                self.detailTermsTitle.snp.remakeConstraints {
+                    $0.top.equalTo(self.separatorDetail.snp.bottom).offset(26)
+                    $0.leading.equalToSuperview().offset(20)
+                }
+                self.peopleDetailView.isVisible = true
+            }
+            
+            self.scrollView.layoutIfNeeded()
+            
+            self.scrollView.updateContentSize()
+            
+        }).disposed(by: disposeBag)
+        
+        
     }
     
     func bindOutput() {
@@ -1202,8 +1425,6 @@ extension PostDetailViewController {
                 alertController.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
                 self.present(alertController, animated: true)
             }).disposed(by: disposeBag)
-        
-        
     }
     
     
@@ -1213,14 +1434,14 @@ extension PostDetailViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        
-        
-        let maxTopHeigt:CGFloat = 416
-        let minTopHeight: CGFloat = 59
-        
-        
-        
-        
+        let y = 414 - (scrollView.contentOffset.y + 414)
+        print(scrollView.contentOffset.y)
+        let height = max(y, 414)
+        self.stickyView.snp.remakeConstraints {
+            $0.top.leading.equalToSuperview()
+            $0.trailing.equalTo(safeArea.snp.trailing)
+            $0.height.equalTo(height)
+        }
         
     }
     
@@ -1345,6 +1566,8 @@ class DetailTitleLabel: UIView {
 
 class SubTitleLabel: UIView {
     
+    var isDetail:Bool = true
+    
     let circleView = UIView().then {
         $0.backgroundColor = UIColor.rgb(red: 255, green: 142, blue: 59)
         $0.layer.cornerRadius = 3
@@ -1358,7 +1581,7 @@ class SubTitleLabel: UIView {
     }
     
     let button = UIButton(type: .custom).then {
-        $0.setImage(UIImage(named: "docDetail_close")!, for: .normal)
+        $0.setImage(UIImage(named: "docDetail_open")!, for: .normal)
     }
     
     let border = UIView().then {
@@ -1387,7 +1610,7 @@ class SubTitleLabel: UIView {
         addSubview(button)
         button.snp.makeConstraints {
             $0.trailing.equalToSuperview()
-            $0.top.equalToSuperview().offset(13)
+            $0.top.equalToSuperview().offset(8)
         }
         
         addSubview(border)
@@ -1396,6 +1619,20 @@ class SubTitleLabel: UIView {
             $0.height.equalTo(1)
         }
         
+    }
+    
+    func getDetailView() {
+        if isDetail {
+            label.numberOfLines = 1
+            label.lineBreakMode = .byTruncatingTail
+            button.setImage(UIImage(named: "docDetail_close")!, for: .normal)
+        } else {
+            label.numberOfLines = 2
+            label.lineBreakMode = .byWordWrapping
+            button.setImage(UIImage(named: "docDetail_open")!, for: .normal)
+        }
+        isDetail = !isDetail
+        layoutIfNeeded()
     }
     
     
@@ -1457,6 +1694,8 @@ class UnderLineLabel: UIView {
 
 
 class PeopleDetailView: UIView {
+    
+    var isVisible = true
     
     let ageTitle = UILabel().then {
         $0.text = "나이"

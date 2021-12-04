@@ -182,7 +182,7 @@ extension UIScrollView {
 }
 
 @IBDesignable class VerticalProgressView : UIView {
-    @IBInspectable public var animationDuration = 0.95
+    @IBInspectable public var animationDuration = 2.0
     var previousProgress : Float = 0.0
     @IBInspectable public var progress:Float {
         get {
@@ -233,6 +233,7 @@ extension UIScrollView {
         else if(value > 1.0){
             value = 1.0
         }
+        
         self.previousProgress = value
         setFilledProgress(position: getPosition(),animated:animated)
     }
@@ -269,6 +270,29 @@ extension UIImage {
         }
         
         
+    }
+    
+}
+
+extension UIView {
+    
+    func getHeight() -> CGFloat {
+        let unionCalculatedTotalRect = recursiveUnionInDepthFor(view: self)
+        
+        // 계산된 크기로 컨텐츠 사이즈 설정
+        return unionCalculatedTotalRect.height
+    }
+    
+    private func recursiveUnionInDepthFor(view: UIView) -> CGRect {
+        var totalRect: CGRect = .zero
+        
+        // 모든 자식 View의 컨트롤의 크기를 재귀적으로 호출하며 최종 영역의 크기를 설정
+        for subView in view.subviews {
+            totalRect = totalRect.union(recursiveUnionInDepthFor(view: subView))
+        }
+        
+        // 최종 계산 영역의 크기를 반환
+        return totalRect.union(view.frame)
     }
     
 }

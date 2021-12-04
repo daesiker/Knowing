@@ -213,6 +213,7 @@ class HomeChartHeader: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setTitle()
+        chartView.chartAnimation()
         setCV()
         setUI()
         bind()
