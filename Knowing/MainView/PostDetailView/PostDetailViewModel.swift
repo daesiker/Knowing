@@ -56,7 +56,7 @@ class PostDetailViewModel {
         output.etcValue = input.etcObserver.map {[false, false, false, true]}.asDriver(onErrorJustReturn: [false, false, false, true])
         
         input.bookmarkObserver.subscribe(onNext: {value in
-            let uid = Auth.auth().currentUser!.uid
+            let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
             let url = "https://www.makeus-hyun.shop/app/users/bookmark"
             let header:HTTPHeaders = ["userUid": uid,
                                       "welfareUid": self.post.uid]

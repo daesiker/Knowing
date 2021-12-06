@@ -24,8 +24,9 @@ class StepTwoView: UIView {
     
     let incomeTextField:UITextField = {
        let tf = UITextField()
-        tf.placeholder = "EX)) 1,950,000"
+        tf.attributedPlaceholder = NSAttributedString(string: "EX)) 1,950,000", attributes: [NSAttributedString.Key.foregroundColor : UIColor.rgb(red: 194, green: 194, blue: 194)])
         tf.borderStyle = .none
+        tf.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
         tf.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
         let border = CALayer()
         border.frame = CGRect(x: 0, y: tf.frame.size.height - 1, width: tf.frame.width, height: 1)

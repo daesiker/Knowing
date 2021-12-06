@@ -29,11 +29,50 @@ extension String {
         let passwordtesting = NSPredicate(format: "SELF MATCHES %@", passwordreg)
         return passwordtesting.evaluate(with: self)
     }
-
+    
 }
 
 extension Date {
     var age:Int { Calendar.current.dateComponents([.year], from: self, to: Date()).year! }
+    
+    func timeAgoDisplay() -> String {
+        let secondsAgo = Int(Date().timeIntervalSince(self))
+        
+        let minute = 60
+        let hour = 60 * minute
+        let day = 24 * hour
+        let week = 7 * day
+        
+        let quotient: Int
+        let unit: String
+        
+        if secondsAgo < minute {
+            quotient = secondsAgo
+            unit = "초"
+            return "\(quotient)\(unit) 전"
+        } else if secondsAgo < hour {
+            quotient = secondsAgo / minute
+            unit = "분"
+            return "\(quotient)\(unit) 전"
+        } else if secondsAgo < day {
+            quotient = secondsAgo / hour
+            unit = "시간"
+            return "\(quotient)\(unit) 전"
+        } else if secondsAgo < week {
+            quotient = secondsAgo / day
+            unit = "일"
+            if quotient <= 7 {
+                return "\(quotient)\(unit) 전"
+            }
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        
+        return dateFormatter.string(from: self)
+    }
+    
+    
 }
 
 extension Encodable {

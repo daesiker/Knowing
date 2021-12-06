@@ -179,7 +179,7 @@ extension BookMarkViewController {
     
     @objc func fetchData() {
         
-        let uid = Auth.auth().currentUser!.uid
+        let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
         let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
@@ -218,6 +218,27 @@ extension BookMarkViewController {
             })
             .disposed(by: disposeBag)
 
+        sortBt.rx.tap.subscribe(onNext: {
+            
+            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            let maxMoneySort = UIAlertAction(title: "높은 금액순", style: .default) { _ in
+                self.vm.bookmarks.sort(by: { a, b in
+                    return Int(a.maxMoney)! > Int(b.maxMoney)!
+                })
+                self.bookmarkCV.reloadData()
+            }
+            
+            let minMoneySort = UIAlertAction(title: "높은 금액순", style: .default) { _ in
+                self.vm.bookmarks.sort(by: { a, b in
+                    return Int(a.maxMoney)! < Int(b.maxMoney)!
+                })
+                self.bookmarkCV.reloadData()
+            }
+            
+            
+        }).disposed(by: disposeBag)
+        
     }
     
 }
@@ -278,7 +299,7 @@ extension BookMarkViewController: SwipeCollectionViewCellDelegate {
         guard orientation == .right else { return nil }
         
         let delete = SwipeAction(style: .default, title: "삭제") { action, indexPath in
-            let uid = Auth.auth().currentUser!.uid
+            let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
             let url = "https://www.makeus-hyun.shop/app/users/bookmark"
             let welfareUid = self.filteredData[indexPath.row].uid
             let header:HTTPHeaders = [ "userUid": uid,

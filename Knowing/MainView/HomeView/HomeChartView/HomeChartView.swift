@@ -189,12 +189,11 @@ class HomeChartHeader: UICollectionViewCell {
         $0.text = "높은 금액순"
         $0.textColor = UIColor.rgb(red: 210, green: 132, blue: 81)
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
-        $0.alpha = 0
     }
     
     let sortBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "filterImg")!, for: .normal)
-        $0.alpha = 0
+        
     }
     
     let categoryCV: UICollectionView = {
@@ -361,7 +360,14 @@ class HomeChartHeader: UICollectionViewCell {
                 self.vm.input.postObserver.accept(posts[0])
             }
         }).disposed(by: disposeBag)
+        
+        sortBt.rx.tap.subscribe(onNext: {
+            
+            
+            
+        }).disposed(by: disposeBag)
     }
+    
     
     func setCV() {
         categoryCV.delegate = nil

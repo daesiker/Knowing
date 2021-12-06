@@ -44,7 +44,9 @@ class CustomTextField: UITextField {
         self.init()
         self.useState = state
         self.backgroundColor = state == .signUp ? .white : UIColor.rgb(red: 243, green: 243, blue: 243)
-        self.placeholder = text
+        self.attributedPlaceholder = NSAttributedString(string: text, attributes: [NSAttributedString.Key.foregroundColor : UIColor.rgb(red: 194, green: 194, blue: 194)])
+        self.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
+        
         self.layer.cornerRadius = 20.0
         self.layer.masksToBounds = true
         self.isUserInteractionEnabled = true
@@ -190,7 +192,6 @@ class HomeAllPostBt: UIButton {
         }
         
         bringSubviewToFront(title)
-        
         
     }
     

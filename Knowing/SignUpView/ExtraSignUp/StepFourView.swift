@@ -41,7 +41,8 @@ class StepFourView: UIView {
     
     let detailTextField:UITextField = {
        let tf = UITextField()
-        tf.placeholder = "ex)) 경영"
+        tf.attributedPlaceholder = NSAttributedString(string: "ex)) 경영", attributes: [NSAttributedString.Key.foregroundColor : UIColor.rgb(red: 194, green: 194, blue: 194)])
+        tf.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
         tf.borderStyle = .none
         tf.textColor = UIColor.rgb(red: 65, green: 65, blue: 65)
         let border = CALayer()

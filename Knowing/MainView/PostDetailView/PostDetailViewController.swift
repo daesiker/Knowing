@@ -361,7 +361,7 @@ class PostDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let uid = Auth.auth().currentUser!.uid
+        let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
         let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
@@ -455,80 +455,83 @@ extension PostDetailViewController {
     
     func setUI() {
         view.backgroundColor = .white
+        
+        safeArea.addSubview(backBt)
+        backBt.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.leading.equalToSuperview().offset(20)
+        }
+        
+        safeArea.addSubview(shareBt)
+        shareBt.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
+        }
+        
+        safeArea.addSubview(bookmarkBt)
+        bookmarkBt.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalTo(shareBt.snp.leading).offset(-10)
+        }
+        
+        safeArea.addSubview(alarmBt)
+        alarmBt.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalTo(bookmarkBt.snp.leading).offset(-10)
+        }
+        
+        
         safeArea.addSubview(scrollView)
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(backBt.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
         
         scrollView.addSubview(stickyView)
         stickyView.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
             $0.trailing.equalTo(safeArea.snp.trailing)
-            $0.height.greaterThanOrEqualTo(416)
+            $0.height.greaterThanOrEqualTo(313)
         }
-        
-        stickyView.addSubview(backBt)
-        backBt.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.leading.equalToSuperview().offset(20)
-        }
-        
-        stickyView.addSubview(shareBt)
-        shareBt.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
-        }
-        
-        stickyView.addSubview(bookmarkBt)
-        bookmarkBt.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.trailing.equalTo(shareBt.snp.leading).offset(-10)
-        }
-        
-        stickyView.addSubview(alarmBt)
-        alarmBt.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.trailing.equalTo(bookmarkBt.snp.leading).offset(-10)
-        }
-        
+
         stickyView.addSubview(logoImg)
         logoImg.snp.makeConstraints {
-            $0.top.equalTo(backBt.snp.bottom).offset(25)
+            $0.top.equalToSuperview().offset(25)
             $0.leading.equalToSuperview().offset(20)
         }
-        
+
         stickyView.addSubview(nameLb)
         nameLb.snp.makeConstraints {
-            $0.top.equalTo(backBt.snp.bottom).offset(27)
+            $0.top.equalToSuperview().offset(27)
             $0.leading.equalTo(logoImg.snp.trailing).offset(13)
         }
-        
+
         stickyView.addSubview(titleLb)
         titleLb.snp.makeConstraints {
             $0.top.equalTo(nameLb.snp.bottom).offset(22)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-19)
         }
-        
+
         stickyView.addSubview(detailLb)
         detailLb.snp.makeConstraints {
             $0.top.equalTo(titleLb.snp.bottom).offset(12)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
         }
-        
+
         stickyView.addSubview(largeCategoryLb)
         largeCategoryLb.snp.makeConstraints {
             $0.top.equalTo(detailLb.snp.bottom).offset(26)
             $0.leading.equalToSuperview().offset(20)
         }
-        
+
         stickyView.addSubview(smallCategoryLb)
         smallCategoryLb.snp.makeConstraints {
             $0.top.equalTo(detailLb.snp.bottom).offset(26)
             $0.leading.equalTo(largeCategoryLb.snp.trailing).offset(8)
         }
-        
+
         stickyView.addSubview(mainStackView)
         mainStackView.snp.makeConstraints {
             $0.top.equalTo(largeCategoryLb.snp.bottom).offset(20)
@@ -536,43 +539,43 @@ extension PostDetailViewController {
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-19)
             $0.height.equalTo(80)
         }
-        
+
         mainStackView.addSubview(serviceTitle)
         serviceTitle.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(38)
             $0.top.equalToSuperview().offset(19)
         }
-        
+
         mainStackView.addSubview(dDayTitle)
         dDayTitle.snp.makeConstraints {
             $0.top.equalToSuperview().offset(19)
             $0.centerX.equalToSuperview()
         }
-        
+
         mainStackView.addSubview(peopleTitle)
         peopleTitle.snp.makeConstraints {
             $0.top.equalToSuperview().offset(19)
             $0.trailing.equalToSuperview().offset(-38)
         }
-        
+
         mainStackView.addSubview(serviceValue)
         serviceValue.snp.makeConstraints {
             $0.top.equalTo(serviceTitle.snp.bottom).offset(10)
             $0.centerX.equalTo(serviceTitle.snp.centerX)
         }
-        
+
         mainStackView.addSubview(dDayValue)
         dDayValue.snp.makeConstraints {
             $0.top.equalTo(dDayTitle.snp.bottom).offset(10)
             $0.centerX.equalTo(dDayTitle.snp.centerX)
         }
-        
+
         mainStackView.addSubview(peopleValue)
         peopleValue.snp.makeConstraints {
             $0.top.equalTo(peopleTitle.snp.bottom).offset(10)
             $0.centerX.equalTo(peopleTitle.snp.centerX)
         }
-        
+
         stickyView.addSubview(separatorOne)
         separatorOne.snp.makeConstraints {
             $0.leading.equalToSuperview()
@@ -581,9 +584,9 @@ extension PostDetailViewController {
             $0.height.equalTo(6)
         }
         
-        stickyView.addSubview(scrollOffsetView)
+        safeArea.addSubview(scrollOffsetView)
         scrollOffsetView.snp.makeConstraints {
-            $0.top.equalTo(separatorOne.snp.bottom)
+            $0.top.equalTo(backBt.snp.bottom).offset(316)
             $0.leading.equalToSuperview()
             $0.trailing.equalTo(safeArea.snp.trailing)
             $0.height.equalTo(59)
@@ -621,9 +624,50 @@ extension PostDetailViewController {
             $0.height.equalTo(59)
         }
         
+
+//        stickyView.addSubview(scrollOffsetView)
+//        scrollOffsetView.snp.makeConstraints {
+//            $0.top.equalTo(separatorOne.snp.bottom)
+//            $0.leading.equalToSuperview()
+//            $0.trailing.equalTo(safeArea.snp.trailing)
+//            $0.height.equalTo(59)
+//        }
+//
+//        scrollOffsetView.addSubview(contentsBt)
+//        contentsBt.snp.makeConstraints {
+//            $0.top.equalToSuperview()
+//            $0.leading.equalToSuperview()
+//            $0.width.equalTo(view.frame.width / 4)
+//            $0.height.equalTo(59)
+//        }
+//
+//        scrollOffsetView.addSubview(conditionBt)
+//        conditionBt.snp.makeConstraints {
+//            $0.top.equalToSuperview()
+//            $0.leading.equalTo(contentsBt.snp.trailing)
+//            $0.width.equalTo(view.frame.width / 4)
+//            $0.height.equalTo(59)
+//        }
+//
+//        scrollOffsetView.addSubview(methodBt)
+//        methodBt.snp.makeConstraints {
+//            $0.top.equalToSuperview()
+//            $0.leading.equalTo(conditionBt.snp.trailing)
+//            $0.width.equalTo(view.frame.width / 4)
+//            $0.height.equalTo(59)
+//        }
+//
+//        scrollOffsetView.addSubview(etcBt)
+//        etcBt.snp.makeConstraints {
+//            $0.top.equalToSuperview()
+//            $0.leading.equalTo(methodBt.snp.trailing)
+//            $0.width.equalTo(view.frame.width / 4)
+//            $0.height.equalTo(59)
+//        }
+        
         scrollView.addSubview(howMuchTitle)
         howMuchTitle.snp.makeConstraints {
-            $0.top.equalTo(scrollOffsetView.snp.bottom).offset(26)
+            $0.top.equalTo(stickyView.snp.bottom).offset(84)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-20)
             $0.height.equalTo(33)
@@ -932,7 +976,6 @@ extension PostDetailViewController {
         scrollView.layoutIfNeeded()
         
         scrollView.updateContentSize()
-        scrollView.contentOffset = CGPoint(x: 0, y: -57)
     }
     
     func getbenefitLabel() {
@@ -1427,21 +1470,43 @@ extension PostDetailViewController {
             }).disposed(by: disposeBag)
     }
     
-    
 }
 
 extension PostDetailViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        let y = 414 - (scrollView.contentOffset.y + 414)
-        print(scrollView.contentOffset.y)
-        let height = max(y, 414)
-        self.stickyView.snp.remakeConstraints {
-            $0.top.leading.equalToSuperview()
-            $0.trailing.equalTo(safeArea.snp.trailing)
-            $0.height.equalTo(height)
+        let y = 316 - scrollView.contentOffset.y
+        print(y)
+
+         if y > 0 {
+            scrollOffsetView.snp.remakeConstraints {
+                $0.top.equalTo(backBt.snp.bottom).offset(y)
+                $0.leading.equalToSuperview()
+                $0.trailing.equalTo(safeArea.snp.trailing)
+                $0.height.equalTo(59)
+            }
+            scrollView.snp.remakeConstraints {
+                $0.top.equalTo(backBt.snp.bottom)
+                $0.leading.trailing.bottom.equalToSuperview()
+            }
+            
+        } else {
+            scrollOffsetView.snp.remakeConstraints {
+                $0.top.equalTo(backBt.snp.bottom)
+                $0.leading.equalToSuperview()
+                $0.trailing.equalTo(safeArea.snp.trailing)
+                $0.height.equalTo(59)
+            }
+            
+            scrollView.snp.remakeConstraints {
+                $0.top.equalTo(scrollOffsetView.snp.bottom)
+                $0.leading.trailing.bottom.equalToSuperview()
+            }
+            
         }
+        
+        self.view.layoutIfNeeded()
         
     }
     

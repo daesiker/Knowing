@@ -24,6 +24,7 @@ class HomeChartViewModel {
         let categoryObserver = PublishRelay<String>()
         let postObserver = PublishRelay<Post>()
         let errorObserver = PublishRelay<Void>()
+        let scrollObserver = PublishRelay<Bool>()
     }
     
     struct Output {

@@ -203,7 +203,7 @@ extension HomeCalendarView {
     }
     
     @objc func fetchData() {
-        let uid = Auth.auth().currentUser!.uid
+        let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
         let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
@@ -381,7 +381,7 @@ extension HomeCalendarView: SwipeCollectionViewCellDelegate {
         guard orientation == .right else { return nil }
         
         let delete = SwipeAction(style: .default, title: "삭제") { action, indexPath in
-            let uid = Auth.auth().currentUser!.uid
+            let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
             let url = "https://www.makeus-hyun.shop/app/users/bookmark"
             let header:HTTPHeaders = [ "userUid": uid,
                                        "welfareUid": self.bookmarkData[indexPath.row].uid,

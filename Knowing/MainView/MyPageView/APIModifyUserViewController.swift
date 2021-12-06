@@ -370,7 +370,7 @@ class APIModifyUserViewModel {
         
         return Observable<User>.create { observer in
             
-            let uid = Auth.auth().currentUser!.uid
+            let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
             let url = "https://www.makeus-hyun.shop/app/users/usermodify/privacy"
             let header:HTTPHeaders = ["uid": uid,
                                       "Content-Type":"application/json"]

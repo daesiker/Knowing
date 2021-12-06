@@ -44,7 +44,7 @@ class LoadingViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        let uid = Auth.auth().currentUser!.uid
+        let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
         let url = "https://www.makeus-hyun.shop/app/users/userInfo"
@@ -122,7 +122,7 @@ class LoadingViewController: UIViewController {
     }
     
     func getPostData() {
-        let uid = Auth.auth().currentUser!.uid
+        let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
         let url = "https://www.makeus-hyun.shop/app/mains/mainpage"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
@@ -203,7 +203,7 @@ class LoadingViewController: UIViewController {
     }
     
     func getBookmarkData() {
-        let uid = Auth.auth().currentUser!.uid
+        let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
         let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]

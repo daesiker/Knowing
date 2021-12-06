@@ -25,6 +25,7 @@ class ChartView: UIView {
         $0.backgroundColor = .clear
         $0.color = CGColor(red: 255/255, green: 228/255, blue: 182/255, alpha: 1.0)
         $0.clipsToBounds = true
+        $0.alpha = 0
         $0.layer.cornerRadius = 10
     }
     
@@ -51,6 +52,7 @@ class ChartView: UIView {
         $0.color = CGColor(red: 255/255, green: 176/255, blue: 128/255, alpha: 1.0)
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
+        $0.alpha = 0
     }
     
     let chartImg2 = UIImageView(image: UIImage(named: "chartIndicator2")).then {
@@ -76,6 +78,7 @@ class ChartView: UIView {
         $0.color = CGColor(red: 255/255, green: 176/255, blue: 97/255, alpha: 1.0)
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
+        $0.alpha = 0
     }
     
     let chartImg3 = UIImageView(image: UIImage(named: "chartIndicator3")).then {
@@ -101,6 +104,7 @@ class ChartView: UIView {
         $0.color = CGColor(red: 255/255, green: 142/255, blue: 59/255, alpha: 1.0)
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
+        $0.alpha = 0
     }
     
     let chartImg4 = UIImageView(image: UIImage(named: "chartIndicator4")).then {
@@ -126,6 +130,7 @@ class ChartView: UIView {
         $0.color = CGColor(red: 255/255, green: 136/255, blue: 84/255, alpha: 1.0)
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
+        $0.alpha = 0
     }
     
     let chartImg5 = UIImageView(image: UIImage(named: "chartIndicator5")).then {
@@ -151,6 +156,7 @@ class ChartView: UIView {
         $0.color = CGColor(red: 210/255, green: 132/255, blue: 81/255, alpha: 1.0)
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
+        $0.alpha = 0
     }
     
     let chartImg6 = UIImageView(image: UIImage(named: "chartIndicator6")).then {
@@ -175,31 +181,37 @@ class ChartView: UIView {
     
     func chartAnimation() {
         
-        UIView.animate(withDuration: 2.0) {
+        UIView.animate(withDuration: 2.0, delay: 0, options: .transitionCurlUp) {
             
             self.chartImg1.alpha = 1.0
             let chart1Val = self.unit[0] >= 20 ? 1 : self.unit[0] == 0 ? 0.01 : self.unit[0] / 20
             self.chartProgress1.setProgress(progress: chart1Val, animated: true)
+            self.chartProgress1.alpha = 1.0
             
             let chart2Val = self.unit[1] >= 20 ? 1 : self.unit[1] == 0 ? 0.01 : self.unit[1] / 20
             self.chartProgress2.setProgress(progress: chart2Val, animated: true)
             self.chartImg2.alpha = 1.0
+            self.chartProgress2.alpha = 1.0
             
             let chart3Val = self.unit[2] >= 20 ? 1 : self.unit[2] == 0 ? 0.01 : self.unit[2] / 20
             self.chartProgress3.setProgress(progress: chart3Val, animated: true)
+            self.chartProgress3.alpha = 1.0
             self.chartImg3.alpha = 1.0
             
             let chart4Val = self.unit[3] >= 20 ? 1 : self.unit[3] == 0 ? 0.01 : self.unit[3] / 20
             self.chartProgress4.setProgress(progress: chart4Val, animated: true)
             self.chartImg4.alpha = 1.0
+            self.chartProgress4.alpha = 1.0
             
             let chart5Val = self.unit[4] >= 20 ? 1 : self.unit[4] == 0 ? 0.01 : self.unit[4] / 20
             self.chartProgress5.setProgress(progress: chart5Val, animated: true)
             self.chartImg5.alpha = 1.0
+            self.chartProgress5.alpha = 1.0
             
             let chart6Val = self.unit[5] >= 20 ? 1 : self.unit[5] == 0 ? 0.01 : self.unit[5] / 20
             self.chartProgress6.setProgress(progress: chart6Val, animated: true)
             self.chartImg6.alpha = 1.0
+            self.chartProgress6.alpha = 1.0
         }
     }
     

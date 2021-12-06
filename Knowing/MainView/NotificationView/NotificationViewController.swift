@@ -8,9 +8,12 @@
 import UIKit
 import Foundation
 import Then
+import SwipeCellKit
 
 class NotificationViewController: UIViewController {
 
+    let vm = MainTabViewModel.instance
+    
     let titleLb = UILabel().then {
         $0.text = "알림"
         $0.textColor = UIColor.rgb(red: 75, green: 75, blue: 75)
@@ -23,7 +26,9 @@ class NotificationViewController: UIViewController {
         $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 17)
     }
     
-    let removeBt = RemoveButton()
+    let removeBt = RemoveButton().then {
+        $0.alpha = 0
+    }
     
     let countLb = PaddingLabel().then {
         $0.text = "0건"
@@ -37,6 +42,14 @@ class NotificationViewController: UIViewController {
         $0.leftInset = 8
         $0.rightInset = 8
     }
+    
+    let notificationCV: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.backgroundColor = .white
+        collectionView.alpha = 0
+        return collectionView
+    }()
     
     let noAlarmImgView = UIImageView(image: UIImage(named: "noAlarm")!)
     
@@ -61,8 +74,6 @@ class NotificationViewController: UIViewController {
         
         
     }
-    
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -99,36 +110,87 @@ extension NotificationViewController {
             $0.leading.equalTo(subTitleLb.snp.trailing).offset(12)
         }
         
+        view.addSubview(removeBt)
+        removeBt.snp.makeConstraints {
+            $0.top.equalTo(countLb.snp.bottom).offset(11)
+            $0.trailing.equalToSuperview().offset(-13)
+        }
+        
+        view.addSubview(notificationCV)
+        notificationCV.snp.makeConstraints {
+            $0.top.equalTo(removeBt.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-91)
+        }
+        
         view.addSubview(noAlarmImgView)
-        noAlarmImgView.snp.makeConstraints {
+        noAlarmImgView.snp.remakeConstraints {
             $0.top.equalTo(countLb.snp.bottom).offset(129)
             $0.centerX.equalToSuperview()
         }
         
         view.addSubview(noAlarmTitleLb)
-        noAlarmTitleLb.snp.makeConstraints {
+        noAlarmTitleLb.snp.remakeConstraints {
             $0.top.equalTo(noAlarmImgView.snp.bottom).offset(2)
             $0.centerX.equalToSuperview()
         }
         
         view.addSubview(noAlarmSubTitleLb)
-        noAlarmSubTitleLb.snp.makeConstraints {
+        noAlarmSubTitleLb.snp.remakeConstraints {
             $0.top.equalTo(noAlarmTitleLb.snp.bottom)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(232)
         }
         
-//        view.addSubview(removeBt)
-//        removeBt.snp.makeConstraints {
-//            $0.top.equalTo(countLb.snp.bottom).offset(11)
-//            $0.trailing.equalToSuperview().offset(-13)
-//        }
+    }
+    
+    func fetchedData() {
         
-        
+        if vm.user.Alarm.count == 0 {
+            removeBt.alpha = 0
+            notificationCV.alpha = 0
+            noAlarmImgView.alpha = 1
+            noAlarmTitleLb.alpha = 1
+            noAlarmSubTitleLb.alpha = 1
+        } else {
+            removeBt.alpha = 1
+            notificationCV.alpha = 1
+            noAlarmImgView.alpha = 0
+            noAlarmTitleLb.alpha = 0
+            noAlarmSubTitleLb.alpha = 0
+        }
+    }
+    
+    func setCV() {
+        notificationCV.delegate = self
+        notificationCV.dataSource = self
         
     }
     
 }
+
+extension NotificationViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return vm.user.Alarm.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! NotificationCell
+        return cell
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 14, left: 20, bottom: 14, right: 20)
+    }
+    
+    
+    
+}
+
+
 
 
 class RemoveButton: UIButton {
@@ -163,5 +225,76 @@ class RemoveButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+}
+
+class NotificationCell: SwipeCollectionViewCell {
+    
+    let titleLb = UILabel().then {
+        $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 17)
+    }
+    
+    let subTitleLb = UILabel().then {
+        $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 15)
+        $0.numberOfLines = 2
+    }
+    
+    let dateLb = UILabel().then {
+        $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 13)
+        $0.textColor = UIColor.rgb(red: 148, green: 148, blue: 148)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = 30
+    }
+    
+    func setupView() {
+        backgroundColor = .clear
+        
+        contentView.addSubview(titleLb)
+        titleLb.snp.makeConstraints {
+            $0.top.leading.equalToSuperview().offset(18)
+            $0.trailing.equalToSuperview().offset(-18)
+        }
+        
+        contentView.addSubview(subTitleLb)
+        subTitleLb.snp.makeConstraints {
+            $0.top.equalTo(titleLb.snp.bottom).offset(11)
+            $0.leading.equalToSuperview().offset(18)
+            $0.trailing.equalToSuperview().offset(-18)
+        }
+        
+        contentView.addSubview(dateLb)
+        dateLb.snp.makeConstraints {
+            $0.top.equalTo(subTitleLb.snp.bottom).offset(11)
+            $0.leading.equalToSuperview().offset(18)
+            $0.bottom.equalToSuperview().offset(-18)
+        }
+        
+    }
+    
+    func configure(_ alarm: GetAlarm) {
+        
+        titleLb.text = alarm.title
+        subTitleLb.text = alarm.subTitle
+        dateLb.text = alarm.date
+        
+        if alarm.isRead == "" {
+            
+        } else {
+            
+        }
+        
+    }
     
 }

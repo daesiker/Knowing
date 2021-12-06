@@ -58,6 +58,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>AppleSDGothicNeoEB.ttf</string>
 		<string>GodoM.ttf</string>
 		<string>GodoB.ttf</string>
 	</array>

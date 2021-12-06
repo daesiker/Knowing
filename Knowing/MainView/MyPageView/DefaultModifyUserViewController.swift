@@ -544,7 +544,7 @@ class DefaultModifyUserViewModel {
         return Observable<Bool>.create { observer in
             
             let url = "https://www.makeus-hyun.shop/app/users/userdelete"
-            let uid = Auth.auth().currentUser!.uid
+            let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
             let header:HTTPHeaders = ["uid": uid,
                                       "Content-Type":"application/json"]
             
@@ -567,7 +567,7 @@ class DefaultModifyUserViewModel {
         
         return Observable<Bool>.create { observer in
             
-            let uid = Auth.auth().currentUser!.uid
+            let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
             let url = "https://www.makeus-hyun.shop/app/users/usermodify/privacy"
             let header:HTTPHeaders = ["uid": uid,
                                       "Content-Type":"application/json"]

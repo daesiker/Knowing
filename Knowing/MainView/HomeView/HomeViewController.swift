@@ -30,6 +30,10 @@ class HomeViewController: UIViewController  {
     
     let homeSegmentedControl = BetterSegmentedControl(frame: .zero, segments: LabelSegment.segments(withTitles: ["맞춤 복지", "나의 캘린더", "모든 복지"], numberOfLines: 1, normalBackgroundColor: UIColor.rgb(red: 252, green: 245, blue: 235), normalFont: UIFont.init(name: "AppleSDGothicNeo-Bold", size: 16), normalTextColor: UIColor.rgb(red: 139, green: 139, blue: 139), selectedBackgroundColor: UIColor.rgb(red: 255, green: 152, blue: 87), selectedFont: UIFont.init(name: "AppleSDGothicNeo-Bold", size: 16), selectedTextColor: .white), options: [.cornerRadius(25), .indicatorViewInset(5), .backgroundColor(UIColor.rgb(red: 252, green: 245, blue: 235))])
     
+    let scrollToTopBt = UIButton(type: .custom).then {
+        $0.setImage(UIImage(named: "scrollToTop")!, for: .normal)
+        $0.alpha = 0
+    }
     
     
     override func viewDidLoad() {
@@ -69,6 +73,13 @@ extension HomeViewController {
             $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(52)
         }
+        
+        view.addSubview(scrollToTopBt)
+        scrollToTopBt.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview().offset(-38)
+        }
+        
     }
     
     func bind() {

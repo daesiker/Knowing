@@ -104,5 +104,9 @@ struct User: Codable {
         
     }
     
+    func getUid() -> String {
+        return UserDefaults.standard.string(forKey: "uid")!
+    }
+    
     
 }

@@ -55,13 +55,11 @@ class ViewController: UIViewController {
                         }
                         //Api 로그인
                     } else {
-                        
-                        let viewController = LoginViewController()
+    
+                        let viewController = LoadingViewController()
                         viewController.modalTransitionStyle = .crossDissolve
                         viewController.modalPresentationStyle = .fullScreen
                         self.present(viewController, animated: true)
-                        
-                        
                     }
                 } else {
                     let viewController = LoginViewController()
