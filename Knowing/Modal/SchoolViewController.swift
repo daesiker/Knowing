@@ -103,7 +103,8 @@ extension SchoolViewController {
         backgroundView.addSubview(collectionView)
         collectionView.snp.makeConstraints {
             $0.top.equalTo(separator.snp.bottom)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(self.view.frame.height).multipliedBy(0.45)
         }
     }
     
@@ -160,7 +161,7 @@ extension SchoolViewController: PanModalPresentable {
     
     var shortFormHeight: PanModalHeight {
         return .contentHeight(self.view.frame.height * 0.64)
-        }
+    }
     
     
     
@@ -179,7 +180,7 @@ extension SchoolViewController: PanModalPresentable {
 extension SchoolViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
+        return UIEdgeInsets(top: 25, left: 25, bottom: 0, right: 25)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

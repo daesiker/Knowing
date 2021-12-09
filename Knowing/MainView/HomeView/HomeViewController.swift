@@ -83,6 +83,9 @@ extension HomeViewController {
     }
     
     func bind() {
+        
+        scrollToTopBt.rx.tap.bind(to: chartVM.input.bottomBtObserver).disposed(by: disposedBag)
+        
         homeSegmentedControl.addTarget(self, action: #selector(segonChnaged), for: .valueChanged)
         
         chartVM.output.getPost.drive(onNext: { value in
@@ -98,6 +101,72 @@ extension HomeViewController {
             alertController.addAction(UIAlertAction(title: "확인", style: .cancel))
             self.present(alertController, animated: true)
         }).disposed(by: disposedBag)
+        
+        chartVM.output.goChartActionSheet.drive(onNext: {
+            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            let maxMoneySort = UIAlertAction(title: "높은 금액순", style: .default) { _ in
+                self.chartVM.input.chartSortObserver.accept(.maxMoney)
+            }
+            
+            let minMoneySort = UIAlertAction(title: "낮은 금액순", style: .default) { _ in
+                self.chartVM.input.chartSortObserver.accept(.minMoney)
+            }
+            
+            let lastestDateSort = UIAlertAction(title: "마감 일순", style: .default) { _ in
+                self.chartVM.input.chartSortObserver.accept(.lastestDate)
+            }
+            
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in}
+            
+            actionSheet.addAction(maxMoneySort)
+            actionSheet.addAction(minMoneySort)
+            actionSheet.addAction(lastestDateSort)
+            actionSheet.addAction(cancelAction)
+            
+            self.present(actionSheet, animated: true, completion: nil)
+            
+            
+        }).disposed(by: disposedBag)
+        
+        chartVM.output.goAllActionSheet.drive(onNext: {
+            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            let maxMoneySort = UIAlertAction(title: "높은 금액순", style: .default) { _ in
+                self.chartVM.input.allSortObserver.accept(.maxMoney)
+            }
+            
+            let minMoneySort = UIAlertAction(title: "낮은 금액순", style: .default) { _ in
+                self.chartVM.input.allSortObserver.accept(.minMoney)
+            }
+            
+            let lastestDateSort = UIAlertAction(title: "마감 일순", style: .default) { _ in
+                self.chartVM.input.allSortObserver.accept(.lastestDate)
+            }
+            
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in}
+            
+            actionSheet.addAction(maxMoneySort)
+            actionSheet.addAction(minMoneySort)
+            actionSheet.addAction(lastestDateSort)
+            actionSheet.addAction(cancelAction)
+            
+            self.present(actionSheet, animated: true, completion: nil)
+            
+        }).disposed(by: disposedBag)
+        
+        chartVM.output.getBottomAlpha.drive(onNext: {value in
+            
+            if value {
+                self.scrollToTopBt.alpha = 1
+            } else {
+                self.scrollToTopBt.alpha = 0
+            }
+            
+        }).disposed(by: disposedBag)
+        
+        
+        
     }
     
     private func setScrollView() {

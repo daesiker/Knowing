@@ -16,6 +16,7 @@ class HomeChartView: UIView {
     let cellID = "cellID"
     let headerID = "headerID"
     let vm = HomeChartViewModel.instance
+    var sortType:SortType = .maxMoney
     
     let chartCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -31,6 +32,7 @@ class HomeChartView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        sort(sortType)
         setCV()
         bind()
         addSubview(chartCV)
@@ -68,9 +70,52 @@ extension HomeChartView {
     
     func bind() {
         vm.output.postChanged.drive(onNext: {value in
+            self.sort(self.sortType)
             self.chartCV.reloadData()
         }).disposed(by: disposeBag)
+        
+        vm.output.goChartSort.drive(onNext: { value in
+            self.sort(value)
+            self.chartCV.reloadData()
+        }).disposed(by: disposeBag)
+        
+        vm.output.getBottomBt.drive(onNext: {
+            self.chartCV.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        }).disposed(by: disposeBag)
+        
     }
+    
+    func sort(_ option: SortType) {
+        sortType = option
+        
+        switch option {
+        case .maxMoney:
+            self.vm.posts.sort(by: { a, b in
+                return Int(a.maxMoney)! > Int(b.maxMoney)!
+            })
+            self.chartCV.reloadData()
+        case .minMoney:
+            self.vm.posts.sort(by: { a, b in
+                return Int(a.maxMoney)! < Int(b.maxMoney)!
+            })
+            self.chartCV.reloadData()
+        case .lastestDate:
+            self.vm.posts.sort(by: { prev, next in
+                
+                
+                let prevTmp = prev.applyDate.components(separatedBy: "~")
+                let nextTmp = next.applyDate.components(separatedBy: "~")
+                
+                let prevDate = prevTmp.count == 2 ? Int(prevTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+                let nextDate = nextTmp.count == 2 ? Int(nextTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+                
+                return prevDate < nextDate
+            })
+            self.chartCV.reloadData()
+        
+        }
+    }
+    
 }
 
 
@@ -118,6 +163,19 @@ extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowL
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 21, left: 20, bottom: 17, right: 20)
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if scrollView.contentOffset.y > 70 {
+            self.vm.input.bottomAlphaObserver.accept(true)
+        } else {
+            self.vm.input.bottomAlphaObserver.accept(false)
+        }
+        
+    }
+    
+    
+    
 }
 
 class HomeChartHeader: UICollectionViewCell {
@@ -266,7 +324,7 @@ class HomeChartHeader: UICollectionViewCell {
 
         imgView.addSubview(maxMoneyLb)
         maxMoneyLb.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
+            $0.centerX.equalToSuperview().offset(-13)
             $0.top.equalTo(titleLb.snp.bottom).offset(11)
         }
 
@@ -361,11 +419,13 @@ class HomeChartHeader: UICollectionViewCell {
             }
         }).disposed(by: disposeBag)
         
-        sortBt.rx.tap.subscribe(onNext: {
-            
-            
-            
+        sortBt.rx.tap.bind(to: vm.input.chartBtObserver).disposed(by: disposeBag)
+        
+        vm.output.goChartSort.drive(onNext: {value in
+            self.sortTitle.text = value.rawValue
         }).disposed(by: disposeBag)
+        
+        
     }
     
     

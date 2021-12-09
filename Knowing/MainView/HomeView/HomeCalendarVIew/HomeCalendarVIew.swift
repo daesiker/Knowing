@@ -386,6 +386,7 @@ extension HomeCalendarView: SwipeCollectionViewCellDelegate {
             let header:HTTPHeaders = [ "userUid": uid,
                                        "welfareUid": self.bookmarkData[indexPath.row].uid,
                                        "Content-Type":"application/json"]
+            
             self.vm.bookmarks = []
             AF.request(url, method: .post, headers: header)
                 .responseJSON { response in
@@ -412,12 +413,14 @@ extension HomeCalendarView: SwipeCollectionViewCellDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        
         var options = SwipeOptions()
         
         options.buttonSpacing = 7
         
         return options
     }
+    
     
     
 }

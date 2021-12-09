@@ -21,6 +21,11 @@ class ViewController: UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             
+//            let vc = ExtraSignUpViewController()
+//            vc.modalTransitionStyle = .crossDissolve
+//            vc.modalPresentationStyle = .fullScreen
+//            self.present(vc, animated: true)
+            
             let isInitial = UserDefaults.standard.string(forKey: "isInitial")
             if isInitial != "yes" {
                 let viewController = GuideViewController()
@@ -55,7 +60,7 @@ class ViewController: UIViewController {
                         }
                         //Api 로그인
                     } else {
-    
+
                         let viewController = LoadingViewController()
                         viewController.modalTransitionStyle = .crossDissolve
                         viewController.modalPresentationStyle = .fullScreen

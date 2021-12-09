@@ -15,6 +15,7 @@ class HomeAllPostView: UIView {
     let disposeBag = DisposeBag()
     let vm = HomeAllPostViewModel()
     let cellID = "cellID"
+    var sortType:SortType = .maxMoney
     
     let backImg = UIImageView(image: UIImage(named: "homeAllPost")!).then {
         $0.isUserInteractionEnabled = true
@@ -43,12 +44,11 @@ class HomeAllPostView: UIView {
         $0.text = "높은 금액순"
         $0.textColor = UIColor.rgb(red: 210, green: 132, blue: 81)
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
-        $0.alpha = 0
     }
     
     let sortBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "filterImg")!, for: .normal)
-        $0.alpha = 0
+        
     }
     
     let allPostCV: UICollectionView = {
@@ -58,15 +58,13 @@ class HomeAllPostView: UIView {
         return collectionView
     }()
     
-    let scrollButton = UIButton(type: .custom).then {
-        $0.setTitle("버튼", for: .normal)
-    }
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
         setCV()
+        sort(sortType)
     }
     
     required init?(coder: NSCoder) {
@@ -158,7 +156,51 @@ class HomeAllPostView: UIView {
             self.allPostCV.reloadData()
         }).disposed(by: disposeBag)
         
+        sortBt.rx.tap.bind(to: HomeChartViewModel.instance.input.allBtObserver).disposed(by: disposeBag)
+        
+        HomeChartViewModel.instance.output.goAllSort.drive(onNext: {value in
+            self.sort(value)
+            self.sortTitle.text = value.rawValue
+        }).disposed(by: disposeBag)
+        
+        HomeChartViewModel.instance.output.getBottomBt.drive(onNext: {
+            self.allPostCV.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        }).disposed(by: disposeBag)
+        
+        
     }
+    
+    func sort(_ option: SortType) {
+        sortType = option
+        
+        switch option {
+        case .maxMoney:
+            self.vm.posts.sort(by: { a, b in
+                return Int(a.maxMoney)! > Int(b.maxMoney)!
+            })
+            self.allPostCV.reloadData()
+        case .minMoney:
+            self.vm.posts.sort(by: { a, b in
+                return Int(a.maxMoney)! < Int(b.maxMoney)!
+            })
+            self.allPostCV.reloadData()
+        case .lastestDate:
+            self.vm.posts.sort(by: { prev, next in
+                
+                
+                let prevTmp = prev.applyDate.components(separatedBy: "~")
+                let nextTmp = next.applyDate.components(separatedBy: "~")
+                
+                let prevDate = prevTmp.count == 2 ? Int(prevTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+                let nextDate = nextTmp.count == 2 ? Int(nextTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+                
+                return prevDate < nextDate
+            })
+            self.allPostCV.reloadData()
+        
+        }
+    }
+    
 }
 
 extension HomeAllPostView: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
@@ -208,12 +250,15 @@ extension HomeAllPostView: UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        scrollButton.alpha = 0
+        
+        if scrollView.contentOffset.y > 70 {
+            HomeChartViewModel.instance.input.bottomAlphaObserver.accept(true)
+        } else {
+            HomeChartViewModel.instance.input.bottomAlphaObserver.accept(false)
+        }
+        
     }
     
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        scrollButton.alpha = 1
-    }
     
 }
 

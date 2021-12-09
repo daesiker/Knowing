@@ -55,6 +55,7 @@ class LoadingViewController: UIViewController {
                 case .success(let value):
                     let json = JSON(value)
                     let result = json["result"].dictionaryValue
+                    print(json)
                     let user = User(json: result)
                     self.largeTitleLabel.attributedText = NSAttributedString(string: "\(user.name)님의 복지 수혜 예상\n금액을 계산중이에요!").withLineSpacing(6)
                     MainTabViewModel.instance.user = user
@@ -131,7 +132,7 @@ class LoadingViewController: UIViewController {
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-                  
+                    print(json)
                     let result = json["result"].dictionaryValue
                     var myPost:[Post] = []
                     for (key, value) in result {
@@ -213,6 +214,7 @@ class LoadingViewController: UIViewController {
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
+                    print(json)
                     let result = json["result"].arrayValue
                     for post in result {
                         let postModel = Post(json: post)

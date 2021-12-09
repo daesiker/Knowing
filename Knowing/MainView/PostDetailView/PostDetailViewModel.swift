@@ -29,6 +29,7 @@ class PostDetailViewModel {
         let methodObserver = PublishRelay<Void>()
         let etcObserver = PublishRelay<Void>()
         let bookmarkObserver = PublishRelay<String>()
+        let alarmObserver = PublishRelay<Void>()
     }
     
     struct Output {
@@ -37,7 +38,9 @@ class PostDetailViewModel {
         var methodValue = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [true, false, false, false])
         var etcValue = PublishRelay<[Bool]>().asDriver(onErrorJustReturn: [true, false, false, false])
         
+        
         var bookmarkEnable = PublishRelay<Bool>()
+        var alarmEnable = PublishRelay<Bool>()
         var errorValid = PublishRelay<Error>()
         
         
@@ -77,6 +80,35 @@ class PostDetailViewModel {
                         self.output.errorValid.accept(error)
                     }
                 }
+        }).disposed(by: disposeBag)
+        
+        input.alarmObserver.subscribe(onNext: {
+            let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
+            let url = "https://www.makeus-hyun.shop/app/mains/alarm/detailPage"
+            let header:HTTPHeaders = ["userUid": uid,
+                                      "welfareUid": self.post.uid]
+            
+            AF.request(url, method: .post, headers: header)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                        print(json)
+                        let result = json["result"].dictionaryValue
+                        let alarmResult = result["result"]?.stringValue
+                        
+                        if alarmResult == "알림등록" {
+                            self.output.alarmEnable.accept(true)
+                        } else {
+                            self.output.alarmEnable.accept(false)
+                        }
+                        
+                    case .failure(let error):
+                        self.output.errorValid.accept(error)
+                    }
+                }
+            
+            
         }).disposed(by: disposeBag)
         
        

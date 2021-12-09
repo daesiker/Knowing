@@ -20,10 +20,12 @@ class HomeAllPostViewModel {
     
     struct Input {
         let categoryObserver = PublishRelay<String>()
+        
     }
     
     struct Output {
         var postChanged = PublishRelay<Int>().asDriver(onErrorJustReturn: 0)
+        
     }
     
     init() {

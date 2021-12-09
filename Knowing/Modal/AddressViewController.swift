@@ -184,7 +184,7 @@ class AddressViewController: UIViewController {
 extension AddressViewController: PanModalPresentable {
     
     var panScrollable: UIScrollView? {
-        return nil
+        return collectionView
     }
     
     var shortFormHeight: PanModalHeight {

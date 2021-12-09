@@ -36,12 +36,12 @@ class BookMarkViewController: UIViewController {
         $0.text = "높은 금액순"
         $0.textColor = UIColor.rgb(red: 210, green: 132, blue: 81)
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
-        $0.alpha = 0
+        $0.alpha = 1
     }
     
     let sortBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "filterImg")!, for: .normal)
-        $0.alpha = 0
+        $0.alpha = 1
     }
     
     let bookmarkCV: UICollectionView = {
@@ -104,6 +104,7 @@ extension BookMarkViewController {
             noDataTitleLb.alpha = 1.0
             noDataSubTitleLb.alpha = 1.0
             bookmarkCV.alpha = 0.0
+            
         } else {
             noDataImg.alpha = 0.0
             noDataTitleLb.alpha = 0.0
@@ -226,16 +227,43 @@ extension BookMarkViewController {
                 self.vm.bookmarks.sort(by: { a, b in
                     return Int(a.maxMoney)! > Int(b.maxMoney)!
                 })
+                self.sortTitle.text = "높은 금액순"
                 self.bookmarkCV.reloadData()
             }
             
-            let minMoneySort = UIAlertAction(title: "높은 금액순", style: .default) { _ in
+            let minMoneySort = UIAlertAction(title: "낮은 금액순", style: .default) { _ in
                 self.vm.bookmarks.sort(by: { a, b in
                     return Int(a.maxMoney)! < Int(b.maxMoney)!
                 })
+                self.sortTitle.text = "낮은 금액순"
                 self.bookmarkCV.reloadData()
             }
             
+            let lastestDateSort = UIAlertAction(title: "마감 일순", style: .default) { _ in
+                self.vm.bookmarks.sort(by: { prev, next in
+                    let prevTmp = prev.applyDate.components(separatedBy: "~")
+                    let nextTmp = next.applyDate.components(separatedBy: "~")
+                    
+                    let prevDate = prevTmp.count == 2 ? Int(prevTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+                    let nextDate = nextTmp.count == 2 ? Int(nextTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+                    
+                    return prevDate < nextDate
+                })
+                self.sortTitle.text = "마감 일순"
+                self.bookmarkCV.reloadData()
+            }
+            
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+                
+            }
+            
+            
+            actionSheet.addAction(maxMoneySort)
+            actionSheet.addAction(minMoneySort)
+            actionSheet.addAction(lastestDateSort)
+            actionSheet.addAction(cancelAction)
+            
+            self.present(actionSheet, animated: true, completion: nil)
             
         }).disposed(by: disposeBag)
         

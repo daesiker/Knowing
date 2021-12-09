@@ -28,7 +28,6 @@ class MainTabViewModel {
         
         bcOutput = bcObserver.asDriver(onErrorJustReturn: .white)
         
-        
     }
     
     func clear() {

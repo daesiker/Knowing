@@ -34,7 +34,6 @@ class PostDetailViewController: UIViewController {
     
     let alarmBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "docDetail_alarm"), for: .normal)
-        $0.alpha = 0
     }
     
     let bookmarkBt = UIButton(type: .custom).then {
@@ -362,11 +361,11 @@ class PostDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
-        let url = "https://www.makeus-hyun.shop/app/mains/bookmark"
-        let header:HTTPHeaders = [ "uid": uid,
+        var url = "https://www.makeus-hyun.shop/app/mains/bookmark"
+        var header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
         
-        AF.request(url, method: .get, headers: header)
+        AF.request(url, method: .post, headers: header)
             .responseJSON { response in
                 switch response.result {
                 case .success(let value):
@@ -374,11 +373,39 @@ class PostDetailViewController: UIViewController {
                     let result = json["result"].arrayValue
                     for post in result {
                         let postModel = Post(json: post)
-                        MainTabViewModel.instance.bookmarks.append(postModel)
+                        if !MainTabViewModel.instance.bookmarks.contains(postModel) {
+                            MainTabViewModel.instance.bookmarks.append(postModel)
+                        }
                     }
+                    
+                    url = "https://www.makeus-hyun.shop/app/mains/alarm/detailPage"
+                    header = [ "userUid": uid,
+                               "welfareUid": self.vm.post.uid,
+                               "Content-Type":"application/json"]
+                    AF.request(url, method: .get, headers: header)
+                        .responseJSON { response in
+                            switch response.result {
+                            case .success(let value):
+                                let json = JSON(value)
+                                print(json)
+                                let result = json["result"].dictionaryObject
+                                if result?["result"] as? String == "알림등록" {
+                                    self.alarmBt.setImage(UIImage(named: "docDetail_alarmSelected"), for: .normal)
+                                }
+                            case .failure(_):
+                                let vc = UIAlertController(title: "에러", message: "네트워크 연결을 확인하세요.", preferredStyle: .alert)
+                                let action = UIAlertAction(title: "확인", style: .cancel) { _ in
+                                    self.dismiss(animated: true)
+                                }
+                                vc.addAction(action)
+                                self.present(vc, animated: true)
+                            }
+                        }
                 case .failure(_):
                     let vc = UIAlertController(title: "에러", message: "네트워크 연결을 확인하세요.", preferredStyle: .alert)
-                    let action = UIAlertAction(title: "확인", style: .cancel)
+                    let action = UIAlertAction(title: "확인", style: .cancel) { _ in
+                        self.dismiss(animated: true)
+                    }
                     vc.addAction(action)
                     self.present(vc, animated: true)
                 }
@@ -395,6 +422,10 @@ extension PostDetailViewController {
         if vm.main.bookmarks.contains(vm.post) {
             bookmarkBt.setImage(UIImage(named: "docDetail_bookmarkOn")!, for: .normal)
         }
+        
+        
+        
+        
         nameLb.text = vm.post.manageOffice
         titleLb.text = vm.post.name
         detailLb.text = vm.post.title
@@ -445,7 +476,7 @@ extension PostDetailViewController {
         etcPhNumValue.text = vm.post.phNum
         etcOperationValue.text = vm.post.address
         
-        if vm.post.url == "" {
+        if vm.post.url == "없음" {
             shareBt.isEnabled = false
             goToWebBt.isEnabled = false
             goToWebBt.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
@@ -983,22 +1014,33 @@ extension PostDetailViewController {
         
         for i in 0..<component.count {
             let textValue = component[i].components(separatedBy: "^")
-            if textValue.count >= 2 {
+            
+            if textValue.count == 2 {
+                let detailTextValue = textValue[1].components(separatedBy: "=")
+                var subLabels:[UILabel] = []
                 let view = UIView()
-                for j in 1..<textValue.count {
+                for j in 0..<detailTextValue.count {
                     let subLabel = UILabel().then {
-                        $0.text = textValue[j]
+                        $0.text = detailTextValue[j]
                         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 13)
                         $0.textColor = UIColor.rgb(red: 124, green: 124, blue: 124)
                         $0.numberOfLines = 0
                         $0.sizeToFit()
                     }
-                    view.addSubview(subLabel)
-                    subLabel.snp.makeConstraints {
-                        $0.top.equalToSuperview().offset(12)
-                        $0.leading.trailing.equalToSuperview()
+                    subLabels.append(subLabel)
+                    view.addSubview(subLabels[j])
+                    if j == 0 {
+                        subLabel.snp.makeConstraints {
+                            $0.top.equalToSuperview().offset(12)
+                            $0.leading.trailing.equalToSuperview()
+                        }
+                    } else {
+                        subLabel.snp.makeConstraints {
+                            $0.top.equalTo(subLabels[j-1].snp.bottom).offset(12)
+                            $0.leading.trailing.equalToSuperview()
+                        }
                     }
-                    if j == textValue.count - 1 {
+                    if j == detailTextValue.count - 1 {
                         subLabel.snp.makeConstraints {
                             $0.bottom.equalToSuperview()
                         }
@@ -1079,22 +1121,34 @@ extension PostDetailViewController {
         
         for i in 0..<component.count {
             let textValue = component[i].components(separatedBy: "^")
-            if textValue.count >= 2 {
+            if textValue.count == 2 {
+                let detailTextValue = textValue[1].components(separatedBy: "=")
+                var subLabels:[UILabel] = []
                 let view = UIView()
-                for j in 1..<textValue.count {
+                for j in 0..<detailTextValue.count {
                     let subLabel = UILabel().then {
-                        $0.text = textValue[j]
+                        $0.text = detailTextValue[j]
                         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 13)
                         $0.textColor = UIColor.rgb(red: 124, green: 124, blue: 124)
                         $0.numberOfLines = 0
                         $0.sizeToFit()
                     }
-                    view.addSubview(subLabel)
-                    subLabel.snp.makeConstraints {
-                        $0.top.equalToSuperview().offset(12)
-                        $0.leading.trailing.equalToSuperview()
+                    subLabels.append(subLabel)
+                    view.addSubview(subLabels[j])
+                    
+                    if j == 0 {
+                        subLabel.snp.makeConstraints {
+                            $0.top.equalToSuperview().offset(12)
+                            $0.leading.trailing.equalToSuperview()
+                        }
+                    } else {
+                        subLabel.snp.makeConstraints {
+                            $0.top.equalTo(subLabels[j-1].snp.bottom).offset(12)
+                            $0.leading.trailing.equalToSuperview()
+                        }
                     }
-                    if j == textValue.count - 1 {
+                    
+                    if j == detailTextValue.count - 1 {
                         subLabel.snp.makeConstraints {
                             $0.bottom.equalToSuperview()
                         }
@@ -1174,22 +1228,33 @@ extension PostDetailViewController {
         
         for i in 0..<component.count {
             let textValue = component[i].components(separatedBy: "^")
-            if textValue.count >= 2 {
+            if textValue.count == 2 {
+                let detailTextValue = textValue[1].components(separatedBy: "=")
+                var subLabels:[UILabel] = []
                 let view = UIView()
-                for j in 1..<textValue.count {
+                for j in 1..<detailTextValue.count {
                     let subLabel = UILabel().then {
-                        $0.text = textValue[j]
+                        $0.text = detailTextValue[j]
                         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 13)
                         $0.textColor = UIColor.rgb(red: 124, green: 124, blue: 124)
                         $0.numberOfLines = 0
                         $0.sizeToFit()
                     }
+                    subLabels.append(subLabel)
                     view.addSubview(subLabel)
-                    subLabel.snp.makeConstraints {
-                        $0.top.equalToSuperview().offset(12)
-                        $0.leading.trailing.equalToSuperview()
+                    if j == 0 {
+                        subLabel.snp.makeConstraints {
+                            $0.top.equalToSuperview().offset(12)
+                            $0.leading.trailing.equalToSuperview()
+                        }
+                    } else {
+                        subLabel.snp.makeConstraints {
+                            $0.top.equalTo(subLabels[j-1].snp.bottom).offset(12)
+                            $0.leading.trailing.equalToSuperview()
+                        }
                     }
-                    if j == textValue.count - 1 {
+                    
+                    if j == detailTextValue.count - 1 {
                         subLabel.snp.makeConstraints {
                             $0.bottom.equalToSuperview()
                         }
@@ -1360,6 +1425,10 @@ extension PostDetailViewController {
                 }
             }).disposed(by: disposeBag)
         
+        alarmBt.rx.tap
+            .bind(to: vm.input.alarmObserver)
+            .disposed(by: disposeBag)
+        
         bookmarkBt.rx.tap
             .map { self.vm.post.uid }
             .bind(to: vm.input.bookmarkObserver)
@@ -1462,6 +1531,17 @@ extension PostDetailViewController {
             }
         }).disposed(by: disposeBag)
         
+        vm.output.alarmEnable.asSignal()
+            .emit(onNext: { value in
+                
+                if value {
+                    self.alarmBt.setImage(UIImage(named: "docDetail_alarmSelected")!, for: .normal)
+                } else {
+                    self.alarmBt.setImage(UIImage(named: "docDetail_alarm")!, for: .normal)
+                }
+                
+            }).disposed(by: disposeBag)
+        
         vm.output.errorValid.asSignal()
             .emit(onNext: { _ in
                 let alertController = UIAlertController(title: "에러", message: "네트워크 연결을 확인해주세요.", preferredStyle: .alert)
@@ -1477,7 +1557,6 @@ extension PostDetailViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         let y = 316 - scrollView.contentOffset.y
-        print(y)
 
          if y > 0 {
             scrollOffsetView.snp.remakeConstraints {

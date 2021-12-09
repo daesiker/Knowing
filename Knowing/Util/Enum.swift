@@ -29,6 +29,12 @@ enum EmailValid {
     case correct
 }
 
+enum SortType:String {
+    case maxMoney = "높은 금액순"
+    case minMoney = "낮은 금액순"
+    case lastestDate = "마감 일순"
+}
+
 public struct KnowingError: Error {
     var code: Int
     var msg: String
