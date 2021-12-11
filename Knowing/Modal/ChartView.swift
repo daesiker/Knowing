@@ -144,7 +144,7 @@ class ChartView: UIView {
     }
     
     let chartTitle6 = UILabel().then {
-        $0.text = "코로나\n19"
+        $0.text = "의료"
         $0.textAlignment = .center
         $0.numberOfLines = 2
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 12)
@@ -252,7 +252,7 @@ class ChartView: UIView {
                 category.append("생활\n복지")
                 unit.append(sort[1])
             } else if sort[0] == 5.0 {
-                category.append("코로나\n19")
+                category.append("의료")
                 unit.append(sort[1])
             }
         }

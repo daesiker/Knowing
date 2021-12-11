@@ -101,7 +101,6 @@ class LoginViewController: UIViewController {
             else { return }
             
             let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
-            UserDefaults.standard.setValue(credential, forKey: "token")
             Auth.auth().signIn(with: credential) { result, error in
                 if let _ = error {
                     DispatchQueue.main.async {
@@ -315,7 +314,6 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             }
             
             let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
-            UserDefaults.standard.setValue(credential, forKey: "token")
             Auth.auth().signIn(with: credential) { authResult, error in
                 if let _ = error {
                     DispatchQueue.main.async {

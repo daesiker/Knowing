@@ -59,7 +59,7 @@ struct User: Codable {
     
     init(json: [String:JSON]) {
         //default
-        self.name = json["name"]!.stringValue
+        self.name = json["name"]?.string ?? "노잉"
         self.email = json["email"]!.stringValue
         self.pwd = json["pwd"]!.stringValue
         self.gender = json["gender"]!.stringValue

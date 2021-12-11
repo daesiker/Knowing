@@ -44,11 +44,13 @@ class HomeChartView: UIView {
         addSubview(imgView)
         imgView.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
+            $0.width.equalToSuperview().multipliedBy(0.7)
         }
         
         addSubview(imgView2)
         imgView2.snp.makeConstraints {
             $0.top.trailing.equalToSuperview()
+            $0.width.equalToSuperview().multipliedBy(0.3)
         }
     }
     
@@ -264,8 +266,8 @@ class HomeChartHeader: UICollectionViewCell {
         return collectionView
     }()
     
-    let categoryData = Observable<[String]>.of(["학생 지원", "취업 지원", "창업 지원", "주거 · 금융 지원", "생활 · 복지 지원", "코로나19 지원"])
-    let categoryDomy = ["학생 지원", "취업 지원", "창업 지원", "주거 · 금융 지원", "생활 · 복지 지원", "코로나19 지원"]
+    let categoryData = Observable<[String]>.of(["학생 지원", "취업 지원", "창업 지원", "주거 · 금융 지원", "생활 · 복지 지원", "의료 지원"])
+    let categoryDomy = ["학생 지원", "취업 지원", "창업 지원", "주거 · 금융 지원", "생활 · 복지 지원", "의료 지원"]
     
     override init(frame: CGRect) {
         super.init(frame: frame)

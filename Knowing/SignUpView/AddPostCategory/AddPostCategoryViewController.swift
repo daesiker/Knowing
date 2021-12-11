@@ -128,7 +128,7 @@ class AddPostCategoryViewController: UIViewController {
     let lifeDomy = ["전체", "건강", "문화"]
     
     let covidLb = UILabel().then {
-        $0.text = "코로나19 지원"
+        $0.text = "의료 지원"
         $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 20)
         $0.textColor = UIColor.rgb(red: 91, green: 91, blue: 91)
     }
