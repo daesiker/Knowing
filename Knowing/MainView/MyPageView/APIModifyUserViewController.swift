@@ -82,6 +82,8 @@ class APIModifyUserViewController: UIViewController {
         $0.setDatePicker(target: self)
     }
     
+    let withDrawBt = WithdrawalButton()
+    
     let modifyBt = UIButton(type: .custom).then {
         $0.setTitle("수정하기", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
@@ -185,6 +187,12 @@ class APIModifyUserViewController: UIViewController {
             $0.top.equalTo(birthLabel.snp.bottom).offset(8)
             $0.leading.equalToSuperview().offset(25)
             $0.trailing.equalToSuperview().offset(-25)
+        }
+        
+        safeArea.addSubview(withDrawBt)
+        withDrawBt.snp.makeConstraints {
+            $0.top.equalTo(birthTextField.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().offset(25)
         }
         
         safeArea.addSubview(modifyBt)

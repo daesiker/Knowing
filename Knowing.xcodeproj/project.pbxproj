@@ -58,6 +58,7 @@
 		BF8A9A13273B962000DA4DE4 /* FindPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A12273B962000DA4DE4 /* FindPasswordViewModel.swift */; };
 		BF8A9A15273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A9A14273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift */; };
 		BF8A9A17273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json in Resources */ = {isa = PBXBuildFile; fileRef = BF8A9A16273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json */; };
+		BF8AA38027677ED70054A5C4 /* SortViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8AA37F27677ED70054A5C4 /* SortViewController.swift */; };
 		BF8D262F2743DD85002A9165 /* TmpAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D262E2743DD85002A9165 /* TmpAddressViewController.swift */; };
 		BF8D626A2718FF51006D7227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D62692718FF51006D7227 /* AppDelegate.swift */; };
 		BF8D626C2718FF51006D7227 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D626B2718FF51006D7227 /* SceneDelegate.swift */; };
@@ -138,6 +139,7 @@
 		BF8A9A12273B962000DA4DE4 /* FindPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordViewModel.swift; sourceTree = "<group>"; };
 		BF8A9A14273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPasswordViewController.swift; sourceTree = "<group>"; };
 		BF8A9A16273B9FC100DA4DE4 /* lf30_editor_ctu3nzol.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf30_editor_ctu3nzol.json; sourceTree = "<group>"; };
+		BF8AA37F27677ED70054A5C4 /* SortViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortViewController.swift; sourceTree = "<group>"; };
 		BF8D262E2743DD85002A9165 /* TmpAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmpAddressViewController.swift; sourceTree = "<group>"; };
 		BF8D62662718FF51006D7227 /* Knowing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Knowing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF8D62692718FF51006D7227 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				BF273BAA273CB5200028EF07 /* SpecialViewController.swift */,
 				BFA4689B2746341A0056224A /* SchoolViewController.swift */,
 				BF8D8F6C2756FF98009E6696 /* ChartView.swift */,
+				BF8AA37F27677ED70054A5C4 /* SortViewController.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -628,6 +631,7 @@
 				BF85C63427311203005D9EF1 /* ExtraSignUpViewController.swift in Sources */,
 				BF85C62927310147005D9EF1 /* SignUpViewModel.swift in Sources */,
 				BF83793A2729238300584E33 /* HomeCalendarVIew.swift in Sources */,
+				BF8AA38027677ED70054A5C4 /* SortViewController.swift in Sources */,
 				BFA07978271FD51600912C18 /* NotificationViewController.swift in Sources */,
 				BFC38CF327365AE400F94876 /* User.swift in Sources */,
 				BF8A9A06273B83A600DA4DE4 /* FindEmailViewController.swift in Sources */,
