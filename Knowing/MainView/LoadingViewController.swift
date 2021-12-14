@@ -141,7 +141,9 @@ class LoadingViewController: UIViewController {
                             var postModels:[Post] = []
                             for post in postValue {
                                 let postModel = Post(json: post)
-                                myPost.append(postModel)
+                                if postModel.maxMoney != "0" {
+                                    myPost.append(postModel)
+                                }
                                 postModels.append(postModel)
                             }
                             self.postDic.updateValue(postModels, forKey: key)
@@ -159,7 +161,9 @@ class LoadingViewController: UIViewController {
                         }
                     }
                     myPost.sort { $0.maxMoney > $1.maxMoney }
-                 
+                    
+                    
+                    
                     self.postDic.updateValue(myPost, forKey: "myPost")
                     MainTabViewModel.instance.posts = self.postDic
                     DispatchQueue.main.async {

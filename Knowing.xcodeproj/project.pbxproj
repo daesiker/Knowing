@@ -15,6 +15,8 @@
 		BF151BAD273246850065E766 /* StepFiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF151BAC273246850065E766 /* StepFiveView.swift */; };
 		BF151BAF2732760F0065E766 /* AddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF151BAE2732760F0065E766 /* AddressViewController.swift */; };
 		BF273BAB273CB5200028EF07 /* SpecialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF273BAA273CB5200028EF07 /* SpecialViewController.swift */; };
+		BF282B3127688520008E151C /* ModifyUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF282B3027688520008E151C /* ModifyUserViewController.swift */; };
+		BF282B3327689211008E151C /* ExtraModifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF282B3227689211008E151C /* ExtraModifyViewController.swift */; };
 		BF2E058327225D7E008CA167 /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058227225D7E008CA167 /* GuideViewController.swift */; };
 		BF2E058527226070008CA167 /* CustomComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058427226070008CA167 /* CustomComponent.swift */; };
 		BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */; };
@@ -96,6 +98,8 @@
 		BF151BAC273246850065E766 /* StepFiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepFiveView.swift; sourceTree = "<group>"; };
 		BF151BAE2732760F0065E766 /* AddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressViewController.swift; sourceTree = "<group>"; };
 		BF273BAA273CB5200028EF07 /* SpecialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialViewController.swift; sourceTree = "<group>"; };
+		BF282B3027688520008E151C /* ModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUserViewController.swift; sourceTree = "<group>"; };
+		BF282B3227689211008E151C /* ExtraModifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraModifyViewController.swift; sourceTree = "<group>"; };
 		BF2E058227225D7E008CA167 /* GuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
 		BF2E058427226070008CA167 /* CustomComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponent.swift; sourceTree = "<group>"; };
 		BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_ng9j9lpx_1.json; sourceTree = "<group>"; };
@@ -196,6 +200,17 @@
 				79344B48A9993DC1F63632C6 /* Pods-Knowing.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		BF282B2F276884F9008E151C /* ModifyUser */ = {
+			isa = PBXGroup;
+			children = (
+				BF877217275640DD00EC9C9A /* APIModifyUserViewController.swift */,
+				BF87721B27565D4D00EC9C9A /* DefaultModifyUserViewController.swift */,
+				BF282B3027688520008E151C /* ModifyUserViewController.swift */,
+				BF282B3227689211008E151C /* ExtraModifyViewController.swift */,
+			);
+			path = ModifyUser;
 			sourceTree = "<group>";
 		};
 		BF2E058127225D40008CA167 /* GuideView */ = {
@@ -405,13 +420,12 @@
 		BFA07971271FD3C200912C18 /* MyPageView */ = {
 			isa = PBXGroup;
 			children = (
+				BF282B2F276884F9008E151C /* ModifyUser */,
 				BFA0797B271FD5F100912C18 /* MyPageViewController.swift */,
 				BF87720F2755E6D700EC9C9A /* TermsAndConditionsViewController.swift */,
 				BF8772112755ED8000EC9C9A /* OpenSourceViewController.swift */,
 				BF8772132755F11C00EC9C9A /* PersonnalInfoViewController.swift */,
 				BF8772152756181900EC9C9A /* AlarmSettingViewController.swift */,
-				BF877217275640DD00EC9C9A /* APIModifyUserViewController.swift */,
-				BF87721B27565D4D00EC9C9A /* DefaultModifyUserViewController.swift */,
 				BF87721D275679E200EC9C9A /* NoticeViewController.swift */,
 			);
 			path = MyPageView;
@@ -657,6 +671,7 @@
 				BF8A9A15273B97AF00DA4DE4 /* ConfirmPasswordViewController.swift in Sources */,
 				BF8772122755ED8000EC9C9A /* OpenSourceViewController.swift in Sources */,
 				BF5A2B8E272A7B8F00234429 /* DefaultLoginViewController.swift in Sources */,
+				BF282B3327689211008E151C /* ExtraModifyViewController.swift in Sources */,
 				BF9A5D33274F1F0C005CC646 /* PostDetailViewController.swift in Sources */,
 				BF5C9BC02742A53C00005AC7 /* ApiSignUpViewModel.swift in Sources */,
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
@@ -668,6 +683,7 @@
 				BF87721C27565D4D00EC9C9A /* DefaultModifyUserViewController.swift in Sources */,
 				BF85C62B27310883005D9EF1 /* FoundationExtension.swift in Sources */,
 				BF8A9A08273B879E00DA4DE4 /* FindEmailViewModel.swift in Sources */,
+				BF282B3127688520008E151C /* ModifyUserViewController.swift in Sources */,
 				BF151BAF2732760F0065E766 /* AddressViewController.swift in Sources */,
 				BFA0797C271FD5F100912C18 /* MyPageViewController.swift in Sources */,
 				BFF1299C2737C1B500BD89EA /* DefaultLoginViewModel.swift in Sources */,

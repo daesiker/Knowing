@@ -423,9 +423,6 @@ extension PostDetailViewController {
             bookmarkBt.setImage(UIImage(named: "docDetail_bookmarkOn")!, for: .normal)
         }
         
-        
-        
-        
         nameLb.text = vm.post.manageOffice
         titleLb.text = vm.post.name
         detailLb.text = vm.post.title
@@ -454,6 +451,7 @@ extension PostDetailViewController {
         if vm.post.maxMoney == "0" {
             maxMoneyLb.text = "-"
             minMoneyLb.text = "-"
+            wonLb.alpha = 0
         } else {
             let numberFormatter = NumberFormatter()
             numberFormatter.numberStyle = .decimal
@@ -2022,7 +2020,23 @@ class PeopleDetailView: UIView {
     }
     
     func setValue(_ post: Post) {
-        ageValue.text = post.age
+        
+        if post.age == "제한없음" {
+            ageValue.text = post.age
+        } else {
+            let age = post.age.components(separatedBy: "~")
+            if age.count < 2 {
+                ageValue.text = post.age
+            } else {
+                if age[0] == "0" {
+                    ageValue.text = "만 \(age[1])세 이하"
+                } else if age[1] == "200" {
+                    ageValue.text = "만 \(age[0])세 이상"
+                } else {
+                    ageValue.text = "만 \(age[0])세 ~ 만 \(age[1])세"
+                }
+            }
+        }
         
         let incomeAvg = Int(post.incomeLevel) ?? 0
         

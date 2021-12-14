@@ -10,6 +10,7 @@ import RxCocoa
 import RxSwift
 import Alamofire
 import Firebase
+import SwiftyJSON
 
 class APIModifyUserViewController: UIViewController {
     
@@ -235,6 +236,17 @@ class APIModifyUserViewController: UIViewController {
             .bind(to: vm.input.birthObserver)
             .disposed(by: disposeBag)
         
+        withDrawBt.rx.tap.subscribe(onNext: {
+            let alertController = UIAlertController(title: "회원탈퇴", message: "정말로 탈퇴하시겠습니까?", preferredStyle: .alert)
+            
+            alertController.addAction(UIAlertAction(title:"회원탈퇴", style: .default, handler: { _ in
+                self.vm.input.withDrawObserver.accept(())
+            }))
+            
+            alertController.addAction(UIAlertAction(title: "취소", style: .default, handler: nil))
+            self.present(alertController, animated: true)
+        }).disposed(by: disposeBag)
+        
         modifyBt.rx.tap
             .bind(to: vm.input.modifyObserver)
             .disposed(by: disposeBag)
@@ -276,6 +288,19 @@ class APIModifyUserViewController: UIViewController {
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true)
         }).disposed(by: disposeBag)
+        
+        vm.output.doWithdraw.asDriver(onErrorJustReturn: false)
+            .drive(onNext: { value in
+                UserDefaults.standard.setValue(nil, forKey: "provider")
+                UserDefaults.standard.setValue(nil, forKey: "email")
+                UserDefaults.standard.setValue(nil, forKey: "pwd")
+                UserDefaults.standard.setValue(nil, forKey: "uid")
+                let viewController = LoginViewController()
+                viewController.modalTransitionStyle = .crossDissolve
+                viewController.modalPresentationStyle = .fullScreen
+                self.present(viewController, animated: true)
+                
+            }).disposed(by: disposeBag)
         
         vm.output.errorValue.asSignal()
             .emit(onNext: { error in
@@ -319,12 +344,14 @@ class APIModifyUserViewModel {
         let nameObserver = PublishRelay<String>()
         let genderObserver = PublishRelay<Gender>()
         let birthObserver = PublishRelay<String>()
+        let withDrawObserver = PublishRelay<Void>()
         let modifyObserver = PublishRelay<Void>()
     }
     
     struct Output {
         var genderValid:Driver<Gender> = PublishRelay<Gender>().asDriver(onErrorJustReturn: .notSelected)
         var buttonValid:Driver<Bool> = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
+        var doWithdraw:PublishRelay = PublishRelay<Bool>()
         var modifyValue = PublishRelay<User>()
         var errorValue = PublishRelay<Error>()
     }
@@ -355,6 +382,19 @@ class APIModifyUserViewModel {
             self.output.buttonValid = Observable<Bool>.just(true).asDriver(onErrorJustReturn: false)
         }).disposed(by: disposeBag)
         
+        input.withDrawObserver.flatMap(withDraw)
+            .subscribe({ result in
+                switch result {
+                case .completed:
+                    break
+                case .error(let error):
+                    self.output.errorValue.accept(error)
+                case .next(let value):
+                    MainTabViewModel.instance.clear()
+                    self.output.doWithdraw.accept(value)
+                }
+            }).disposed(by: disposeBag)
+        
         input.modifyObserver
             .flatMap(modifyUser)
             .subscribe({ result in
@@ -373,6 +413,31 @@ class APIModifyUserViewModel {
         output.genderValid = input.genderObserver.asDriver(onErrorJustReturn: .notSelected)
         
     }
+    
+    func withDraw() -> Observable<Bool> {
+        
+        return Observable<Bool>.create { observer in
+            
+            let url = "https://www.makeus-hyun.shop/app/users/userdelete"
+            let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
+            let header:HTTPHeaders = ["uid": uid,
+                                      "Content-Type":"application/json"]
+            
+            AF.request(url, method: .delete, headers: header)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                        let result = json["isSuccess"].boolValue
+                        observer.onNext(result)
+                    case .failure(let error):
+                        observer.onError(error)
+                    }
+                }
+            return Disposables.create()
+        }
+    }
+    
     
     func modifyUser() -> Observable<User> {
         

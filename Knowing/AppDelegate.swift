@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.appName = kServiceAppName
         
         //Kakao
-        KakaoSDKCommon.initSDK(appKey: "d8e0e3e9398b5db90db367e587268a49")
+        KakaoSDK.initSDK(appKey: "d8e0e3e9398b5db90db367e587268a49")
         
         //Google
         GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in

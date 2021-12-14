@@ -150,7 +150,7 @@ extension BookMarkViewController {
         
         safeArea.addSubview(noDataTitleLb)
         noDataTitleLb.snp.makeConstraints {
-            $0.top.equalTo(noDataImg.snp.bottom).offset(2)
+            $0.top.equalTo(noDataImg.snp.bottom).offset(6)
             $0.centerX.equalToSuperview()
         }
         

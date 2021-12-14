@@ -144,13 +144,13 @@ extension NotificationViewController {
 
         safeArea.addSubview(noAlarmTitleLb)
         noAlarmTitleLb.snp.remakeConstraints {
-            $0.top.equalTo(noAlarmImgView.snp.bottom).offset(2)
+            $0.top.equalTo(noAlarmImgView.snp.bottom).offset(19.2)
             $0.centerX.equalToSuperview()
         }
 
         safeArea.addSubview(noAlarmSubTitleLb)
         noAlarmSubTitleLb.snp.remakeConstraints {
-            $0.top.equalTo(noAlarmTitleLb.snp.bottom)
+            $0.top.equalTo(noAlarmTitleLb.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(232)
         }

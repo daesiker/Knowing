@@ -292,7 +292,7 @@ class HomeChartHeader: UICollectionViewCell {
             var result = numberFormatter.string(from: NSNumber(value:price))!
             maxMoneyLb.text = result
             if posts.count >= 2 {
-                price = Int(posts.last!.minMoney) ?? 0
+                price = Int(posts.last!.maxMoney) ?? 0
                 result = numberFormatter.string(from: NSNumber(value:price))!
                 minMoneyLb.text = "최소 \(result)원"
             } else {

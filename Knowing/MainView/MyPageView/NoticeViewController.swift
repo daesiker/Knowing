@@ -65,6 +65,7 @@ class NoticeViewController: UIViewController {
     
     let detailView = UIView().then {
         $0.backgroundColor = UIColor.rgb(red: 255, green: 248, blue: 236)
+        $0.alpha = 0
     }
     
     let detailLb = UILabel().then {
@@ -186,9 +187,11 @@ class NoticeViewController: UIViewController {
                 if self.isDetail {
                     self.detailView.alpha = 0
                     self.moreBt.setImage(UIImage(named: "docDetail_close"), for: .normal)
+                    self.isDetail = false
                 } else {
                     self.detailView.alpha = 1
                     self.moreBt.setImage(UIImage(named: "docDetail_open"), for: .normal)
+                    self.isDetail = true
                 }
             }).disposed(by: disposeBag)
     }

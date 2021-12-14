@@ -288,19 +288,10 @@ extension MyPageViewController {
         
         userInfoBt.rx.tap
             .subscribe(onNext: {
-                if self.vm.user.provider == "default" {
-                    let vm = DefaultModifyUserViewModel(self.vm.user)
-                    let vc = DefaultModifyUserViewController(vm: vm)
-                    vc.modalPresentationStyle = .fullScreen
-                    vc.modalTransitionStyle = .crossDissolve
-                    self.present(vc, animated: true)
-                } else {
-                    let vm = APIModifyUserViewModel(self.vm.user)
-                    let vc = APIModifyUserViewController(vm: vm)
-                    vc.modalPresentationStyle = .fullScreen
-                    vc.modalTransitionStyle = .crossDissolve
-                    self.present(vc, animated: true)
-                }
+                let vc = ModifyUserViewController()
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
         noticeSettingBt.rx.tap
