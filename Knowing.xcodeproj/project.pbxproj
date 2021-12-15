@@ -21,6 +21,7 @@
 		BF2E058527226070008CA167 /* CustomComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058427226070008CA167 /* CustomComponent.swift */; };
 		BF2E058727229B6F008CA167 /* lf20_ng9j9lpx_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */; };
 		BF2E058927229C30008CA167 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E058827229C30008CA167 /* LoadingViewController.swift */; };
+		BF3502292768D4EA00399CC1 /* ExtraModifyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3502282768D4EA00399CC1 /* ExtraModifyViewModel.swift */; };
 		BF368C46274E14110035DA50 /* AppleSDGothicNeoEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF368C45274E14110035DA50 /* AppleSDGothicNeoEB.ttf */; };
 		BF3CF93E274FD6850018260B /* PostDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3CF93D274FD6850018260B /* PostDetailViewModel.swift */; };
 		BF4F267F27584BD8004A153D /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F267E27584BD7004A153D /* Alarm.swift */; };
@@ -104,6 +105,7 @@
 		BF2E058427226070008CA167 /* CustomComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponent.swift; sourceTree = "<group>"; };
 		BF2E058627229B6F008CA167 /* lf20_ng9j9lpx_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_ng9j9lpx_1.json; sourceTree = "<group>"; };
 		BF2E058827229C30008CA167 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		BF3502282768D4EA00399CC1 /* ExtraModifyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraModifyViewModel.swift; sourceTree = "<group>"; };
 		BF368C45274E14110035DA50 /* AppleSDGothicNeoEB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleSDGothicNeoEB.ttf; sourceTree = "<group>"; };
 		BF3CF93D274FD6850018260B /* PostDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewModel.swift; sourceTree = "<group>"; };
 		BF4F267E27584BD7004A153D /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				BF87721B27565D4D00EC9C9A /* DefaultModifyUserViewController.swift */,
 				BF282B3027688520008E151C /* ModifyUserViewController.swift */,
 				BF282B3227689211008E151C /* ExtraModifyViewController.swift */,
+				BF3502282768D4EA00399CC1 /* ExtraModifyViewModel.swift */,
 			);
 			path = ModifyUser;
 			sourceTree = "<group>";
@@ -676,6 +679,7 @@
 				BF5C9BC02742A53C00005AC7 /* ApiSignUpViewModel.swift in Sources */,
 				BF8D626E2718FF51006D7227 /* ViewController.swift in Sources */,
 				BF7749872754F3550062180A /* HomeAllPostViewModel.swift in Sources */,
+				BF3502292768D4EA00399CC1 /* ExtraModifyViewModel.swift in Sources */,
 				BFA0797A271FD5C900912C18 /* BookMarkViewController.swift in Sources */,
 				BF8D8F6D2756FF98009E6696 /* ChartView.swift in Sources */,
 				BF87721A2756412300EC9C9A /* Category.swift in Sources */,

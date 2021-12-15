@@ -40,6 +40,8 @@ class AddressViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     let vm = ExtraSignUpViewModel.instance
+    var modiVm:ExtraModifyViewModel?
+    
     
     let backgroundView = UIView().then {
         $0.backgroundColor = .white
@@ -146,6 +148,12 @@ class AddressViewController: UIViewController {
         vm.stepOne.output.guValue.drive(onNext: { _ in
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
+        
+        modiVm?.output.guValue.asDriver(onErrorJustReturn: "")
+            .drive(onNext: { _ in
+                self.dismiss(animated: true, completion: nil)
+            }).disposed(by: disposeBag)
+        
         selectedItem.bind(to: vm.addressSelect.input.cellObserver).disposed(by: disposeBag)
         searchBar.rx.text
             .orEmpty
@@ -173,7 +181,7 @@ class AddressViewController: UIViewController {
                 let cell = self.collectionView.cellForItem(at: index) as? AddressCell
                 return cell?.title.text ?? ""
             }
-            .bind(to: self.isCity ? vm.stepOne.input.cityValueObserver : vm.stepOne.input.guValueObserver)
+            .bind(to: self.modiVm != nil ? modiVm!.input.guValue : self.isCity ? vm.stepOne.input.cityValueObserver : vm.stepOne.input.guValueObserver)
             .disposed(by: disposeBag)
         
     }

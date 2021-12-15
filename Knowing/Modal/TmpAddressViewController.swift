@@ -15,10 +15,14 @@ class TmpAddressViewController: UIViewController {
     let disposeBag = DisposeBag()
     let vm = ExtraSignUpViewModel.instance
     
+    var modiVm: ExtraModifyViewModel?
+    
+    
     let backgroundView = UIView().then {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 40.0
     }
+    
     let titleLabel = UILabel().then {
         $0.text = "시/도 선택"
         $0.textColor = UIColor.rgb(red: 101, green: 101, blue: 101)
@@ -70,6 +74,8 @@ class TmpAddressViewController: UIViewController {
     var allItem = ["서울특별시", "인천광역시", "경기도", "세종특별자치시"]
     var selectedItem = Observable<[String]>.of(["서울특별시", "인천광역시", "경기도", "세종특별자치시"])
     var isCity:Bool = true
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,6 +177,11 @@ class TmpAddressViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
+        modiVm?.output.cityValue.asDriver(onErrorJustReturn: "")
+            .drive(onNext: { value in
+                self.dismiss(animated: true, completion: nil)
+            }).disposed(by: disposeBag)
+        
         selectedItem.bind(to: vm.addressSelect.input.cellObserver).disposed(by: disposeBag)
         
         searchBar.rx.text
@@ -201,7 +212,7 @@ class TmpAddressViewController: UIViewController {
                 let cell = self.collectionView.cellForItem(at: index) as? AddressCell
                 return cell?.title.text ?? ""
             }
-            .bind(to: self.isCity ? vm.stepOne.input.cityValueObserver : vm.stepOne.input.guValueObserver)
+            .bind(to: self.modiVm == nil ? vm.stepOne.input.cityValueObserver : modiVm!.input.cityValue)
             .disposed(by: disposeBag)
         
         

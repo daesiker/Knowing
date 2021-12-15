@@ -16,7 +16,7 @@ class HomeChartView: UIView {
     let cellID = "cellID"
     let headerID = "headerID"
     let vm = HomeChartViewModel.instance
-    var sortType:SortType = .maxMoney
+    let mainVm = MainTabViewModel.instance
     
     let chartCV: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -32,7 +32,7 @@ class HomeChartView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        sort(sortType)
+        sort(mainVm.sortType)
         setCV()
         bind()
         addSubview(chartCV)
@@ -72,11 +72,11 @@ extension HomeChartView {
     
     func bind() {
         vm.output.postChanged.drive(onNext: {value in
-            self.sort(self.sortType)
+            self.sort(self.mainVm.sortType)
             self.chartCV.reloadData()
         }).disposed(by: disposeBag)
         
-        vm.output.goChartSort.drive(onNext: { value in
+        mainVm.output.sortValue.asDriver(onErrorJustReturn: .maxMoney).drive(onNext: { value in
             self.sort(value)
             self.chartCV.reloadData()
         }).disposed(by: disposeBag)
@@ -88,7 +88,7 @@ extension HomeChartView {
     }
     
     func sort(_ option: SortType) {
-        sortType = option
+        mainVm.sortType = option
         
         switch option {
         case .maxMoney:
@@ -183,6 +183,7 @@ extension HomeChartView: UICollectionViewDelegate, UICollectionViewDelegateFlowL
 class HomeChartHeader: UICollectionViewCell {
     
     let vm = HomeChartViewModel.instance
+    let mainVm = MainTabViewModel.instance
     let disposeBag = DisposeBag()
     
     let imgView = UIImageView(image: UIImage(named: "chartView")!).then {
@@ -423,7 +424,7 @@ class HomeChartHeader: UICollectionViewCell {
         
         sortBt.rx.tap.bind(to: vm.input.chartBtObserver).disposed(by: disposeBag)
         
-        vm.output.goChartSort.drive(onNext: {value in
+        mainVm.output.sortValue.asDriver(onErrorJustReturn: .maxMoney).drive(onNext: {value in
             self.sortTitle.text = value.rawValue
         }).disposed(by: disposeBag)
         

@@ -7,10 +7,14 @@
 
 import Foundation
 import UIKit
+import PanModal
+import RxCocoa
+import RxSwift
 
 class SortViewController: UIViewController {
     
-    let sortType:SortType
+    let vm = MainTabViewModel.instance
+    let disposeBag = DisposeBag()
     
     let backgroundView = UIView().then {
         $0.backgroundColor = .white
@@ -33,7 +37,7 @@ class SortViewController: UIViewController {
     let high2LowBt = UIButton(type: .custom).then {
         $0.setTitle("높은 금액순", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
-        $0.titleLabel?.textColor = UIColor.rgb(red: 176, green: 176, blue: 176)
+        $0.setTitleColor(UIColor.rgb(red: 176, green: 176, blue: 176), for: .normal)
         $0.backgroundColor = .clear//UIColor.rgb(red: 255, green: 238, blue: 211)
         $0.layer.cornerRadius = 23.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 13, left: 126, bottom: 13, right: 125)
@@ -42,7 +46,7 @@ class SortViewController: UIViewController {
     let low2highBt = UIButton(type: .custom).then {
         $0.setTitle("낮은 금액순", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
-        $0.titleLabel?.textColor = UIColor.rgb(red: 176, green: 176, blue: 176)
+        $0.setTitleColor(UIColor.rgb(red: 176, green: 176, blue: 176), for: .normal)
         $0.backgroundColor = .clear//UIColor.rgb(red: 255, green: 238, blue: 211)
         $0.layer.cornerRadius = 23.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 13, left: 126, bottom: 13, right: 125)
@@ -51,24 +55,16 @@ class SortViewController: UIViewController {
     let lastestDateBt = UIButton(type: .custom).then {
         $0.setTitle("마감일순", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
-        $0.titleLabel?.textColor = UIColor.rgb(red: 176, green: 176, blue: 176)
+        $0.setTitleColor(UIColor.rgb(red: 176, green: 176, blue: 176), for: .normal)
         $0.backgroundColor = .clear//UIColor.rgb(red: 255, green: 238, blue: 211)
         $0.layer.cornerRadius = 23.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 13, left: 135, bottom: 13, right: 134)
     }
     
-    init(sortType: SortType) {
-        self.sortType = sortType
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
+        bind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,7 +93,7 @@ class SortViewController: UIViewController {
         
         backgroundView.addSubview(separator)
         separator.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(18)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(18)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
@@ -125,20 +121,62 @@ class SortViewController: UIViewController {
     }
     
     func getInitialValue() {
-        switch sortType {
+        switch vm.sortType {
         case .lastestDate:
             lastestDateBt.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
-            lastestDateBt.titleLabel?.textColor = UIColor.rgb(red: 255, green: 136, blue: 84)
+            lastestDateBt.setTitleColor(UIColor.rgb(red: 255, green: 136, blue: 84), for: .normal)
         case .maxMoney:
             high2LowBt.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
-            high2LowBt.titleLabel?.textColor = UIColor.rgb(red: 255, green: 136, blue: 84)
+            high2LowBt.setTitleColor(UIColor.rgb(red: 255, green: 136, blue: 84), for: .normal)
         case .minMoney:
             low2highBt.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
-            low2highBt.titleLabel?.textColor = UIColor.rgb(red: 255, green: 136, blue: 84)
+            low2highBt.setTitleColor(UIColor.rgb(red: 255, green: 136, blue: 84), for: .normal)
         }
     }
     
-    
+    func bind() {
+        
+        high2LowBt.rx.tap
+            .map { SortType.maxMoney }
+            .bind(to: vm.input.sortObserver)
+            .disposed(by: disposeBag)
+        
+        low2highBt.rx.tap
+            .map { SortType.minMoney }
+            .bind(to: vm.input.sortObserver)
+            .disposed(by: disposeBag)
+        
+        lastestDateBt.rx.tap
+            .map { SortType.lastestDate }
+            .bind(to: vm.input.sortObserver)
+            .disposed(by: disposeBag)
+        
+        vm.output.sortValue.subscribe(onNext: { _ in
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+        
+    }
 }
 
 
+extension SortViewController: PanModalPresentable {
+    
+    var panScrollable: UIScrollView? {
+        return nil
+    }
+    
+    var shortFormHeight: PanModalHeight {
+        return .contentHeight(self.view.frame.height * 0.35)
+        }
+    
+    //Modal background color
+    var panModalBackgroundColor: UIColor {
+        return UIColor.black.withAlphaComponent(0.2)
+    }
+    
+    //Whether to round the top corners of the modal
+    var shouldRoundTopCorners: Bool {
+        return true
+    }
+    
+}

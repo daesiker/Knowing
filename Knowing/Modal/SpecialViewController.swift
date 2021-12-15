@@ -14,6 +14,7 @@ class SpecialViewController: UIViewController {
 
     let disposeBag = DisposeBag()
     let vm = ExtraSignUpViewModel.instance
+    var modiVm:ExtraModifyViewModel?
     
     let backgroundView = UIView().then {
         $0.backgroundColor = .white
@@ -62,6 +63,7 @@ class SpecialViewController: UIViewController {
     }()
     
     let cvData = Observable<[String]>.of(["중소기업", "저소득층", "장애인", "농업인", "군인", "지역인재"])
+    let cvDommy = ["중소기업", "저소득층", "장애인", "농업인", "군인", "지역인재"]
     let cellId = "cellId"
     
     let nextBt = UIButton(type: .custom).then {
@@ -167,8 +169,8 @@ extension SpecialViewController {
         
         
         checkBoxBt.rx.tap
-            .map { "" }
-            .bind(to: vm.stepOne.input.specialNoneValueObserver)
+            .map { "none" }
+            .bind(to: modiVm != nil ? modiVm!.input.specialValue : vm.stepOne.input.specialNoneValueObserver)
             .disposed(by: disposeBag)
         
         vm.stepOne.output.spcialNoneValue.drive(onNext: {value in
@@ -178,6 +180,7 @@ extension SpecialViewController {
                 self.checkBoxBt.setImage(UIImage(named: "checkbox_unselected")!, for: .normal)
             }
         }).disposed(by: disposeBag)
+        
         
         vm.stepOne.output.specialBtValid.drive(onNext: { value in
             if value {
@@ -190,7 +193,7 @@ extension SpecialViewController {
         }).disposed(by: disposeBag)
         
         nextBt.rx.tap
-            .bind(to: vm.stepOne.input.specialButtonObserver)
+            .bind(to: modiVm != nil ? modiVm!.input.specialViewDismiss : vm.stepOne.input.specialButtonObserver)
             .disposed(by: disposeBag)
         
         
@@ -198,6 +201,31 @@ extension SpecialViewController {
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
+        modiVm?.output.specialBtEnable.asDriver(onErrorJustReturn: false)
+            .drive(onNext: {value in
+                if value {
+                    self.nextBt.backgroundColor = UIColor.rgb(red: 255, green: 136, blue: 84)
+                    self.nextBt.isEnabled = true
+                } else {
+                    self.nextBt.backgroundColor = UIColor.rgb(red: 210, green: 210, blue: 210)
+                    self.nextBt.isEnabled = false
+                }
+            }).disposed(by: disposeBag)
+        
+        modiVm?.output.specialViewDismiss.asDriver(onErrorJustReturn: ())
+            .drive(onNext: {
+                self.dismiss(animated: true, completion: nil)
+            }).disposed(by: disposeBag)
+        
+        modiVm?.output.specialValue.asDriver(onErrorJustReturn: [])
+            .drive(onNext: { value in
+                if value == ["none"] {
+                    self.checkBoxBt.setImage(UIImage(named: "checkbox_selected")!, for: .normal)
+                } else {
+                    self.checkBoxBt.setImage(UIImage(named: "checkbox_unselected")!, for: .normal)
+                }
+                self.collectionView.reloadData()
+            }).disposed(by: disposeBag)
         
     }
     
@@ -210,32 +238,63 @@ extension SpecialViewController {
         
         cvData
             .bind(to: collectionView.rx.items(cellIdentifier: cellId, cellType: SpecialCell.self)) {row, element, cell in
-                cell.title.text = element
+                if self.modiVm != nil {
+                    if self.modiVm!.user.specialStatus.contains(element) {
+                        cell.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        cell.title.textColor = .white
+                    }
+                }
+                cell.configure(name: element)
             }.disposed(by: disposeBag)
         
         collectionView.rx
             .itemSelected
             .map { index in
                 let cell = self.collectionView.cellForItem(at: index) as? SpecialCell
+                if cell?.title.textColor == .white {
+                    cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    cell?.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                    cell?.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                } else {
+                    cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    cell?.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                    cell?.title.textColor = .white
+                }
                 return cell?.title.text ?? ""
             }
-            .bind(to: self.vm.stepOne.input.specialValueObserver)
+            .bind(to: modiVm != nil ? modiVm!.input.specialValue : self.vm.stepOne.input.specialValueObserver)
             .disposed(by: disposeBag)
         
-        collectionView.rx
-            .itemSelected
-            .map { self.collectionView.cellForItem(at: $0) as? SpecialCell}
-            .subscribe(onNext: { value in
-                let text = value?.title.text ?? ""
-                if self.vm.user.specialStatus.contains(text) {
-                    value?.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
-                    value?.title.textColor = .white
-                } else {
-                    value?.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
-                    value?.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-                }
-            }).disposed(by: disposeBag)
-        
+//        collectionView.rx
+//            .itemSelected
+//            .subscribe(onNext: { value in
+//                for i in 0..<self.cvDommy.count {
+//                    let cell = self.collectionView.cellForItem(at: [0, i]) as! SpecialCell
+//                    
+//                    if self.modiVm != nil {
+//                        if self.modiVm!.user.specialStatus.contains(cell.title.text ?? "") {
+//                            cell.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+//                            cell.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+//                            cell.title.textColor = .white
+//                        } else {
+//                            cell.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+//                            cell.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+//                            cell.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+//                        }
+//                    } else {
+//                        if self.vm.user.specialStatus.contains(cell.title.text ?? "") {
+//                            cell.title.textColor = .white
+//                            cell.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+//                            cell.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+//                        } else {
+//                            cell.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+//                            cell.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+//                            cell.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+//                        }
+//                    }
+//                }
+//                self.collectionView.reloadData()
+//            }).disposed(by: disposeBag)
         
     }
 }
@@ -313,4 +372,10 @@ class SpecialCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configure(name: String) {
+        
+        title.text = name
+    }
+    
 }

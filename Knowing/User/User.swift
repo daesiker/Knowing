@@ -101,7 +101,33 @@ struct User: Codable {
         self.provider = json["provider"]!.stringValue
         self.FCMTOKEN = json["fcmtoken"]!.stringValue
         
+    }
+    
+    func extraJson() -> [String:Any] {
+        var dic:[String:Any] = [:]
         
+        dic.updateValue(address, forKey: "address")
+        dic.updateValue(addressDetail, forKey: "addressDetail")
+        dic.updateValue(specialStatus, forKey: "specialStatus")
+        dic.updateValue(incomeLevel, forKey: "incomeLevel")
+        dic.updateValue(incomeAvg, forKey: "incomeAvg")
+        dic.updateValue(employmentState, forKey: "employmentState")
+        dic.updateValue(schoolRecords, forKey: "schoolRecords")
+        dic.updateValue(school, forKey: "school")
+        dic.updateValue(mainMajor, forKey: "mainMajor")
+        dic.updateValue(subMajor, forKey: "subMajor")
+        dic.updateValue(semester, forKey: "semester")
+        dic.updateValue(lastSemesterScore, forKey: "lastSemesterScore")
+        
+        return dic
+    }
+    
+    func checkAvailable() -> Bool {
+        if address != "" && addressDetail != "" && specialStatus.count != 0 && incomeLevel != "" && incomeAvg != "" && employmentState.count != 0 && schoolRecords != ""{
+            return true
+        } else {
+            return false
+        }
     }
     
     func getUid() -> String {

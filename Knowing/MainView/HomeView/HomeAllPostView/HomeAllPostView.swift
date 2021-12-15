@@ -158,7 +158,7 @@ class HomeAllPostView: UIView {
         
         sortBt.rx.tap.bind(to: HomeChartViewModel.instance.input.allBtObserver).disposed(by: disposeBag)
         
-        HomeChartViewModel.instance.output.goAllSort.drive(onNext: {value in
+        MainTabViewModel.instance.output.sortValue.asDriver(onErrorJustReturn: .maxMoney).drive(onNext: {value in
             self.sort(value)
             self.sortTitle.text = value.rawValue
         }).disposed(by: disposeBag)

@@ -11,9 +11,12 @@ import RxSwift
 import PanModal
 
 class SchoolViewController: UIViewController {
+    
     let cellId = "cellId"
     let disposeBag = DisposeBag()
     let vm = ExtraSignUpViewModel.instance
+    
+    var modiVm:ExtraModifyViewModel?
     
     let backgroundView = UIView().then {
         $0.backgroundColor = .white
@@ -124,6 +127,10 @@ extension SchoolViewController {
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
+        modiVm?.output.schoolValue.asDriver(onErrorJustReturn: "")
+            .drive(onNext: { _ in
+                self.dismiss(animated: true, completion: nil)
+            }).disposed(by: disposeBag)
     }
     
     func setCollectionView() {
@@ -145,7 +152,7 @@ extension SchoolViewController {
                 let cell = self.collectionView.cellForItem(at: index) as? AddressCell
                 return cell?.title.text ?? ""
             }
-            .bind(to: vm.schoolSelect.input.schoolValueObserver)
+            .bind(to: modiVm != nil ? modiVm!.input.schoolValue : vm.schoolSelect.input.schoolValueObserver)
             .disposed(by: disposeBag)
         
         

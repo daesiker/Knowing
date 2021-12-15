@@ -15,7 +15,7 @@ import SwiftyJSON
 import Firebase
 
 class BookMarkViewController: UIViewController {
-
+    
     let disposeBag = DisposeBag()
     
     let searchBar = CustomTextField(image: UIImage(named: "search")!, text: "검색", state: .search)
@@ -23,6 +23,7 @@ class BookMarkViewController: UIViewController {
     var defaultOptions = SwipeOptions()
     var buttonStyle: ButtonStyle = .circular
     let vm = MainTabViewModel.instance
+    
     
     var filteredData:[Post] = []
     
@@ -215,31 +216,84 @@ extension BookMarkViewController {
             .debounce(RxTimeInterval.microseconds(5), scheduler: MainScheduler.instance) //0.5초 기다림
             .distinctUntilChanged() // 같은 아이템을 받지 않는기능
             .subscribe(onNext: { t in self.filteredData = self.vm.bookmarks.filter{ $0.name.hasPrefix(t) }
-                        self.bookmarkCV.reloadData()
+                self.bookmarkCV.reloadData()
             })
             .disposed(by: disposeBag)
-
+        
         sortBt.rx.tap.subscribe(onNext: {
             
-            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            //            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            //
+            //            let maxMoneySort = UIAlertAction(title: "높은 금액순", style: .default) { _ in
+            //                self.vm.bookmarks.sort(by: { a, b in
+            //                    return Int(a.maxMoney)! > Int(b.maxMoney)!
+            //                })
+            //                self.sortTitle.text = "높은 금액순"
+            //                self.bookmarkCV.reloadData()
+            //            }
+            //
+            //            let minMoneySort = UIAlertAction(title: "낮은 금액순", style: .default) { _ in
+            //                self.vm.bookmarks.sort(by: { a, b in
+            //                    return Int(a.maxMoney)! < Int(b.maxMoney)!
+            //                })
+            //                self.sortTitle.text = "낮은 금액순"
+            //                self.bookmarkCV.reloadData()
+            //            }
+            //
+            //            let lastestDateSort = UIAlertAction(title: "마감 일순", style: .default) { _ in
+            //                self.vm.bookmarks.sort(by: { prev, next in
+            //                    let prevTmp = prev.applyDate.components(separatedBy: "~")
+            //                    let nextTmp = next.applyDate.components(separatedBy: "~")
+            //
+            //                    let prevDate = prevTmp.count == 2 ? Int(prevTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+            //                    let nextDate = nextTmp.count == 2 ? Int(nextTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+            //
+            //                    return prevDate < nextDate
+            //                })
+            //                self.sortTitle.text = "마감 일순"
+            //                self.bookmarkCV.reloadData()
+            //            }
+            //
+            //            let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+            //
+            //            }
+            //
+            //
+            //            actionSheet.addAction(maxMoneySort)
+            //            actionSheet.addAction(minMoneySort)
+            //            actionSheet.addAction(lastestDateSort)
+            //            actionSheet.addAction(cancelAction)
+            //
+            //            self.present(actionSheet, animated: true, completion: nil)
             
-            let maxMoneySort = UIAlertAction(title: "높은 금액순", style: .default) { _ in
+            let vc = SortViewController()
+            self.presentPanModal(vc)
+            
+            
+        }).disposed(by: disposeBag)
+        
+        vm.output.sortValue.subscribe(onNext: { value in
+            
+            switch value {
+            case .lastestDate:
+                self.vm.bookmarks.sort(by: { prev, next in
+                    let prevTmp = prev.applyDate.components(separatedBy: "~")
+                    let nextTmp = next.applyDate.components(separatedBy: "~")
+                    
+                    let prevDate = prevTmp.count == 2 ? Int(prevTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+                    let nextDate = nextTmp.count == 2 ? Int(nextTmp[1].replacingOccurrences(of: ".", with: "")) ?? 0 : 99999999
+                    
+                    return prevDate < nextDate
+                })
+                self.sortTitle.text = "마감 일순"
+                self.bookmarkCV.reloadData()
+            case .maxMoney:
                 self.vm.bookmarks.sort(by: { a, b in
                     return Int(a.maxMoney)! > Int(b.maxMoney)!
                 })
                 self.sortTitle.text = "높은 금액순"
                 self.bookmarkCV.reloadData()
-            }
-            
-            let minMoneySort = UIAlertAction(title: "낮은 금액순", style: .default) { _ in
-                self.vm.bookmarks.sort(by: { a, b in
-                    return Int(a.maxMoney)! < Int(b.maxMoney)!
-                })
-                self.sortTitle.text = "낮은 금액순"
-                self.bookmarkCV.reloadData()
-            }
-            
-            let lastestDateSort = UIAlertAction(title: "마감 일순", style: .default) { _ in
+            case .minMoney:
                 self.vm.bookmarks.sort(by: { prev, next in
                     let prevTmp = prev.applyDate.components(separatedBy: "~")
                     let nextTmp = next.applyDate.components(separatedBy: "~")
@@ -252,18 +306,6 @@ extension BookMarkViewController {
                 self.sortTitle.text = "마감 일순"
                 self.bookmarkCV.reloadData()
             }
-            
-            let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
-                
-            }
-            
-            
-            actionSheet.addAction(maxMoneySort)
-            actionSheet.addAction(minMoneySort)
-            actionSheet.addAction(lastestDateSort)
-            actionSheet.addAction(cancelAction)
-            
-            self.present(actionSheet, animated: true, completion: nil)
             
         }).disposed(by: disposeBag)
         
@@ -297,7 +339,7 @@ extension BookMarkViewController: UICollectionViewDelegate, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-    
+        
         return filteredData.count
     }
     
@@ -358,7 +400,7 @@ extension BookMarkViewController: SwipeCollectionViewCellDelegate {
         delete.image = UIImage(named: "trash")!
         delete.accessibilityContainerType = .none
         delete.transitionDelegate = ScaleTransition.default
-       
+        
         return [delete]
     }
     

@@ -238,10 +238,10 @@ extension StepFiveView: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        var tmp1 = "2 학년   "
-        var tmp2 = "2 학기"
+        var tmp1 = "2학년 "
+        var tmp2 = "2학기"
         if component == 0 {
-            tmp1 = "\(schoolData[component][row])학년  "
+            tmp1 = "\(schoolData[component][row])학년 "
         }
         if component == 2 {
             tmp2 = "\(schoolData[component][row])학기"

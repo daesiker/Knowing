@@ -25,13 +25,8 @@ class HomeChartViewModel {
         let postObserver = PublishRelay<Post>()
         let errorObserver = PublishRelay<Void>()
         let scrollObserver = PublishRelay<Bool>()
-        
         let chartBtObserver = PublishRelay<Void>()
-        let chartSortObserver = PublishRelay<SortType>()
-        
         let allBtObserver = PublishRelay<Void>()
-        let allSortObserver = PublishRelay<SortType>()
-        
         let bottomAlphaObserver = PublishRelay<Bool>()
         let bottomBtObserver = PublishRelay<Void>()
         
@@ -41,13 +36,8 @@ class HomeChartViewModel {
         var postChanged = PublishRelay<[Post]>().asDriver(onErrorJustReturn: [])
         var getPost = PublishRelay<Post>().asDriver(onErrorJustReturn: Post())
         var goError = PublishRelay<Void>().asDriver(onErrorJustReturn: ())
-        
         var goChartActionSheet = PublishRelay<Void>().asDriver(onErrorJustReturn: ())
-        var goChartSort = PublishRelay<SortType>().asDriver(onErrorJustReturn: .maxMoney)
-        
         var goAllActionSheet = PublishRelay<Void>().asDriver(onErrorJustReturn: ())
-        var goAllSort = PublishRelay<SortType>().asDriver(onErrorJustReturn: .maxMoney)
-        
         var getBottomAlpha = PublishRelay<Bool>().asDriver(onErrorJustReturn: false)
         var getBottomBt = PublishRelay<Void>().asDriver(onErrorJustReturn: ())
         
@@ -78,15 +68,11 @@ class HomeChartViewModel {
         output.getPost = input.postObserver.asDriver(onErrorJustReturn: Post())
         
         output.goError = input.errorObserver.asDriver(onErrorJustReturn: ())
-        
+        output.goChartActionSheet = input.chartBtObserver.asDriver(onErrorJustReturn: ())
+        output.goAllActionSheet = input.allBtObserver.asDriver(onErrorJustReturn: ())
         output.postChanged = input.categoryObserver.map { _ in
             return self.posts}.asDriver(onErrorJustReturn: [])
         
-        output.goChartActionSheet = input.chartBtObserver.asDriver(onErrorJustReturn: ())
-        output.goChartSort = input.chartSortObserver.asDriver(onErrorJustReturn: .maxMoney)
-        
-        output.goAllActionSheet = input.allBtObserver.asDriver(onErrorJustReturn: ())
-        output.goAllSort = input.allSortObserver.asDriver(onErrorJustReturn: .maxMoney)
         
         output.getBottomBt = input.bottomBtObserver.asDriver(onErrorJustReturn: ())
         output.getBottomAlpha = input.bottomAlphaObserver.asDriver(onErrorJustReturn: false)

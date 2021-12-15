@@ -128,8 +128,9 @@ class StepFourView: UIView {
                         cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
                     }
                 }
-
             }).disposed(by: disposeBag)
+        
+        
         
     }
     

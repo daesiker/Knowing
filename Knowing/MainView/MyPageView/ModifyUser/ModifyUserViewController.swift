@@ -90,6 +90,14 @@ class ModifyUserViewController: UIViewController {
                 }
             }).disposed(by: disposeBag)
         
+        extraModifyBt.rx.tap
+            .subscribe(onNext: {
+                let vm = ExtraModifyViewModel(user: self.vm.user)
+                let vc = ExtraModifyViewController(vm: vm)
+                vc.modalTransitionStyle = .crossDissolve
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            }).disposed(by: disposeBag)
         
         
     }
