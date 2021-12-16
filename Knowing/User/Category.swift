@@ -14,7 +14,7 @@ struct Category: Codable {
     var foundationCategory:[String]
     var residentCategory:[String]
     var lifeCategory:[String]
-    var covidCategory:[String]
+    var medicalCategory:[String]
     
     init(dic: [String:[String]]) {
         self.studentCategory = dic["studentCategory"] ?? []
@@ -22,7 +22,7 @@ struct Category: Codable {
         self.residentCategory = dic["residentCategory"] ?? []
         self.foundationCategory = dic["foundationCategory"] ?? []
         self.lifeCategory = dic["lifeCategory"] ?? []
-        self.covidCategory = dic["covidCategory"] ?? []
+        self.medicalCategory = dic["medicalCategory"] ?? []
     }
     
     

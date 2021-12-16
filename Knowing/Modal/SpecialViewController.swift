@@ -11,7 +11,7 @@ import RxRelay
 import PanModal
 
 class SpecialViewController: UIViewController {
-
+    
     let disposeBag = DisposeBag()
     let vm = ExtraSignUpViewModel.instance
     var modiVm:ExtraModifyViewModel?
@@ -190,6 +190,7 @@ extension SpecialViewController {
                 self.nextBt.backgroundColor = UIColor.rgb(red: 210, green: 210, blue: 210)
                 self.nextBt.isEnabled = false
             }
+            
         }).disposed(by: disposeBag)
         
         nextBt.rx.tap
@@ -245,56 +246,47 @@ extension SpecialViewController {
                     }
                 }
                 cell.configure(name: element)
+                
             }.disposed(by: disposeBag)
         
         collectionView.rx
             .itemSelected
             .map { index in
                 let cell = self.collectionView.cellForItem(at: index) as? SpecialCell
-                if cell?.title.textColor == .white {
-                    cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
-                    cell?.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
-                    cell?.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-                } else {
-                    cell?.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
-                    cell?.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-                    cell?.title.textColor = .white
-                }
                 return cell?.title.text ?? ""
             }
             .bind(to: modiVm != nil ? modiVm!.input.specialValue : self.vm.stepOne.input.specialValueObserver)
             .disposed(by: disposeBag)
         
-//        collectionView.rx
-//            .itemSelected
-//            .subscribe(onNext: { value in
-//                for i in 0..<self.cvDommy.count {
-//                    let cell = self.collectionView.cellForItem(at: [0, i]) as! SpecialCell
-//                    
-//                    if self.modiVm != nil {
-//                        if self.modiVm!.user.specialStatus.contains(cell.title.text ?? "") {
-//                            cell.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
-//                            cell.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-//                            cell.title.textColor = .white
-//                        } else {
-//                            cell.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
-//                            cell.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
-//                            cell.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-//                        }
-//                    } else {
-//                        if self.vm.user.specialStatus.contains(cell.title.text ?? "") {
-//                            cell.title.textColor = .white
-//                            cell.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
-//                            cell.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
-//                        } else {
-//                            cell.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
-//                            cell.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
-//                            cell.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
-//                        }
-//                    }
-//                }
-//                self.collectionView.reloadData()
-//            }).disposed(by: disposeBag)
+        collectionView.rx
+            .itemSelected
+            .map { self.collectionView.cellForItem(at: $0) as? SpecialCell}
+            .subscribe(onNext: { value in
+                let text = value?.title.text ?? ""
+                
+                if self.modiVm != nil {
+                    if self.modiVm!.user.specialStatus.contains(text) {
+                        value?.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                        value?.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        value?.title.textColor = .white
+                    } else {
+                        value?.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                        value?.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        value?.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                    }
+                } else {
+                    if self.vm.user.specialStatus.contains(text) {
+                        value?.title.textColor = .white
+                        value?.title.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
+                        value?.view.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
+                    } else {
+                        value?.title.textColor = UIColor.rgb(red: 108, green: 108, blue: 108)
+                        value?.title.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
+                        value?.view.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
+                    }
+                }
+                
+            }).disposed(by: disposeBag)
         
     }
 }
@@ -307,7 +299,7 @@ extension SpecialViewController: PanModalPresentable {
     
     var shortFormHeight: PanModalHeight {
         return .contentHeight(self.view.frame.height * 0.64)
-        }
+    }
     
     //Modal background color
     var panModalBackgroundColor: UIColor {

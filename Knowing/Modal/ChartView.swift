@@ -229,7 +229,7 @@ class ChartView: UIView {
                     sortedCategory.append([3, Float(v.count)])
                 } else if k == "lifeCategory" {
                     sortedCategory.append([4, Float(v.count)])
-                } else if k == "covidCategory" {
+                } else if k == "medicalCategory" {
                     sortedCategory.append([5, Float(v.count)])
                 }
             }

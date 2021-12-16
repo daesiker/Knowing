@@ -46,7 +46,7 @@ class HomeAllPostViewModel {
             case "생활 · 복지 지원":
                 self.posts = self.main.posts["alllifeCategory"]!
             default:
-                self.posts = self.main.posts["allcovidCategory"]!
+                self.posts = self.main.posts["allmedicalCategory"]!
             }
         }).disposed(by: disposeBag)
         

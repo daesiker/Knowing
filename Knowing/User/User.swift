@@ -46,7 +46,7 @@ struct User: Codable {
     var foundationCategory:[String] = []
     var residentCategory:[String] = []
     var lifeCategory:[String] = []
-    var covidCategory:[String] = []
+    var medicalCategory:[String] = []
    
     var bookmark:[String] = []
     var provider:String = ""
@@ -95,7 +95,7 @@ struct User: Codable {
         self.foundationCategory = json["foundationCategory"]!.arrayValue.map { $0.stringValue }
         self.residentCategory = json["residentCategory"]!.arrayValue.map { $0.stringValue }
         self.lifeCategory = json["lifeCategory"]!.arrayValue.map { $0.stringValue }
-        self.covidCategory = json["covidCategory"]!.arrayValue.map { $0.stringValue }
+        self.medicalCategory = json["medicalCategory"]!.arrayValue.map { $0.stringValue }
        
         self.bookmark = json["bookmark"]!.arrayValue.map { $0.stringValue }
         self.provider = json["provider"]!.stringValue

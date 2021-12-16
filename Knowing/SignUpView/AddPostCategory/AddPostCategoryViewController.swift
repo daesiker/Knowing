@@ -127,23 +127,23 @@ class AddPostCategoryViewController: UIViewController {
     let lifeData = Observable<[String]>.of(["전체", "건강", "문화"])
     let lifeDomy = ["전체", "건강", "문화"]
     
-    let covidLb = UILabel().then {
+    let medicalLb = UILabel().then {
         $0.text = "의료 지원"
         $0.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 20)
         $0.textColor = UIColor.rgb(red: 91, green: 91, blue: 91)
     }
     
-    let covidCV: UICollectionView = {
+    let medicalCV: UICollectionView = {
         let flowLayout = CollectionViewLeftAlignFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.register(AddCategoryCell.self, forCellWithReuseIdentifier: "covidCell")
+        collectionView.register(AddCategoryCell.self, forCellWithReuseIdentifier: "medicalCell")
         collectionView.backgroundColor = .white
         return collectionView
     }()
     
-    let covidData = Observable<[String]>.of(["전체", "기본소득 지원", "저소득층 지원", "재난피해 지원", "소득 · 일자리 보전", "기타 인센티브", "심리지원"])
-    let covidLayout = ["전체", "기본소득 지원", "저소득층 지원", "재난피해 지원", "소득 · 일자리 보전", "기타 인센티브", "심리지원"]
-    let covidDomy = ["전체", "기본소득지원", "저소득층지원", "재난피해지원", "소득일자리보전", "기타인센티브", "심리지원"]
+    let medicalData = Observable<[String]>.of(["전체", "기본소득 지원", "저소득층 지원", "재난피해 지원", "소득 · 일자리 보전", "기타 인센티브", "심리지원"])
+    let medicalLayout = ["전체", "기본소득 지원", "저소득층 지원", "재난피해 지원", "소득 · 일자리 보전", "기타 인센티브", "심리지원"]
+    let medicalDomy = ["전체", "기본소득지원", "저소득층지원", "재난피해지원", "소득일자리보전", "기타인센티브", "심리지원"]
     
     let signUpBt = UIButton(type: .custom).then {
         $0.setTitle("적용하기", for: .normal)
@@ -267,15 +267,15 @@ extension AddPostCategoryViewController {
             $0.height.equalTo(48)
         }
         
-        scrollView.addSubview(covidLb)
-        covidLb.snp.makeConstraints {
+        scrollView.addSubview(medicalLb)
+        medicalLb.snp.makeConstraints {
             $0.top.equalTo(lifeCV.snp.bottom).offset(42)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        scrollView.addSubview(covidCV)
-        covidCV.snp.makeConstraints {
-            $0.top.equalTo(covidLb.snp.bottom).offset(20)
+        scrollView.addSubview(medicalCV)
+        medicalCV.snp.makeConstraints {
+            $0.top.equalTo(medicalLb.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
             $0.width.equalTo(self.view.frame.width - 46)
             $0.height.equalTo(176)
@@ -283,7 +283,7 @@ extension AddPostCategoryViewController {
         
         scrollView.addSubview(signUpBt)
         signUpBt.snp.makeConstraints {
-            $0.top.equalTo(covidCV.snp.bottom).offset(42)
+            $0.top.equalTo(medicalCV.snp.bottom).offset(42)
             $0.centerX.equalToSuperview()
         }
         
@@ -541,30 +541,30 @@ extension AddPostCategoryViewController {
                 }
             }).disposed(by: disposeBag)
         
-        covidCV.delegate = nil
-        covidCV.dataSource = nil
-        covidCV.rx.setDelegate(self).disposed(by: disposeBag)
-        covidData
-            .bind(to: self.covidCV.rx.items(cellIdentifier: "covidCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
-                cell.configure(name: title, category: self.vm.user.covidCategory)
+        medicalCV.delegate = nil
+        medicalCV.dataSource = nil
+        medicalCV.rx.setDelegate(self).disposed(by: disposeBag)
+        medicalData
+            .bind(to: self.medicalCV.rx.items(cellIdentifier: "medicalCell", cellType: AddCategoryCell.self)) { indexPath, title, cell in
+                cell.configure(name: title, category: self.vm.user.medicalCategory)
             }.disposed(by: disposeBag)
         
-        covidCV.rx.itemSelected
+        medicalCV.rx.itemSelected
             .map { index in
-                let cell = self.covidCV.cellForItem(at: index) as? AddCategoryCell
+                let cell = self.medicalCV.cellForItem(at: index) as? AddCategoryCell
                 let text = cell?.titleLabel.text! ?? ""
                 var newText = text.replacingOccurrences(of: " ", with: "")
                 newText = newText.replacingOccurrences(of: "·", with: "")
                 return newText
             }
-            .bind(to: self.vm.input.covidObserver)
+            .bind(to: self.vm.input.medicalObserver)
             .disposed(by: disposeBag)
         
-        covidCV.rx.itemSelected
+        medicalCV.rx.itemSelected
             .subscribe(onNext: { value in
-                for i in 0..<self.covidDomy.count {
-                    let cell = self.covidCV.cellForItem(at: [0, i]) as? AddCategoryCell
-                    if self.vm.user.covidCategory.count == 6 {
+                for i in 0..<self.medicalDomy.count {
+                    let cell = self.medicalCV.cellForItem(at: [0, i]) as? AddCategoryCell
+                    if self.vm.user.medicalCategory.count == 6 {
                         if i == 0 {
                             cell?.titleLabel.textColor = .white
                             cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
@@ -575,7 +575,7 @@ extension AddPostCategoryViewController {
                             cell?.backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 211)
                         }
                     } else {
-                        if self.vm.user.covidCategory.contains(self.covidDomy[i]) {
+                        if self.vm.user.medicalCategory.contains(self.medicalDomy[i]) {
                             cell?.titleLabel.textColor = .white
                             cell?.titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
                             cell?.backgroundColor = UIColor.rgb(red: 255, green: 147, blue: 81)
@@ -650,7 +650,7 @@ extension AddPostCategoryViewController: UICollectionViewDelegate, UICollectionV
         } else if collectionView == lifeCV {
             return AddCategoryCell.fittingSize(availableHeight: 45, name: lifeDomy[indexPath.item])
         } else {
-            return AddCategoryCell.fittingSize(availableHeight: 45, name: covidLayout[indexPath.item])
+            return AddCategoryCell.fittingSize(availableHeight: 45, name: medicalLayout[indexPath.item])
         }
     }
     

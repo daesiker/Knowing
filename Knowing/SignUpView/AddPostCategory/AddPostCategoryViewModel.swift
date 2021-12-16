@@ -26,7 +26,7 @@ class AddPostCategoryViewModel {
         let foundationObserver = PublishRelay<String>()
         let residentObserver = PublishRelay<String>()
         let lifeObserver = PublishRelay<String>()
-        let covidObserver = PublishRelay<String>()
+        let medicalObserver = PublishRelay<String>()
         let btObserver = PublishRelay<Void>()
     }
     
@@ -144,27 +144,27 @@ class AddPostCategoryViewModel {
             }
         }).disposed(by: disposeBag)
         
-        input.covidObserver.subscribe(onNext: { value in
+        input.medicalObserver.subscribe(onNext: { value in
             if value == "전체" {
-                if self.user.covidCategory.count == 6 {
-                    self.user.covidCategory = []
+                if self.user.medicalCategory.count == 6 {
+                    self.user.medicalCategory = []
                 } else {
-                    self.user.covidCategory = ["기본소득지원", "저소득층지원", "재난피해지원", "소득일자리 보전", "기타인센티브", "심리지원"]
+                    self.user.medicalCategory = ["기본소득지원", "저소득층지원", "재난피해지원", "소득일자리 보전", "기타인센티브", "심리지원"]
                 }
             } else {
-                if self.user.covidCategory.count == 6 {
-                    self.user.covidCategory = [value]
-                }else if self.user.covidCategory.contains(value) {
-                    let index = self.user.covidCategory.firstIndex(of: value) ?? 0
-                    self.user.covidCategory.remove(at: index)
+                if self.user.medicalCategory.count == 6 {
+                    self.user.medicalCategory = [value]
+                }else if self.user.medicalCategory.contains(value) {
+                    let index = self.user.medicalCategory.firstIndex(of: value) ?? 0
+                    self.user.medicalCategory.remove(at: index)
                 } else {
-                    self.user.covidCategory.append(value)
+                    self.user.medicalCategory.append(value)
                 }
             }
         }).disposed(by: disposeBag)
         
-        output.buttonValid = Observable.of(input.covidObserver, input.empolyObserver, input.foundationObserver, input.lifeObserver, input.residentObserver, input.studentObserver).merge().map { _ in
-            if self.user.covidCategory.count == 0 && self.user.empolyCategory.count == 0 {
+        output.buttonValid = Observable.of(input.medicalObserver, input.empolyObserver, input.foundationObserver, input.lifeObserver, input.residentObserver, input.studentObserver).merge().map { _ in
+            if self.user.medicalCategory.count == 0 && self.user.empolyCategory.count == 0 {
                 if self.user.foundationCategory.count == 0 && self.user.lifeCategory.count == 0 {
                     if self.user.residentCategory.count == 0 && self.user.studentCategory.count == 0 {
                         return false
@@ -205,7 +205,7 @@ class AddPostCategoryViewModel {
                     let header:HTTPHeaders = ["uid": uid,
                                               "Content-Type":"application/json"]
                     
-                    let url = "https://www.makeus-hyun.shop/app/users/sign-up"
+                    let url = "https://www.makeus-hyun.shop/app/tmp/sign-up"
                     
                     let jsonData = try? JSONEncoder().encode(self.user)
                     AF.request(url, method: .post, headers: header)
@@ -232,7 +232,7 @@ class AddPostCategoryViewModel {
                 let header:HTTPHeaders = ["uid": uid,
                                           "Content-Type":"application/json"]
                 
-                let url = "https://www.makeus-hyun.shop/app/users/sign-up"
+                let url = "https://www.makeus-hyun.shop/app/tmp/sign-up"
                 
                 let jsonData = try? JSONEncoder().encode(self.user)
                 AF.request(url, method: .post, headers: header)
@@ -269,14 +269,14 @@ class AddPostCategoryViewModel {
             let uid = Auth.auth().currentUser!.uid
             let header:HTTPHeaders = ["uid": uid,
                                       "Content-Type":"application/json"]
-            let url = "https://www.makeus-hyun.shop/app/users/usermodify/welfare"
+            let url = "https://www.makeus-hyun.shop/app/tmp/usermodify/welfare"
             
             let body:[String: [String]] = ["studentCategory": self.user.studentCategory,
                                            "empolyCategory": self.user.empolyCategory,
                                            "foundationCategory": self.user.foundationCategory,
                                            "residentCategory": self.user.residentCategory,
                                            "lifeCategory": self.user.lifeCategory,
-                                           "covidCategory": self.user.covidCategory]
+                                           "medicalCategory": self.user.medicalCategory]
             
             let jsonData = try? JSONSerialization.data(withJSONObject: body, options: [])
             

@@ -61,7 +61,7 @@ class HomeChartViewModel {
             case "생활 · 복지 지원":
                 self.posts = self.main.posts["lifeCategory"]!
             default:
-                self.posts = self.main.posts["covidCategory"]!
+                self.posts = self.main.posts["medicalCategory"]!
             }
         }).disposed(by: disposeBag)
         

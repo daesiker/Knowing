@@ -47,7 +47,7 @@ class LoadingViewController: UIViewController {
         let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
-        let url = "https://www.makeus-hyun.shop/app/users/userInfo"
+        let url = "https://www.makeus-hyun.shop/app/tmp/userInfo"
         
         AF.request(url, method: .get, headers: header)
             .responseJSON { response in
@@ -124,7 +124,7 @@ class LoadingViewController: UIViewController {
     
     func getPostData() {
         let uid = Auth.auth().currentUser?.uid ?? MainTabViewModel.instance.user.getUid()
-        let url = "https://www.makeus-hyun.shop/app/mains/mainpage"
+        let url = "https://www.makeus-hyun.shop/app/tmp/mainpage"
         let header:HTTPHeaders = [ "uid": uid,
                                    "Content-Type":"application/json"]
         AF.request(url, method: .get, headers: header)

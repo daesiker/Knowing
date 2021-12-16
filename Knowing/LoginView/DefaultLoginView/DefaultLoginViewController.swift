@@ -267,8 +267,8 @@ extension DefaultLoginViewController {
         }).disposed(by: disposeBag)
         
         
-        vm.output.doLogin.asSignal()
-            .emit(onNext: {
+        vm.output.doLogin.asDriver(onErrorJustReturn: ())
+            .drive(onNext: {
             let viewController = LoadingViewController()
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
