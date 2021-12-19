@@ -359,6 +359,7 @@ class CalendarCell: SwipeCollectionViewCell {
         }
         
         contentView.addSubview(alertImg)
+        alertImg.alpha = 0
         alertImg.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-11)
             $0.centerY.equalToSuperview()

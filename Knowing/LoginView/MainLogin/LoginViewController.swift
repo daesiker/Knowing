@@ -65,6 +65,28 @@ class LoginViewController: UIViewController {
                 
                 
             }
+        } else {
+            UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+                    if let _ = error {
+                        DispatchQueue.main.async {
+                            let alert = UIAlertController(title:"에러", message: "네트워크 상태를 확인해주세요.", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                        return
+                    }
+                    else {
+                        let alert = UIAlertController(title:"카카오 로그인", message: "카카오로 로그인합니다.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default) { _ in
+                            if let token = oauthToken?.accessToken {
+                                self.getJWT(token, provider: "kakao")
+                            }
+                        }
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
         }
     }
     
@@ -268,13 +290,7 @@ extension LoginViewController: NaverThirdPartyLoginConnectionDelegate {
     }
     
     func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-
-        let alert = UIAlertController(title:"네이버 로그인", message: "네이버로 로그인합니다.", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "ok", style: UIAlertAction.Style.default) { _ in
-            self.getNaverInfo()
-        }
-        alert.addAction(okAction)
-        self.present(alert, animated: true, completion: nil)
+        self.getNaverInfo()
         
     }
     

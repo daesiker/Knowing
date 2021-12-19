@@ -160,7 +160,8 @@ class LoadingViewController: UIViewController {
                             }
                         }
                     }
-                    myPost.sort { $0.maxMoney > $1.maxMoney }
+                    myPost.sort { a, b in
+                        return Int(a.maxMoney)! > Int(b.maxMoney)! }
                     
                     
                     

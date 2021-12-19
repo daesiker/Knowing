@@ -594,6 +594,11 @@ class ExtraModifyViewController: UIViewController {
     }
     
     func bindInput() {
+        
+        backBt.rx.tap.subscribe(onNext: {
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+        
         cityBt.rx.tap
             .subscribe(onNext: {
                 let vc = TmpAddressViewController()

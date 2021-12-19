@@ -14,7 +14,7 @@ class HomeAllPostViewModel {
     let main = MainTabViewModel.instance
     let disposeBag = DisposeBag()
     var posts:[Post] = []
-    var category:String = "학생 지원"
+    var category:String = "취업 지원"
     let input = Input()
     var output = Output()
     
@@ -30,7 +30,7 @@ class HomeAllPostViewModel {
     
     init() {
         
-        posts = main.posts["allstudentCategory"] ?? []
+        posts = main.posts["allemployCategory"] ?? []
         
         input.categoryObserver.subscribe(onNext: {value in
             self.category = value

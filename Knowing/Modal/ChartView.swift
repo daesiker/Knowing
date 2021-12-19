@@ -302,8 +302,9 @@ class ChartView: UIView {
         }
         
         addSubview(chartImg1)
+        let height1 = unit[0] >= 20 ? 20 : unit[0]
         chartImg1.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(13 + ((20 - unit[0]) * 7.2))
+            $0.top.equalToSuperview().offset(13 + ((20 - height1) * 7.2))
             $0.leading.equalToSuperview().offset(24)
         }
         
@@ -327,8 +328,9 @@ class ChartView: UIView {
         }
         
         addSubview(chartImg2)
+        let height2 = unit[1] >= 20 ? 20 : unit[1]
         chartImg2.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(13 + ((20 - unit[1]) * 7.2))
+            $0.top.equalToSuperview().offset(13 + ((20 - height2) * 7.2))
             $0.leading.equalTo(chartProgress1.snp.trailing).offset(30)
         }
         
@@ -351,8 +353,9 @@ class ChartView: UIView {
             $0.height.equalTo(146)
         }
         addSubview(chartImg3)
+        let height3 = unit[2] >= 20 ? 20 : unit[2]
         chartImg3.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(13 + ((20 - unit[2]) * 7.2))
+            $0.top.equalToSuperview().offset(13 + ((20 - height3) * 7.2))
             $0.leading.equalTo(chartProgress2.snp.trailing).offset(30)
         }
         
@@ -375,8 +378,9 @@ class ChartView: UIView {
             $0.height.equalTo(146)
         }
         addSubview(chartImg4)
+        let height4 = unit[3] >= 20 ? 20 : unit[3]
         chartImg4.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(13 + ((20 - unit[3]) * 7.2))
+            $0.top.equalToSuperview().offset(13 + ((20 - height4) * 7.2))
             $0.leading.equalTo(chartProgress3.snp.trailing).offset(30)
         }
         

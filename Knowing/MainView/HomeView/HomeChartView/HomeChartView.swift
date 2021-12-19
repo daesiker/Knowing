@@ -267,8 +267,8 @@ class HomeChartHeader: UICollectionViewCell {
         return collectionView
     }()
     
-    let categoryData = Observable<[String]>.of(["학생 지원", "취업 지원", "창업 지원", "주거 · 금융 지원", "생활 · 복지 지원", "의료 지원"])
-    let categoryDomy = ["학생 지원", "취업 지원", "창업 지원", "주거 · 금융 지원", "생활 · 복지 지원", "의료 지원"]
+    let categoryData = Observable<[String]>.of(["취업 지원", "창업 지원", "주거 · 금융 지원", "생활 · 복지 지원", "의료 지원", "학생 지원"])
+    let categoryDomy = [ "취업 지원", "창업 지원", "주거 · 금융 지원", "생활 · 복지 지원", "의료 지원", "학생 지원"]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -286,6 +286,7 @@ class HomeChartHeader: UICollectionViewCell {
     func setTitle() {
         titleLb.text = "\(vm.main.user.name)님의 최대 수혜 금액"
         let posts = vm.main.posts["myPost"] ?? []
+        print(posts)
         if posts.count != 0 {
             let numberFormatter = NumberFormatter()
             numberFormatter.numberStyle = .decimal
@@ -537,7 +538,7 @@ final class HomeCategoryCell: UICollectionViewCell {
     }
     
     func configure(name: String?) {
-        if name == "학생 지원" {
+        if name == "취업 지원" {
             backgroundColor = UIColor.rgb(red: 255, green: 152, blue: 87)
             titleLabel.textColor = .white
             titleLabel.text = name

@@ -194,6 +194,8 @@ class APIModifyUserViewController: UIViewController {
         withDrawBt.snp.makeConstraints {
             $0.top.equalTo(birthTextField.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(25)
+            $0.width.equalTo(95)
+            $0.height.equalTo(26)
         }
         
         safeArea.addSubview(modifyBt)

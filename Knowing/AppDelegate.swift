@@ -68,6 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if AuthApi.isKakaoTalkLoginUrl(url) {
             return AuthController.handleOpenUrl(url: url)
         }
+        
         let naverSession = NaverThirdPartyLoginConnection.getSharedInstance().application(app, open: url, options: options)
         let googleSession = GIDSignIn.sharedInstance.handle(url)
         return naverSession || googleSession

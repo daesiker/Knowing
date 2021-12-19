@@ -76,12 +76,14 @@ class PostCell: SwipeCollectionViewCell {
         imgView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(15)
             $0.leading.equalToSuperview().offset(19)
+            $0.width.equalTo(21)
         }
         
         contentView.addSubview(subjectiveLb)
         subjectiveLb.snp.makeConstraints {
             $0.top.equalToSuperview().offset(18)
             $0.leading.equalTo(imgView.snp.trailing).offset(7)
+            $0.trailing.equalToSuperview().offset(-19)
         }
         
         contentView.addSubview(mainLb)

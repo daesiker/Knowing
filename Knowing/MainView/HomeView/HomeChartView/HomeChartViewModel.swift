@@ -17,7 +17,7 @@ class HomeChartViewModel {
     let main = MainTabViewModel.instance
     let input = Input()
     var output = Output()
-    var category = "학생 지원"
+    var category = "취업 지원"
     var posts:[Post] = []
     
     struct Input {
@@ -45,7 +45,7 @@ class HomeChartViewModel {
     
     init() {
         
-        posts = main.posts["studentCategory"] ?? []
+        posts = main.posts["employCategory"] ?? []
         
         input.categoryObserver.subscribe(onNext: {value in
             self.category = value

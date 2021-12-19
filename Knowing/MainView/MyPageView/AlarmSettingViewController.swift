@@ -49,6 +49,12 @@ class AlarmSettingViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let isRegistered = UIApplication.shared.isRegisteredForRemoteNotifications
+        pushControlSwitch.setOn(isRegistered, animated: true)
+    }
+    
     func setUI() {
         view.backgroundColor = .white
         
@@ -89,8 +95,7 @@ class AlarmSettingViewController: UIViewController {
     }
     
     func bind() {
-        let isRegistered = UIApplication.shared.isRegisteredForRemoteNotifications
-        pushControlSwitch.setOn(isRegistered, animated: true)
+        
         
         backBt.rx.tap
             .subscribe(onNext: {
