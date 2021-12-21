@@ -62,17 +62,11 @@ class DefaultLoginViewController: UIViewController {
     let logInBt = UIButton(type: .custom).then {
         $0.setTitle("로그인하기", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
-        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.textColor = .white
         $0.backgroundColor = UIColor.rgb(red: 177, green: 177, blue: 177)
         $0.layer.cornerRadius = 27.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 15, left: 128, bottom: 14, right: 127)
         $0.isEnabled = false
-    }
-    
-    let loginAlert = UILabel().then {
-        $0.text = ""
-        $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 11)
-        $0.textColor = UIColor.rgb(red: 255, green: 108, blue: 0)
     }
     
     let findEmailBt = UIButton(type: .custom).then {
@@ -214,6 +208,7 @@ extension DefaultLoginViewController {
             .disposed(by: disposeBag)
         
         logInBt.rx.tap
+            .debug()
             .bind(to: self.vm.input.loginObserver)
             .disposed(by: disposeBag)
         
@@ -267,8 +262,8 @@ extension DefaultLoginViewController {
         }).disposed(by: disposeBag)
         
         
-        vm.output.doLogin.asDriver(onErrorJustReturn: ())
-            .drive(onNext: {
+        vm.output.doLogin.asSignal()
+            .emit(onNext: { value in
             let viewController = LoadingViewController()
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
@@ -280,7 +275,7 @@ extension DefaultLoginViewController {
             let alertController = UIAlertController(title: "에러", message: error.msg, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
             self.present(alertController, animated: true)
-        }).disposed(by: disposeBag)
+            }).disposed(by: disposeBag)
         
     }
 }

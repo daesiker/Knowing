@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Foundation
 
 class FindPasswordViewController: UIViewController {
 
@@ -190,7 +191,7 @@ extension FindPasswordViewController {
         }).disposed(by: disposeBag)
         
         vm.output.findPassword.asSignal()
-            .emit(onNext: {
+            .emit(onNext:  { value in
             let vc = ConfirmPasswordViewController()
             vc.modalPresentationStyle = .fullScreen
             vc.modalTransitionStyle = .crossDissolve

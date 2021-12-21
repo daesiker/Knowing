@@ -41,7 +41,7 @@ class FindEmailViewModel {
             .map { $0 && $1 }
             .asDriver(onErrorJustReturn: false)
         
-        input.buttonObserver.withLatestFrom(Observable.combineLatest(input.nameObserver, input.phoneObserver)).flatMap(self.findEmail).subscribe({ event in
+        input.buttonObserver.withLatestFrom(Observable.combineLatest(input.nameObserver, input.phoneObserver)).debug().flatMap(self.findEmail).subscribe({ event in
             switch event {
             case .error(let error):
                 self.output.goError.accept(error)
@@ -74,7 +74,6 @@ class FindEmailViewModel {
                             valid.onNext(result)
                         }
                     case .failure(let error):
-                        print(error)
                         valid.onError(error)
                     }
                 }
