@@ -108,7 +108,7 @@ class HomeAllPostView: UIView {
         allPostCV.snp.makeConstraints {
             $0.top.equalTo(sortTitle.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-91)
+            $0.bottom.equalToSuperview().offset(-57)
         }
         
     }

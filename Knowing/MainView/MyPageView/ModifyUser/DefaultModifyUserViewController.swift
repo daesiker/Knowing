@@ -17,6 +17,14 @@ class DefaultModifyUserViewController: UIViewController {
     let disposeBag = DisposeBag()
     let vm:DefaultModifyUserViewModel
     
+    lazy var scrollView = UIScrollView(frame: .zero).then {
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.isScrollEnabled = true
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
+    }
+    
     let backBt = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
     }
@@ -161,71 +169,78 @@ class DefaultModifyUserViewController: UIViewController {
     
     func setUI() {
         view.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 734)
+        safeArea.addSubview(scrollView)
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         
-        safeArea.addSubview(backBt)
+        
+        
+        scrollView.addSubview(backBt)
         backBt.snp.makeConstraints {
             $0.top.equalToSuperview().offset(6)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        safeArea.addSubview(titleLabel)
+        scrollView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(backBt.snp.bottom).offset(13)
             $0.leading.equalToSuperview().offset(25)
         }
         
-        safeArea.addSubview(nameLabel)
+        scrollView.addSubview(nameLabel)
         nameLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(48)
             $0.leading.equalToSuperview().offset(25)
         }
         
-        safeArea.addSubview(nameTextField)
+        scrollView.addSubview(nameTextField)
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(nameLabel.snp.bottom).offset(8)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(25)
             $0.trailing.equalTo(self.safeArea.snp.trailing).offset(-25)
         }
         
-        safeArea.addSubview(nameAlertLabel)
+        scrollView.addSubview(nameAlertLabel)
         nameAlertLabel.snp.makeConstraints {
             $0.top.equalTo(nameTextField.snp.bottom).offset(5)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(25)
         }
         
-        safeArea.addSubview(emailLabel)
+        scrollView.addSubview(emailLabel)
         emailLabel.snp.makeConstraints {
             $0.top.equalTo(nameTextField.snp.bottom).offset(28)
             $0.leading.equalToSuperview().offset(25)
         }
         
-        safeArea.addSubview(emailTextField)
+        scrollView.addSubview(emailTextField)
         emailTextField.snp.makeConstraints {
             $0.top.equalTo(emailLabel.snp.bottom).offset(8)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(25)
             $0.trailing.equalTo(self.safeArea.snp.trailing).offset(-25)
         }
         
-        safeArea.addSubview(emailAlertLabel)
+        scrollView.addSubview(emailAlertLabel)
         emailAlertLabel.snp.makeConstraints {
             $0.top.equalTo(emailTextField.snp.bottom).offset(5)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(25)
         }
         
-        safeArea.addSubview(phoneLb)
+        scrollView.addSubview(phoneLb)
         phoneLb.snp.makeConstraints {
             $0.top.equalTo(emailTextField.snp.bottom).offset(28)
             $0.leading.equalToSuperview().offset(25)
         }
         
-        safeArea.addSubview(phoneTextField)
+        scrollView.addSubview(phoneTextField)
         phoneTextField.snp.makeConstraints {
             $0.top.equalTo(phoneLb.snp.bottom).offset(8)
             $0.leading.equalTo(self.safeArea.snp.leading).offset(25)
             $0.trailing.equalTo(self.safeArea.snp.trailing).offset(-25)
         }
         
-        safeArea.addSubview(genderLabel)
+        scrollView.addSubview(genderLabel)
         genderLabel.snp.makeConstraints {
             $0.top.equalTo(phoneTextField.snp.bottom).offset(28)
             $0.leading.equalToSuperview().offset(25)
@@ -237,7 +252,7 @@ class DefaultModifyUserViewController: UIViewController {
             $0.spacing = 28
         }
         
-        safeArea.addSubview(genderStackView)
+        scrollView.addSubview(genderStackView)
         genderStackView.snp.makeConstraints {
             $0.top.equalTo(genderLabel.snp.bottom).offset(8)
             $0.leading.equalTo(safeArea.snp.leading).offset(25)
@@ -245,20 +260,20 @@ class DefaultModifyUserViewController: UIViewController {
             
         }
         
-        safeArea.addSubview(birthLabel)
+        scrollView.addSubview(birthLabel)
         birthLabel.snp.makeConstraints {
             $0.top.equalTo(genderStackView.snp.bottom).offset(28)
             $0.leading.equalTo(safeArea.snp.leading).offset(25)
         }
         
-        safeArea.addSubview(birthTextField)
+        scrollView.addSubview(birthTextField)
         birthTextField.snp.makeConstraints {
             $0.top.equalTo(birthLabel.snp.bottom).offset(8)
             $0.leading.equalTo(safeArea.snp.leading).offset(25)
             $0.trailing.equalTo(safeArea.snp.trailing).offset(-25)
         }
         
-        safeArea.addSubview(withDrawBt)
+        scrollView.addSubview(withDrawBt)
         withDrawBt.snp.makeConstraints {
             $0.top.equalTo(birthTextField.snp.bottom).offset(14)
             $0.leading.equalToSuperview().offset(19)
@@ -266,7 +281,7 @@ class DefaultModifyUserViewController: UIViewController {
             $0.height.equalTo(26)
         }
         
-        safeArea.addSubview(modifyBt)
+        scrollView.addSubview(modifyBt)
         modifyBt.snp.makeConstraints {
             $0.top.equalTo(withDrawBt.snp.bottom).offset(24)
             $0.leading.equalTo(safeArea.snp.leading).offset(26)

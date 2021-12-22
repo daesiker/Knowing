@@ -38,7 +38,7 @@ class HomeChartView: UIView {
         addSubview(chartCV)
         chartCV.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-91)
+            $0.bottom.equalToSuperview().offset(-57)
         }
         
         addSubview(imgView)
@@ -51,6 +51,7 @@ class HomeChartView: UIView {
         imgView2.snp.makeConstraints {
             $0.top.trailing.equalToSuperview()
             $0.width.equalToSuperview().multipliedBy(0.3)
+            $0.height.equalTo(142.9)
         }
     }
     

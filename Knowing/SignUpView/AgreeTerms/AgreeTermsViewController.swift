@@ -18,6 +18,14 @@ class AgreeTermsViewController: UIViewController {
         $0.setImage(UIImage(named: "backArrow"), for: .normal)
     }
     
+    lazy var scrollView = UIScrollView(frame: .zero).then {
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.isScrollEnabled = true
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.backgroundColor = .white
+    }
+    
     let titleLb = UIImageView(image: UIImage(named: "textLogo")!)
     
     let subLb = UILabel().then {
@@ -27,7 +35,9 @@ class AgreeTermsViewController: UIViewController {
         $0.numberOfLines = 2
     }
     
-    let titleImg = UIImageView(image: UIImage(named: "agreeImg")!)
+    let titleImg = UIImageView(image: UIImage(named: "agreeImg")!).then {
+        $0.sizeToFit()
+    }
     
     let allCbImg =  UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "checkbox_unselected")!, for: .normal)
@@ -120,115 +130,128 @@ extension AgreeTermsViewController {
     func setUI() {
         view.backgroundColor = .white
         
-        safeArea.addSubview(backBt)
+        
+        
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 734)
+        safeArea.addSubview(scrollView)
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        scrollView.addSubview(backBt)
         backBt.snp.makeConstraints {
             $0.top.equalToSuperview().offset(6)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        safeArea.addSubview(titleLb)
+        scrollView.addSubview(titleLb)
         titleLb.snp.makeConstraints {
             $0.top.equalTo(backBt.snp.bottom).offset(13)
             $0.leading.equalToSuperview().offset(29)
+            $0.height.equalTo(25)
         }
         
-        safeArea.addSubview(subLb)
+        scrollView.addSubview(subLb)
         subLb.snp.makeConstraints {
             $0.top.equalTo(titleLb.snp.bottom).offset(14)
             $0.leading.equalToSuperview().offset(29)
         }
         
-        safeArea.addSubview(titleImg)
+        scrollView.addSubview(titleImg)
         titleImg.snp.makeConstraints {
             $0.top.equalTo(subLb.snp.bottom).offset(42)
             $0.centerX.equalToSuperview()
+            $0.width.equalTo(185)
+            $0.height.equalTo(150)
         }
         
-        safeArea.addSubview(allCbImg)
+        scrollView.addSubview(allCbImg)
         allCbImg.snp.makeConstraints {
             $0.width.height.equalTo(47)
             $0.top.equalTo(titleImg.snp.bottom).offset(50)
             $0.leading.equalToSuperview().offset(18)
         }
         
-        safeArea.addSubview(allLb)
+        scrollView.addSubview(allLb)
         allLb.snp.makeConstraints {
             $0.top.equalTo(titleImg.snp.bottom).offset(64)
             $0.leading.equalTo(allCbImg.snp.trailing).offset(2)
         }
         
-        safeArea.addSubview(separator)
+        scrollView.addSubview(separator)
         separator.snp.makeConstraints {
             $0.height.equalTo(1)
             $0.top.equalTo(allLb.snp.bottom).offset(23)
             $0.leading.equalToSuperview().offset(31)
-            $0.trailing.equalToSuperview().offset(-31)
+            $0.trailing.equalTo(safeArea.snp.trailing).offset(-31)
         }
         
-        safeArea.addSubview(firstCbImg)
+        scrollView.addSubview(firstCbImg)
         firstCbImg.snp.makeConstraints {
             $0.width.height.equalTo(47)
             $0.top.equalTo(separator.snp.bottom).offset(9)
             $0.leading.equalToSuperview().offset(18)
         }
         
-        safeArea.addSubview(firstLb)
+        scrollView.addSubview(firstLb)
         firstLb.snp.makeConstraints {
             $0.top.equalTo(separator.snp.bottom).offset(23)
             $0.leading.equalTo(firstCbImg.snp.trailing).offset(2)
         }
         
-        safeArea.addSubview(firstBt)
+        scrollView.addSubview(firstBt)
         firstBt.snp.makeConstraints {
             $0.width.height.equalTo(40)
             $0.top.equalTo(separator.snp.bottom).offset(11)
-            $0.trailing.equalToSuperview().offset(-15)
+            $0.trailing.equalTo(safeArea.snp.trailing).offset(-15)
         }
         
-        safeArea.addSubview(secondCbImg)
+        scrollView.addSubview(secondCbImg)
         secondCbImg.snp.makeConstraints {
             $0.width.height.equalTo(47)
             $0.top.equalTo(firstCbImg.snp.bottom).offset(6)
             $0.leading.equalToSuperview().offset(18)
         }
         
-        safeArea.addSubview(secondLb)
+        scrollView.addSubview(secondLb)
         secondLb.snp.makeConstraints {
             $0.top.equalTo(firstLb.snp.bottom).offset(34)
             $0.leading.equalTo(secondCbImg.snp.trailing).offset(2)
         }
         
-        safeArea.addSubview(secondSubLb)
+        scrollView.addSubview(secondSubLb)
         secondSubLb.snp.makeConstraints {
             $0.top.equalTo(secondLb.snp.bottom).offset(9)
             $0.leading.equalTo(secondLb.snp.leading)
         }
         
-        safeArea.addSubview(secondBt)
+        scrollView.addSubview(secondBt)
         secondBt.snp.makeConstraints {
             $0.width.height.equalTo(40)
             $0.top.equalTo(firstBt.snp.bottom).offset(9)
-            $0.trailing.equalToSuperview().offset(-15)
+            $0.trailing.equalTo(safeArea.snp.trailing).offset(-15)
         }
         
-        safeArea.addSubview(thirdCbImg)
+        scrollView.addSubview(thirdCbImg)
         thirdCbImg.snp.makeConstraints {
             $0.width.height.equalTo(47)
             $0.top.equalTo(secondCbImg.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(18)
         }
         
-        safeArea.addSubview(thirdLb)
+        scrollView.addSubview(thirdLb)
         thirdLb.snp.makeConstraints {
             $0.top.equalTo(secondSubLb.snp.bottom).offset(26)
             $0.leading.equalTo(thirdCbImg.snp.trailing).offset(2)
         }
         
-        safeArea.addSubview(nextBt)
+        scrollView.addSubview(nextBt)
         nextBt.snp.makeConstraints {
             $0.top.equalTo(thirdLb.snp.bottom).offset(47)
-            $0.centerX.equalToSuperview()
+            $0.leading.equalToSuperview().offset(31)
+            $0.height.equalTo(47)
         }
+        
         
     }
     

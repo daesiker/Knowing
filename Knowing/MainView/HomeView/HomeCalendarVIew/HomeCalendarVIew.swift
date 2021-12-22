@@ -51,6 +51,7 @@ class HomeCalendarView: UIView {
         calendar.appearance.titleSelectionColor = .white
         calendar.appearance.eventDefaultColor = UIColor.rgb(red: 255, green: 161, blue: 102)
         calendar.appearance.eventSelectionColor = UIColor.rgb(red: 255, green: 161, blue: 102)
+        calendar.scrollEnabled = false
         return calendar
     }()
     
@@ -166,7 +167,7 @@ extension HomeCalendarView {
         calendarCV.snp.makeConstraints {
             $0.top.equalTo(imgView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-91)
+            $0.bottom.equalToSuperview().offset(-57)
         }
     }
     
@@ -343,12 +344,14 @@ class CalendarCell: SwipeCollectionViewCell {
         contentView.addSubview(imgView)
         imgView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(14)
+            $0.height.width.equalTo(31)
             $0.centerY.equalToSuperview()
         }
         
         contentView.addSubview(titleLb)
         titleLb.snp.makeConstraints {
             $0.leading.equalTo(imgView.snp.trailing).offset(14)
+            $0.trailing.equalToSuperview().offset(-14)
             $0.top.equalToSuperview().offset(15)
         }
         

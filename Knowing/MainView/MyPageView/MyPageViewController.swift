@@ -107,6 +107,7 @@ class MyPageViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        MainTabViewModel.instance.bcObserver.accept(UIColor.white)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

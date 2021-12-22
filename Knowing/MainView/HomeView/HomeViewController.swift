@@ -47,6 +47,9 @@ class HomeViewController: UIViewController  {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        MainTabViewModel.instance.bcObserver.accept(UIColor.rgb(red: 255, green: 245, blue: 230))
+        let contentOffset = CGPoint(x: 0, y: 0)
+        homeScrollView.setContentOffset(contentOffset, animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -34,7 +34,7 @@ class LoadingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        MainTabViewModel.instance.bcObserver.accept(UIColor.rgb(red: 255, green: 245, blue: 230))
         animationView.play()
         animationView.loopMode = .loop
         setUI()
