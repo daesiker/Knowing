@@ -9,6 +9,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+
 class ApiSignUpViewController: UIViewController {
     
     let vm = ApiSignUpViewModel()
@@ -55,7 +56,7 @@ class ApiSignUpViewController: UIViewController {
         $0.layer.cornerRadius = 20.0
         $0.contentEdgeInsets = UIEdgeInsets(top: 16, left: 61, bottom: 15, right: 61)
     }
-
+    
     let femaleBt = UIButton(type: .custom).then {
         $0.setTitle("여성", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
@@ -89,6 +90,8 @@ class ApiSignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
+        setValue()
         setUI()
         bind()
     }
@@ -96,13 +99,22 @@ class ApiSignUpViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-
+    
     
 }
 
 extension ApiSignUpViewController {
+    
+    func setValue() {
+        if vm.user.name != "" {
+            nameTextField.text = vm.user.name
+            nameTextField.isEnabled = false
+        }
+    }
+    
     func setUI() {
         view.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)
+        
         
         safeArea.addSubview(backBt)
         backBt.snp.makeConstraints {
@@ -176,6 +188,7 @@ extension ApiSignUpViewController {
     }
     
     func bind() {
+        
         bindInput()
         bindOutput()
     }

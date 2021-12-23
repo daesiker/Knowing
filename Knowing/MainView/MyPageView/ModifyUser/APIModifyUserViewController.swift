@@ -106,6 +106,7 @@ class APIModifyUserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         setValue()
         setUI()
         bind()

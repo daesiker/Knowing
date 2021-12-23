@@ -166,6 +166,7 @@ class AddPostCategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         setUI()
         bind()
     }

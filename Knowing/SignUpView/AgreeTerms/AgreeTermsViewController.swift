@@ -119,6 +119,7 @@ class AgreeTermsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         setUI()
         bind()
     }
@@ -129,8 +130,6 @@ extension AgreeTermsViewController {
     
     func setUI() {
         view.backgroundColor = .white
-        
-        
         
         scrollView.contentSize = CGSize(width: view.frame.width, height: 734)
         safeArea.addSubview(scrollView)
@@ -251,8 +250,6 @@ extension AgreeTermsViewController {
             $0.leading.equalToSuperview().offset(31)
             $0.height.equalTo(47)
         }
-        
-        
     }
     
     func bind() {
@@ -401,5 +398,8 @@ extension AgreeTermsViewController {
             }).disposed(by: disposeBag)
         
     }
+    
+    
+
     
 }

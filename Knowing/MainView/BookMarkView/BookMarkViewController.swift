@@ -116,6 +116,7 @@ extension BookMarkViewController {
     }
     
     func setUI() {
+        self.lightMode()
         view.backgroundColor = .white
         safeArea.addSubview(searchBar)
         searchBar.snp.makeConstraints {

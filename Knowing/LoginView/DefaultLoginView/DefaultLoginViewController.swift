@@ -96,6 +96,7 @@ class DefaultLoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        self.lightMode()
         setUI()
         bind()
     }

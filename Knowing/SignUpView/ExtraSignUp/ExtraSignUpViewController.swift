@@ -117,6 +117,7 @@ class ExtraSignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         setSV()
         setUI()
         bind()

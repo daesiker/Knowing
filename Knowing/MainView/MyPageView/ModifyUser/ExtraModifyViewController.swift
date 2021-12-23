@@ -326,7 +326,7 @@ class ExtraModifyViewController: UIViewController {
     }
     
     func setUI() {
-        
+        self.lightMode()
         view.backgroundColor = .white
         
         safeArea.addSubview(backBt)

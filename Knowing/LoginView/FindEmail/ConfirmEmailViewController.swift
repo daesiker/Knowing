@@ -59,6 +59,7 @@ class ConfirmEmailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         setValue()
         setUI()
         bind()

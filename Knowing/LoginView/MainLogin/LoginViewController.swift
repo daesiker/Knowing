@@ -329,6 +329,8 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 return
             }
             
+            let username = "\(appleIDCredential.fullName?.givenName ?? "") + \(appleIDCredential.fullName?.familyName ?? "")"
+           
             let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
             Auth.auth().signIn(with: credential) { authResult, error in
                 if let _ = error {
@@ -341,7 +343,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                     return
                 }
                 if let uid = Auth.auth().currentUser?.uid {
-                    self.googleAppleLogin(uid, provider: "apple")
+                    self.googleAppleLogin(uid, provider: "apple", name: username)
                 }
             }
         }
@@ -461,7 +463,7 @@ extension LoginViewController {
             }
     }
     
-    func googleAppleLogin(_ uid: String, provider: String) {
+    func googleAppleLogin(_ uid: String, provider: String, name: String = "") {
         let header:HTTPHeaders = ["uid": uid,
                                   "Content-Type":"application/json"]
         let url = "https://www.makeus-hyun.shop/app/users/checkuid"
@@ -476,6 +478,7 @@ extension LoginViewController {
                             DispatchQueue.main.async {
                                 let vc = AgreeTermsViewController()
                                 vc.vm.user.provider = provider
+                                vc.vm.user.name = name
                                 vc.modalPresentationStyle = .fullScreen
                                 vc.modalTransitionStyle = .crossDissolve
                                 self.present(vc, animated: true)

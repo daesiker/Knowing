@@ -59,6 +59,7 @@ class FindEmailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         setUI()
         bind()
     }

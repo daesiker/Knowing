@@ -81,6 +81,7 @@ class NotificationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         MainTabViewModel.instance.bcObserver.accept(.white)
+        self.lightMode()
         setCV()
         setUI()
         bind()

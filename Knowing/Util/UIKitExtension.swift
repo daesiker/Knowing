@@ -11,6 +11,16 @@ import RxSwift
 import RxCocoa
 extension UIViewController {
     
+    func lightMode(){
+        if #available(iOS 13.0, *) {
+            // Always adopt a light / dark interface style.
+            overrideUserInterfaceStyle = .light // 상태바는 검은글씨, 흰배경
+            setNeedsStatusBarAppearanceUpdate()
+            
+        }
+        
+    }
+    
     var safeArea:UIView {
         get {
             guard let safeArea = self.view.viewWithTag(Int(INT_MAX)) else {

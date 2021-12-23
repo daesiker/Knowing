@@ -100,6 +100,7 @@ class MyPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         MainTabViewModel.instance.bcObserver.accept(.white)
+        self.lightMode()
         setUI()
         bind()
     }

@@ -36,6 +36,7 @@ class GuideViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         setScrollView()
         addContentScrollView()
         setUI()

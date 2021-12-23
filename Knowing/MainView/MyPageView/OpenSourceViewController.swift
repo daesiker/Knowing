@@ -64,6 +64,7 @@ class OpenSourceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         setUI()
         backBt.rx.tap
             .subscribe(onNext: {

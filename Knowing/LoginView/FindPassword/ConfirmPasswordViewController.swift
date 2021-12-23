@@ -47,6 +47,7 @@ class ConfirmPasswordViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         animationView.play()
         animationView.loopMode = .loop
         setUI()

@@ -38,6 +38,7 @@ class HomeViewController: UIViewController  {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         setScrollView()
         setUI()
         bind()
@@ -50,6 +51,7 @@ class HomeViewController: UIViewController  {
         MainTabViewModel.instance.bcObserver.accept(UIColor.rgb(red: 255, green: 245, blue: 230))
         let contentOffset = CGPoint(x: 0, y: 0)
         homeScrollView.setContentOffset(contentOffset, animated: true)
+        homeSegmentedControl.setIndex(0)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -44,6 +44,7 @@ class AlarmSettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lightMode()
         bind()
         setUI()
         

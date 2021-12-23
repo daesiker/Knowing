@@ -36,7 +36,7 @@ class ModifyUserViewController: UIViewController {
     
     func setUI() {
         view.backgroundColor = .white
-        
+        self.lightMode()
         safeArea.addSubview(backBt)
         backBt.snp.makeConstraints {
             $0.top.equalToSuperview().offset(6)
