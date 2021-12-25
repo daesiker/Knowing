@@ -33,12 +33,12 @@ class ApiSignUpViewController: UIViewController {
     }
     
     let nameLabel = UILabel().then {
-        $0.text = "이름"
+        $0.text = "닉네임"
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
         $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
     }
     
-    let nameTextField = CustomTextField(image: UIImage(named: "person")!, text: "이름 입력").then {
+    let nameTextField = CustomTextField(image: UIImage(named: "person")!, text: "닉네임 입력").then {
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
     }
     
@@ -91,7 +91,6 @@ class ApiSignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.lightMode()
-        setValue()
         setUI()
         bind()
     }
@@ -104,13 +103,6 @@ class ApiSignUpViewController: UIViewController {
 }
 
 extension ApiSignUpViewController {
-    
-    func setValue() {
-        if vm.user.name != "" {
-            nameTextField.text = vm.user.name
-            nameTextField.isEnabled = false
-        }
-    }
     
     func setUI() {
         view.backgroundColor = UIColor.rgb(red: 252, green: 245, blue: 235)

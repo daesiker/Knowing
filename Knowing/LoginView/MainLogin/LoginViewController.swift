@@ -329,7 +329,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 return
             }
             
-            let username = "\(appleIDCredential.fullName?.givenName ?? "") + \(appleIDCredential.fullName?.familyName ?? "")"
+            let username = "\(appleIDCredential.fullName?.givenName ?? "")\(appleIDCredential.fullName?.familyName ?? "")"
            
             let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
             Auth.auth().signIn(with: credential) { authResult, error in

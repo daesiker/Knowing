@@ -26,12 +26,12 @@ class FindEmailViewController: UIViewController {
     }
     
     let nameLb = UILabel().then {
-        $0.text = "이름"
+        $0.text = "닉네임"
         $0.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 14)
         $0.textColor = UIColor.rgb(red: 100, green: 98, blue: 94)
     }
     
-    let nameTextField = CustomTextField(image: UIImage(named: "person")!, text: "이름 입력", state: .login).then {
+    let nameTextField = CustomTextField(image: UIImage(named: "person")!, text: "닉네임 입력", state: .login).then {
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 16)
         $0.keyboardType = .namePhonePad
     }
