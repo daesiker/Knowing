@@ -21,7 +21,7 @@
 
 <br/>
 
-<p align="center">
+<p align="left">
   
   <img src="./screenshot/guide1.webp" width="200"/>
   <img src="./screenshot/guide2.webp" width="200"/>
