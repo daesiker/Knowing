@@ -352,7 +352,7 @@ class PostDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(vm.post)
+        self.lightMode()
         inputValue()
         setUI()
         bind()

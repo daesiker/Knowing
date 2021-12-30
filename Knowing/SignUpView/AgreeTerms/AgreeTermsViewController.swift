@@ -96,6 +96,12 @@ class AgreeTermsViewController: UIViewController {
         $0.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 15)
     }
     
+    let thirdDetailLb = UILabel().then {
+        $0.text = "비동의 시, 중요한 맞춤 복지 알림을 놓칠 수도 있어요!"
+        $0.textColor = UIColor.rgb(red: 251, green: 136, blue: 85)
+        $0.font =  UIFont(name: "AppleSDGothicNeo-Medium", size: 12)
+    }
+    
     let nextBt = UIButton(type: .custom).then {
         $0.setTitle("확인", for: .normal)
         $0.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 16)
@@ -244,9 +250,15 @@ extension AgreeTermsViewController {
             $0.leading.equalTo(thirdCbImg.snp.trailing).offset(2)
         }
         
+        scrollView.addSubview(thirdDetailLb)
+        thirdDetailLb.snp.makeConstraints {
+            $0.leading.equalTo(thirdLb)
+            $0.top.equalTo(thirdLb.snp.bottom).offset(9)
+        }
+        
         scrollView.addSubview(nextBt)
         nextBt.snp.makeConstraints {
-            $0.top.equalTo(thirdLb.snp.bottom).offset(47)
+            $0.top.equalTo(thirdDetailLb.snp.bottom).offset(33)
             $0.leading.equalToSuperview().offset(31)
             $0.height.equalTo(47)
         }
