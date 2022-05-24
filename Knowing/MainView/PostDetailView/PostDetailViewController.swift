@@ -1552,6 +1552,8 @@ extension PostDetailViewController {
 
 extension PostDetailViewController: UIScrollViewDelegate {
     
+    
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         let y = 316 - scrollView.contentOffset.y
